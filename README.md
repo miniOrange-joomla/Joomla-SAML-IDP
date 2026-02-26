@@ -73,8 +73,7 @@ Secure your SSO experience today!
 ## Website:
 Check out our website! Visit [https://plugins.miniorange.com/joomla](https://plugins.miniorange.com/joomla) to see all our Joomla plugins.
 
-
-![GitHub Downloads](https://img.shields.io/github/downloads/miniOrange-joomla/Joomla-SAML-IDP/total?cacheSeconds=60)
+![GitHub Downloads](https://img.shields.io/github/downloads/miniOrange-joomla/Joomla-SAML-IDP/total)
 <img src="https://komarev.com/ghpvc/?username=miniOrange-joomla&label=Repo%20Views&color=0e75b6&style=flat" />
 
 
