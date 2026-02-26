@@ -15,14 +15,13 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Installer\Installer;
-$lang = Factory::getLanguage();
-$lang->load('plg_system_joomlaidplogin',JPATH_ADMINISTRATOR);
+
 jimport('joomla.plugin.plugin');
 jimport('miniorangejoomlaidpplugin.utility.IDP_Utilities');
 jimport('joomla.application.component.controller');
 include_once 'saml2idp/AuthnRequest.php';
 include_once 'saml2idp/GenerateResponse.php';
-
+include_once JPATH_SITE . DIRECTORY_SEPARATOR . 'administrator' . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_joomlaidp' . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'DbHelper.php';
 require_once JPATH_ADMINISTRATOR . '/components/com_joomlaidp/helpers/MoIdpLogger.php';
 require_once JPATH_ADMINISTRATOR . '/components/com_joomlaidp/helpers/mo_saml_idp_utility.php';
 
@@ -73,7 +72,10 @@ class plgSystemJoomlaidplogin extends CMSPlugin
                 if ($type) {
                     $cid = 0;
                     $installer = new Installer();
-                    $installer->setDatabase(Factory::getDbo());
+                    // setDatabase() exists only in Joomla 4+; Joomla 3 uses application DBO
+                    if (method_exists($installer, 'setDatabase')) {
+                        $installer->setDatabase(MoSamlIdpDb::getDb());
+                    }
                     $installer->uninstall($type, $identifier);
                 }
             }
@@ -125,6 +127,8 @@ class plgSystemJoomlaidplogin extends CMSPlugin
 
     private function _read_saml_request($REQUEST, $GET)
     {
+        $lang = Factory::getLanguage();
+        $lang->load('plg_system_joomlaidplogin', JPATH_ADMINISTRATOR);    
         $samlRequest = $REQUEST['SAMLRequest'];
         $relayState = '';
         $errors = ''; 

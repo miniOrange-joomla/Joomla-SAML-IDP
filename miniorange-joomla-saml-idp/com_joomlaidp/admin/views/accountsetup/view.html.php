@@ -33,6 +33,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\MVC\View\HtmlView;
+include_once JPATH_SITE . DIRECTORY_SEPARATOR . 'administrator' . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_joomlaidp' . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'DbHelper.php';
 HTMLHelper::_('jquery.framework');
 
 $document = Factory::getApplication()->getDocument();
@@ -90,22 +91,27 @@ class JoomlaIdpViewAccountSetup extends HtmlView
         }
         ?>
 
-        <div class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0">
-            <div class="mo_boot_row mo_tab_border mo_boot_p-2 mo_boot_m-0">
-                <div class="mo_boot_col-sm-12 mo_boot_mt-3">
-                    <div class="mo_boot_row">
-                        <div class="mo_boot_col-lg-5">
-                            <h3 class="mo_saml_form_head"><?php echo Text::_('COM_JOOMLAIDP_RESTRICTIONS'); ?></h3>
-                        </div>
-                    </div>
+        <div class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0 mo_idp_main_content">
+            <div class="mo_boot_row mo_boot_p-2">
+                <div class="mo_boot_col-sm-12 mo_boot_px-2">
+                    <h3>1.<?php echo Text::_('COM_JOOMLAIDP_ROLE_RESTRICTION'); ?>  
+                        <sup>
+                            <div class="mo_tooltip">
+                                <img class="crown_img_small mo_idp_ml_px"
+                                    src="<?php echo Uri::base(); ?>/components/com_joomlaidp/assets/images/crown.webp">
+                                <span class="mo_tooltiptext small">
+                                    <?php echo Text::sprintf('COM_JOOMLAIDP_UPGRADE_NOTE', $licensing_page_link); ?>
+                                </span>
+                            </div>
+                        </sup>
+                    </h3>  
                 </div>
-                <div class="mo_boot_col-sm-12 mt-5">
-                    <h4 class="form-head form-head-bar"><?php echo Text::_('COM_JOOMLAIDP_ROLE_RESTRICTION'); ?><div class="mo_tooltip"><img class="crown_img_small mo_idp_ml_px" src="<?php echo Uri::base();?>/components/com_joomlaidp/assets/images/crown.webp"><span class="mo_tooltiptext small"><?php echo Text::sprintf('COM_JOOMLAIDP_AVAILABLE',$licensing_page_link); ?></span></div></h4>
-                    <div class="alert alert-info">
-                        <span ms-1><?php echo Text::_('COM_JOOMLAIDP_ROLE_RESTRICTION_INFO'); ?>  </span>           
-                    </div>
-
+                
+                <div class="mo_boot_col-sm-12 mo_boot_p-2 mo_boot_mt-4 mo_idp_mini_section">
                     <div class="mo_boot_p-4">
+                        <div class="alert alert-info mo_boot_col-sm-12 mo_boot_mt-0">
+                            <span ms-1><?php echo Text::_('COM_JOOMLAIDP_ROLE_RESTRICTION_INFO'); ?>  </span>           
+                        </div>
                         <table class='customtemp'>
                             <thead>
                                 <tr>
@@ -130,12 +136,27 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                         </table>
                     </div>
                 </div>
-                <div class="mo_boot_col-sm-12 mo_boot_mt-5">
-                    <h4 class="form-head form-head-bar"><?php echo Text::_('COM_JOOMLAIDP_RELAY_RESTRICTION'); ?><div class="mo_tooltip"><img class="crown_img_small mo_idp_ml_px" src="<?php echo Uri::base();?>/components/com_joomlaidp/assets/images/crown.webp"><span class="mo_tooltiptext small"><?php echo Text::sprintf('COM_JOOMLAIDP_AVAILABLE',$licensing_page_link); ?></span></div></h4>
-                    <div class="alert alert-info">
-                        <span ms-1><?php echo Text::_('COM_JOOMLAIDP_RELAY_RESTRICTION_INFO'); ?>  </span>           
-                    </div>
+            </div>
+            <div class="mo_boot_row mo_boot_p-2">
+                <div class="mo_boot_col-sm-12 mo_boot_px-2">
+                    <h3>2.<?php echo Text::_('COM_JOOMLAIDP_RELAY_RESTRICTION'); ?>  
+                        <sup>
+                            <div class="mo_tooltip">
+                                <img class="crown_img_small mo_idp_ml_px"
+                                    src="<?php echo Uri::base(); ?>/components/com_joomlaidp/assets/images/crown.webp">
+                                <span class="mo_tooltiptext small">
+                                    <?php echo Text::sprintf('COM_JOOMLAIDP_UPGRADE_NOTE', $licensing_page_link); ?>
+                                </span>
+                            </div>
+                        </sup>
+                    </h3>  
+                </div>
+                
+                <div class="mo_boot_col-sm-12 mo_boot_p-2 mo_boot_mt-4 mo_idp_mini_section">
                     <div class="mo_boot_p-4">
+                        <div class="alert alert-info mo_boot_col-sm-12 mo_boot_mt-0">
+                            <span ms-1><?php echo Text::_('COM_JOOMLAIDP_RELAY_RESTRICTION_INFO'); ?>  </span>           
+                        </div>
                         <table class='customtemp'>
                             <thead>
                                 <tr>
@@ -159,9 +180,13 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                             ?> 
                         </table>
                     </div>
-                    <div class="mo_boot_row mo_boot_mt-5">
+                </div>
+            </div>
+            <div class="mo_boot_row mo_tab_border mo_boot_p-2 mo_boot_m-0">
+                <div class="mo_boot_col-sm-12">
+                    <div class="mo_boot_row">
                         <div class="mo_boot_col-sm-12 text-center">
-                            <input type="submit" class="btn btn_cstm mb-4" disabled value="<?php echo Text::_('COM_JOOMLAIDP_CLICK_TO_CONFIGURE'); ?>">
+                            <input type="submit" class="btn btn_cstm mb-4 mo_idp_block_cursor" disabled value="<?php echo Text::_('COM_JOOMLAIDP_CLICK_TO_CONFIGURE'); ?>">
                         </div>
                     </div>
                 </div>
@@ -213,17 +238,23 @@ class JoomlaIdpViewAccountSetup extends HtmlView
         $licensing_page_link=Uri::base().'index.php?option=com_joomlaidp&view=accountsetup&tab-panel=license';
         ?>
 
-        <div class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0">
-            <div class="mo_boot_row mo_tab_border mo_boot_p-2 mo_boot_m-0">
-
-                <div class="mo_boot_col-sm-12 mo_boot_mt-3">
-                    <div class="mo_boot_row">
-                        <div class="mo_boot_col-lg-5">
-                            <h3 class="mo_saml_form_head"><?php echo Text::_('COM_JOOMLAIDP_CHECK_FEATTURES'); ?><div class="mo_tooltip"><img class="crown_img_small mo_idp_ml_px"src="<?php echo Uri::base();?>/components/com_joomlaidp/assets/images/crown.webp"><span class="mo_tooltiptext small"><?php echo Text::sprintf('COM_JOOMLAIDP_UPGRADE_NOTE',$licensing_page_link); ?></span></div></h3>
-                        </div>
-                    </div>
+        <div class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0 mo_idp_main_content">
+            <div class="mo_boot_row mo_boot_p-2">
+                <div class="mo_boot_col-sm-12 mo_boot_px-2">
+                    <h3><?php echo Text::_('COM_JOOMLAIDP_CHECK_FEATTURES'); ?>  
+                        <sup>
+                            <div class="mo_tooltip">
+                                <img class="crown_img_small mo_idp_ml_px"
+                                    src="<?php echo Uri::base(); ?>/components/com_joomlaidp/assets/images/crown.webp">
+                                <span class="mo_tooltiptext small">
+                                    <?php echo Text::sprintf('COM_JOOMLAIDP_UPGRADE_NOTE', $licensing_page_link); ?>
+                                </span>
+                            </div>
+                        </sup>
+                    </h3>  
                 </div>
-                <div class="mo_boot_col-sm-12">
+                
+                <div class="mo_boot_col-sm-12 mo_boot_mt-4">
                     <div class="mo_boot_row mo_boot_mt-4">
                         <div class="vtab mo_boot_col-sm-3">
                             <button class="vtab_btn active" onclick="openTab(event, 'vaddon1')" id="defaultTab"><?php echo Text::_('COM_JOOMLAIDP_IDP_INITIATED'); ?></button>
@@ -268,7 +299,7 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                         <div class="mo_boot_col-sm-8">
                                             <label class="mo_saml_switch">
                                                 <input type="checkbox" disabled>
-                                                <span class="mo_saml_slider"></span>
+                                                <span class="mo_saml_slider mo_idp_block_cursor"></span>
                                             </label>
                                             <span class="small"><strong><?php echo Text::_('COM_MINIORANGE_SAML_NOTE'); ?>: </strong><?php echo Text::_('COM_JOOMLAIDP_ADMIN_LOGIN_ENABLE_NOTE'); ?></span>
                                         </div>
@@ -278,7 +309,7 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                             <span class="saml_idp_label_css"><?php echo Text::_('COM_JOOMLAIDP_ADMIN_ACCESS'); ?></span>
                                         </div>
                                         <div class="mo_boot_col-sm-8">
-                                            <input class="form-control" type="text" placeholder="<?php echo Text::_('COM_JOOMLAIDP_ENTER_KEY'); ?>" disabled="disable"/>
+                                            <input class="mo_boot_form-control mo_idp_block_cursor" type="text" placeholder="<?php echo Text::_('COM_JOOMLAIDP_ENTER_KEY'); ?>" disabled="disable"/>
                                         </div>
                                     </div>
                                     <div class="mo_boot_row  mo_boot_mt-4">
@@ -304,8 +335,8 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                         <div class="mo_boot_col-sm-8">
                                             <select class="mo_boot_form-control" id="failure_response" readonly>
                                                 <option> <?php echo Text::_('COM_JOOMLAIDP_HOMEPAGE'); ?></option>
-                                                <option> <?php echo Text::_('COM_JOOMLAIDP_CUSTOM_REDIRECT'); ?></option>
-                                                <option> <?php echo Text::_('COM_JOOMLAIDP_CUSTOM_REDIRECT_ONE'); ?></option>
+                                                <option disabled> <?php echo Text::_('COM_JOOMLAIDP_CUSTOM_REDIRECT'); ?></option>
+                                                <option disabled> <?php echo Text::_('COM_JOOMLAIDP_CUSTOM_REDIRECT_ONE'); ?></option>
                                             </select>
                                         </div>
                                     </div>
@@ -314,7 +345,7 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                             <span class="saml_idp_label_css"><?php echo Text::_('COM_JOOMLAIDP_CUSTOM_REDIRECT_AFTER_FAILURE'); ?></span>
                                         </div>
                                         <div class="mo_boot_col-sm-8">
-                                            <input class="mo_boot_form-control" disabled type="text"/>
+                                            <input class="mo_boot_form-control mo_idp_block_cursor" disabled type="text"/>
                                         </div>
                                     </div>
                                     <div class="mo_boot_row  mo_boot_mt-4" id="custom_message">
@@ -322,12 +353,12 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                             <span class="saml_idp_label_css"><?php echo Text::_('COM_JOOMLAIDP_CUSTOM_ERROR'); ?></span>
                                         </div>
                                         <div class="mo_boot_col-sm-8">
-                                            <textarea  class="mo_boot_form-control" disabled></textarea>
+                                            <textarea  class="mo_boot_form-control mo_idp_block_cursor" disabled></textarea>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="mo_boot_col-sm-12  mo_boot_mt-4  mo_boot_text-center">
-                                    <input type="submit" class="btn btn_cstm" value="<?php echo Text::_('COM_JOOMLAIDP_SAVE_BTN'); ?>" disabled/>
+                                    <input type="submit" class="btn btn_cstm mo_idp_block_cursor" value="<?php echo Text::_('COM_JOOMLAIDP_SAVE_BTN'); ?>" disabled/>
                                 </div>
                             </div>
 
@@ -339,7 +370,7 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                             <?php echo Text::_('COM_JOOMLAIDP_COUNTRY_CODE'); ?><span class="mo_saml_required">*</span> :
                                         </div>
                                         <div class="mo_boot_col-sm-8">
-                                            <input class="mo_boot_form-control" type="text"  placeholder=" <?php echo Text::_('COM_JOOMLAIDP_ENTER_CODE'); ?>" disabled>
+                                            <input class="mo_boot_form-control mo_idp_block_cursor" type="text"  placeholder=" <?php echo Text::_('COM_JOOMLAIDP_ENTER_CODE'); ?>" disabled>
                                         </div>
                                     </div>
                                     <div class="mo_boot_row mt-3">
@@ -347,7 +378,7 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                             <?php echo Text::_('COM_JOOMLAIDP_STATE'); ?><span class="mo_saml_required">*</span> :
                                         </div>
                                         <div class="mo_boot_col-sm-8">
-                                            <input class=" mo_boot_form-control" type="text"  placeholder=" <?php echo Text::_('COM_JOOMLAIDP_ENTER_STATE'); ?>" disabled />
+                                            <input class=" mo_boot_form-control mo_idp_block_cursor" type="text"  placeholder=" <?php echo Text::_('COM_JOOMLAIDP_ENTER_STATE'); ?>" disabled />
                                         </div>
                                     </div>
                                     <div class="mo_boot_row mo_boot_mt-3">
@@ -355,7 +386,7 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                             <?php echo Text::_('COM_JOOMLAIDP_COMPANY'); ?><span class="mo_saml_required">*</span> :
                                         </div>
                                         <div class="mo_boot_col-sm-8">
-                                            <input  class=" mo_boot_form-control" type="text"  placeholder=" <?php echo Text::_('COM_JOOMLAIDP_ENTER_COMPANY'); ?>" disabled />
+                                            <input  class=" mo_boot_form-control mo_idp_block_cursor" type="text"  placeholder=" <?php echo Text::_('COM_JOOMLAIDP_ENTER_COMPANY'); ?>" disabled />
                                         </div>
                                     </div>
                                     <div class="mo_boot_row mo_boot_mt-3">
@@ -363,7 +394,7 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                             <?php echo Text::_('COM_JOOMLAIDP_UNIT'); ?><span class="mo_saml_required">*</span> :
                                         </div>
                                         <div class="mo_boot_col-sm-8">
-                                            <input  class=" mo_boot_form-control" type="text" placeholder=" <?php echo Text::_('COM_JOOMLAIDP_UNIT_INFO'); ?>" disabled />
+                                            <input  class=" mo_boot_form-control mo_idp_block_cursor" type="text" placeholder=" <?php echo Text::_('COM_JOOMLAIDP_UNIT_INFO'); ?>" disabled />
                                         </div>
                                     </div>
                                     <div class="mo_boot_row mo_boot_mt-3">
@@ -371,7 +402,7 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                             <?php echo Text::_('COM_JOOMLAIDP_COMMON'); ?><span class="mo_saml_required">*</span> :
                                         </div>
                                         <div class="mo_boot_col-sm-8">
-                                            <input  class="mo_boot_form-control" type="text" placeholder=" <?php echo Text::_('COM_JOOMLAIDP_COMMON_NAME'); ?>" disabled />
+                                            <input  class="mo_boot_form-control mo_idp_block_cursor" type="text" placeholder=" <?php echo Text::_('COM_JOOMLAIDP_COMMON_NAME'); ?>" disabled />
                                         </div>
                                     </div>
                                     <div class="mo_boot_row mo_boot_mt-3">
@@ -381,9 +412,9 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                         <div class="mo_boot_col-sm-8">
                                             <select class="mo_boot_form-control" readonly>                            
                                                 <option>SHA512</option>
-                                                <option>SHA384</option>
-                                                <option>SHA256</option>
-                                                <option>SHA1</option>                            
+                                                <option disabled>SHA384</option>
+                                                <option disabled>SHA256</option>
+                                                <option disabled>SHA1</option>                            
                                             </select>
                                         </div>
                                     </div>
@@ -394,7 +425,7 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                         <div class="mo_boot_col-sm-8">
                                             <select class=" mo_boot_form-control" readonly>  <?php echo Text::_('COM_MINIORANGE_SAML_VALID_DAYS'); ?>                             
                                                 <option>2048 bits</option>
-                                                <option>1024 bits</option>                                                               
+                                                <option disabled>1024 bits</option>                                                               
                                             </select>
                                         </div>
                                     </div>
@@ -405,18 +436,18 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                         <div class="mo_boot_col-sm-8">
                                             <select class=" mo_boot_form-control" readonly>                               
                                                 <option>365 <?php echo Text::_('COM_JOOMLAIDP_DAYS'); ?></option>                                                                                               
-                                                <option>180 <?php echo Text::_('COM_JOOMLAIDP_DAYS'); ?></option>                                                                                               
-                                                <option>90 <?php echo Text::_('COM_JOOMLAIDP_DAYS'); ?></option>                                                                                               
-                                                <option>45 <?php echo Text::_('COM_JOOMLAIDP_DAYS'); ?></option>                                                                                               
-                                                <option>30 <?php echo Text::_('COM_JOOMLAIDP_DAYS'); ?></option>                                                                                               
-                                                <option>15 <?php echo Text::_('COM_JOOMLAIDP_DAYS'); ?></option>                                                                                               
-                                                <option>7 <?php echo Text::_('COM_JOOMLAIDP_DAYS'); ?></option>                                                                                               
+                                                <option disabled>180 <?php echo Text::_('COM_JOOMLAIDP_DAYS'); ?></option>                                                                                               
+                                                <option disabled>90 <?php echo Text::_('COM_JOOMLAIDP_DAYS'); ?></option>                                                                                               
+                                                <option disabled>45 <?php echo Text::_('COM_JOOMLAIDP_DAYS'); ?></option>                                                                                               
+                                                <option disabled>30 <?php echo Text::_('COM_JOOMLAIDP_DAYS'); ?></option>                                                                                               
+                                                <option disabled>15 <?php echo Text::_('COM_JOOMLAIDP_DAYS'); ?></option>                                                                                               
+                                                <option disabled>7 <?php echo Text::_('COM_JOOMLAIDP_DAYS'); ?></option>                                                                                               
                                             </select>
                                         </div>
                                     </div>
                                     <div class="mo_boot_row mo_boot_text-center mo_boot_mt-3">
                                         <div class="mo_boot_col-sm-12">
-                                            <input type="submit" value=" <?php echo Text::_('COM_JOOMLAIDP_SAML_SELF_SIGNED'); ?>" disabled class="btn btn_cstm"; />
+                                            <input type="submit" value=" <?php echo Text::_('COM_JOOMLAIDP_SAML_SELF_SIGNED'); ?>" disabled class="btn btn_cstm mo_idp_block_cursor"; />
                                             <input type="button" class="btn btn_cstm" value=" <?php echo Text::_('COM_JOOMLAIDP_BACK_BTN'); ?>" onclick = "hide_gen_cert_form()"/>           
                                         </div>
                                     </div>
@@ -433,7 +464,7 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                                         <span class="mo_saml_required">*</span>
                                                 </div>
                                                 <div class="mo_boot_col-sm-8">
-                                                    <textarea disabled="disabled" rows="5" cols="100" class="mo_saml_table_textbox w-100 mb-5"></textarea>
+                                                    <textarea disabled="disabled" rows="5" cols="100" class="mo_saml_table_textbox w-100 mb-5 mo_idp_block_cursor"></textarea>
                                                 </div>
                                             </div>
                                             <div class="mo_boot_row custom_certificate_table"  >
@@ -442,7 +473,7 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                                         <span class="mo_saml_required">*</span>
                                                 </div>
                                                 <div class="mo_boot_col-sm-8">
-                                                    <textarea disabled="disabled" rows="5" cols="100" class="mo_saml_table_textbox w-100"></textarea>
+                                                    <textarea disabled="disabled" rows="5" cols="100" class="mo_saml_table_textbox w-100 mo_idp_block_cursor"></textarea>
                                                 </div>
                                             </div>
                                             <div class="mo_boot_row mo_boot_mt-3 custom_certificate_table"  id="save_config_element">
@@ -472,15 +503,12 @@ class JoomlaIdpViewAccountSetup extends HtmlView
         if ($admin_email == '') $admin_email = $current_user->email;
         
         ?>
-            <div class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0">
-                <div class="mo_boot_row mo_tab_border mo_boot_p-2 mo_boot_m-0">
-                    <div class="mo_boot_col-sm-12 mo_boot_mt-3">
-                        <div class="mo_boot_row">
-                            <div class="mo_boot_col-lg-5">
-                                <h3 class="mo_saml_form_head"><?php echo Text::_('COM_JOOMLAIDP_DEMO_HEADER'); ?></h3>
+            <div class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0 mo_idp_main_content">
+                <div class="mo_boot_row mo_boot_p-2">
+                  
+                            <div class="mo_boot_col-sm-12 mo_boot_px-2">
+                                <h3><?php echo Text::_('COM_JOOMLAIDP_DEMO_HEADER'); ?></h3>
                             </div>
-                        </div>
-                    </div>
                     <div class="mo_boot_col-sm-12">
                         <div class=" mo_boot_offset-1">
                             <div class="mo_boot_row">
@@ -568,157 +596,269 @@ class JoomlaIdpViewAccountSetup extends HtmlView
             $disabled="disabled";
         }
         ?>
-        <div class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0">
-            <div class="mo_boot_row mo_tab_border mo_boot_p-2 mo_boot_m-0">
-                <div class="mo_boot_col-sm-12 mo_boot_mt-3">
-                    <div class="mo_boot_row">
-                        <div class="mo_boot_col-lg-5">
-                            <h3 class="mo_saml_form_head"><?php echo Text::_('COM_JOOMLAIDP_ATTRIBUTE_MAPPING'); ?></h3>
-                        </div>
-                    </div>
+        <div class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0 mo_idp_main_content">
+            <div class="mo_boot_row mo_boot_p-2">
+                <div class="mo_boot_col-sm-12 mo_boot_px-2">
+                    <h3>1.<?php echo Text::_('COM_JOOMLAIDP_ACCOUNTSETUP_CUSTOM_MAPPING'); ?></h3>
                 </div>
-                <form action="<?php echo Route::_('index.php?option=com_joomlaidp&view=accountsetup&task=accountsetup.updateNameId'); ?>" name="updateNameId" method="post"enctype="multipart/form-data">
-                    <div class="mo_boot_col-sm-12 mo_boot_mt-5">
-                        <div class="mo_boot_row">
-                            <div class="mo_boot_col-sm-3">
-                                <span class="mo_boot_offset-lg-3"><?php echo  Text::_('COM_JOOMLAIDP_ATTRIBUTE_NAMEID'); ?></span>
+                <div class="mo_boot_col-sm-12 mo_boot_p-2 mo_boot_mt-4 mo_idp_mini_section">
+                    <form action="<?php echo Route::_('index.php?option=com_joomlaidp&view=accountsetup&task=accountsetup.updateNameId'); ?>" name="updateNameId" method="post"enctype="multipart/form-data">
+                        <div class="mo_boot_col-sm-12 mo_boot_mt-4">
+                             <div class="mo_boot_row mo_boot_mt-4">
+                                <div class="mo_boot_col-sm-2  mo_boot_ml-5">
+                                    <span class="mo_boot_sm-4"><?php echo Text::_('COM_JOOMLAIDP_ATTRIBUTE_NAMEID'); ?> :</span>
+                                </div>
+                                <div class="mo_boot_col-sm-8">
+                                    <select id="nameid_attribute" name="nameid_attribute" class="mo_form-control mo_idp_form_control">
+                                        <option value="emailAddress" <?php if ($nameid_attribute == 'emailAddress') echo 'selected = "selected"'; ?>>emailAddress</option>
+                                        <option value="username" <?php if ($nameid_attribute == 'username') echo 'selected = "selected"'; ?>>username</option>
+                                    </select>
+                                    <span class="small"><strong><?php echo Text::_('COM_MINIORANGE_SAML_NOTE'); ?>: </strong><?php echo Text::_('COM_JOOMLAIDP_ATTRIBUTE_MAPPING_INFO'); ?></span>
+                                </div>
                             </div>
-                            <div class="mo_boot_col-sm-6">
-                                <select id="nameid_attribute" name="nameid_attribute" class="mo_form-control mo_idp_form_control">
-                                    <option value="emailAddress" <?php if ($nameid_attribute == 'emailAddress') echo 'selected = "selected"'; ?>>emailAddress</option>
-                                    <option value="username" <?php if ($nameid_attribute == 'username') echo 'selected = "selected"'; ?>>username</option>
-                                </select>
-                                <span class="small"><strong><?php echo Text::_('COM_MINIORANGE_SAML_NOTE'); ?>: </strong><?php echo Text::_('COM_JOOMLAIDP_ATTRIBUTE_MAPPING_INFO'); ?></span>
+                            <div class="mo_boot_row mo_boot_mt-4">
+                                <div class="mo_boot_col-sm-12 mo_boot_text-center">
+                                     <input type="submit" class="btn btn_cstm mb-4" value="<?php echo Text::_('COM_JOOMLAIDP_SAVE_BTN'); ?>" <?php echo $disabled ?>/>
+                                </div>
                             </div>
-                            <div class="mo_boot_col-sm-2">
-                                <input type="submit" class="btn btn_cstm" value="<?php echo Text::_('COM_JOOMLAIDP_SAVE_BTN'); ?>" <?php echo $disabled ?>/>
-                            </div>
+                          
                         </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="mo_boot_row mo_boot_p-2">
+                <div class="mo_boot_col-sm-12 mo_boot_px-2">
+                    <div class="mo_boot_col-sm-12 mo_boot_px-2">
+                        <h3>2.<?php echo Text::_('COM_JOOMLAIDP_ACCOUNTSETUP_CUSTOM_MAPPING_2'); ?></h3>
                     </div>
-                </form>
-                <div class="mo_boot_col-sm-12 mo_boot_mt-5">
-                    <h4 class="form-head form-head-bar"><?php echo Text::_('COM_JOOMLAIDP_SAML_BASIC_ATTRIBUTE_MAPPING'); ?><div class="mo_tooltip"><img class="crown_img_small mo_idp_ml_px" src="<?php echo Uri::base();?>/components/com_joomlaidp/assets/images/crown.webp"><span class="mo_tooltiptext small"><?php echo Text::sprintf('COM_JOOMLAIDP_UPGRADE_NOTE',$licensing_page_link); ?></span></div></h4>
-                    <div class="alert alert-info">
-                        <?php echo Text::_('COM_JOOMLAIDP_SAML_ATTRIBUTE_MAPPING_NOTE'); ?>         
-                    </div>
-                    <div class="mo_boot_col-sm-12 mo_boot_mt-5">
-                        <div class="mo_boot_row">
-                            <?php
-                                for($icnt = 1; $icnt <= 5; $icnt++)
-                                {
-                                    ?>
-                                    <div class="mo_boot_col-sm-6">
-                                            <div class="mo_boot_row">
-                                                <div class="mo_boot_col-sm-4">
-                                                    <b><?php echo Text::_('COM_JOOMLAIDP_ATTRIBUTE'); ?> <?php echo $icnt ?> <?php echo Text::_('COM_JOOMLAIDP_NAME'); ?>:</b>
-                                                </div>
-                                                <div class="mo_boot_col-sm-8">
-                                                    <input type="text" class="mo_saml_idp_textfield mo_form-control" disabled="disabled" placeholder="<?php echo Text::_('COM_JOOMLAIDP_ATTRIBUTE_PLACEHOLDER'); ?>"/>
-                                                </div>
-                                            </div>
+
+
+                    <div class="mo_boot_col-sm-12 mo_boot_p-2 mo_boot_mt-4 mo_idp_mini_section">
+                        <div class="mo_boot_col-sm-12 mo_boot_m-3">
+                            <div class="mo_boot_d-flex mo_boot_align-items-center mo_boot_justify-content-between">
+                                <h3 class="mo_boot_mb-0 mo_boot_col-sm-7">a)
+                                <?php echo Text::_('COM_JOOMLAIDP_SAML_BASIC_ATTRIBUTE_MAPPING'); ?>
+                                <sup>
+                                    <div class="mo_tooltip">
+                                        <img class="crown_img_small mo_idp_ml_px"
+                                            src="<?php echo Uri::base(); ?>/components/com_joomlaidp/assets/images/crown.webp">
+                                        <span class="mo_tooltiptext small">
+                                            <?php echo Text::sprintf('COM_JOOMLAIDP_UPGRADE_NOTE', $licensing_page_link); ?>
+                                        </span>
                                     </div>
-                                    <div class="mo_boot_col-sm-6">
-                                        <div class="mo_boot_row">
-                                            <div class="mo_boot_col-sm-4">
-                                                <b><?php echo Text::_('COM_JOOMLAIDP_ATTRIBUTE'); ?> <?php echo $icnt;?> <?php echo Text::_('COM_JOOMLAIDP_VALUE'); ?>:</b>
-                                            </div>
-                                            <div class="mo_boot_col-sm-8">
-                                                <select class="mo_saml_idp_textfield mo_form-control" readonly>
-                                                    <option value=""><?php echo Text::_('COM_JOOMLAIDP_SELECT_ATTR_VAL'); ?></option>
-                                                    <option value="emailAddress"><?php echo Text::_('COM_JOOMLAIDP_EMAIL_ADDRESS'); ?></option>
-                                                    <option value="username"><?php echo Text::_('COM_JOOMLAIDP_USERNAME'); ?></option>
-                                                    <option value="name"><?php echo Text::_('COM_JOOMLAIDP_NAME'); ?></option>
-                                                    <option value="firstname"><?php echo Text::_('COM_JOOMLAIDP_FNAME'); ?></option>
-                                                    <option value="lastname"><?php echo Text::_('COM_JOOMLAIDP_LNAME'); ?></option>
-                                                    <option value="groups"><?php echo Text::_('COM_JOOMLAIDP_GROUPS'); ?></option>
-                                                </select>
-                                            </div>
-                                        </div><br>
-                                    </div>
+                                </sup>
+                                </h3>
+                            </div>
+                            <div class="alert alert-info">
+                                <?php echo Text::_('COM_JOOMLAIDP_SAML_ATTRIBUTE_MAPPING_NOTE'); ?>         
+                            </div>
+
+                            <div class="mo_boot_col-sm-12 mo_boot_mt-4">
+                                <div class="mo_boot_row">
                                     <?php
-                                }
-                            ?>
+                                        for($icnt = 1; $icnt <= 5; $icnt++)
+                                        {
+                                            ?>
+                                            <div class="mo_boot_col-sm-6">
+                                                    <div class="mo_boot_row">
+                                                        <div class="mo_boot_col-sm-4">
+                                                            <b><?php echo Text::_('COM_JOOMLAIDP_ATTRIBUTE'); ?> <?php echo $icnt ?> <?php echo Text::_('COM_JOOMLAIDP_NAME'); ?>:</b>
+                                                        </div>
+                                                        <div class="mo_boot_col-sm-8">
+                                                            <input type="text" class="mo_saml_idp_textfield mo_form-control mo_idp_block_cursor" disabled="disabled" placeholder="<?php echo Text::_('COM_JOOMLAIDP_ATTRIBUTE_PLACEHOLDER'); ?>"/>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                            <div class="mo_boot_col-sm-6">
+                                                <div class="mo_boot_row">
+                                                    <div class="mo_boot_col-sm-4">
+                                                        <b><?php echo Text::_('COM_JOOMLAIDP_ATTRIBUTE'); ?> <?php echo $icnt;?> <?php echo Text::_('COM_JOOMLAIDP_VALUE'); ?>:</b>
+                                                    </div>
+                                                    <div class="mo_boot_col-sm-8">
+                                                        <select class="mo_saml_idp_textfield mo_form-control" readonly>
+                                                            <option value=""><?php echo Text::_('COM_JOOMLAIDP_SELECT_ATTR_VAL'); ?></option>
+                                                            <option value="emailAddress" disabled><?php echo Text::_('COM_JOOMLAIDP_EMAIL_ADDRESS'); ?></option>
+                                                            <option value="username" disabled><?php echo Text::_('COM_JOOMLAIDP_USERNAME'); ?></option>
+                                                            <option value="name" disabled><?php echo Text::_('COM_JOOMLAIDP_NAME'); ?></option>
+                                                            <option value="firstname" disabled><?php echo Text::_('COM_JOOMLAIDP_FNAME'); ?></option>
+                                                            <option value="lastname" disabled><?php echo Text::_('COM_JOOMLAIDP_LNAME'); ?></option>
+                                                            <option value="groups" disabled><?php echo Text::_('COM_JOOMLAIDP_GROUPS'); ?></option>
+                                                        </select>
+                                                    </div>
+                                                </div><br>
+                                            </div>
+                                            <?php
+                                        }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mo_boot_col-sm-12 mo_boot_p-2 mo_boot_mt-4 mo_idp_mini_section">
+                        <div class="mo_boot_col-sm-12 mo_boot_m-3">
+                            <div class="mo_boot_d-flex mo_boot_align-items-center mo_boot_justify-content-between"
+                                onclick="toggleAdditionalAttributes()" style="cursor: pointer;">
+                                <h3 class="mo_boot_mb-0 mo_boot_col-sm-7">
+                                    b) <?php echo Text::_('COM_JOOMLAIDP_MAP_ADDITIONAL_USER_ATTRIBUTES'); ?>
+                                </h3>
+                                <button class="mo_boot_col-sm-1 mo_boot_offset-sm-4 mo_idp_toggle_btn_black"
+                                    id="additional-attributes-toggle">+</button>
+                            </div>
+
+                            <div id="additional-attributes-content" style="display: none;">
+                                <div class="mo_boot_row mo_boot_m-2 mo_idp_highlight_background_url_note mo_boot_mt-4">
+                                    <div class="mo_boot_col-sm-12 mo_boot_m-4">
+                                        <div class="mo_boot_d-flex mo_boot_align-items-center mo_boot_justify-content-between">
+                                            <h4 class="mo_boot_mb-0 mo_boot_col-sm-6 ">
+                                                <?php echo Text::_('COM_JOOMLAIDP_ADDITIONAL_USER_ATTRIBUTES'); ?>
+                                                <sup>
+                                                <div class="mo_tooltip">
+                                                    <img class="crown_img_small mo_idp_ml_px"
+                                                        src="<?php echo Uri::base(); ?>/components/com_joomlaidp/assets/images/crown.webp">
+                                                    <span class="mo_tooltiptext small">
+                                                        <?php echo Text::sprintf('COM_JOOMLAIDP_UPGRADE_NOTE', $licensing_page_link); ?>
+                                                    </span>
+                                                </div>
+                                            </sup>
+                                            </h4>
+                                            <div class="mo_boot_col-sm-2 mo_boot_offset-sm-4 mo_boot_p-0">
+                                                <button class="mo_boot_btn btn_cstm mo_idp_block_cursor"
+                                                    disabled><?php echo Text::_('COM_JOOMLAIDP_ADD_BTN'); ?></button>
+                                            </div>
+                                        </div>
+                                        <div class="alert alert-info mo_boot_col-sm-11">
+                                            <?php echo Text::_('COM_JOOMLAIDP_SAML_ATTRIBUTE_PROFILE_MAPPING_NOTE'); ?>         
+                                        </div>
+
+                                        <div class="mo_boot_col-sm-12 mo_boot_mt-3">
+                                            <div class="mo_boot_row mo_boot_mt-2">
+                                                <div class="mo_boot_col-sm-5">
+                                                    <input class="mo_saml_idp_textfield mo_form-control mo_idp_block_cursor"
+                                                        type="text"
+                                                        placeholder="<?php echo Text::_('COM_JOOMLAIDP_SAML_PROFILE_ATTRIBUTE_HEADER'); ?>"
+                                                        disabled />
+                                                </div>
+                                                <div class="mo_boot_col-sm-5 mo_boot_col-sm-5 mo_boot_offset-sm-1">
+                                                    <input class="mo_saml_idp_textfield mo_form-control mo_idp_block_cursor"
+                                                        type="text"
+                                                        placeholder="<?php echo Text::_('COM_JOOMLAIDP_SAML_IDP_PROFILE_ATTRIBUTE'); ?>"
+                                                        disabled />
+                                                </div>
+                                                <i class="fa fa-trash-o mo_boot_btn mo_boot_btn-sm mo_idp_block_cursor"
+                                                    style="color: #D90F0F; cursor: pointer; background: transparent; border: none; padding: 8px 12px; font-size: 20px;"></i>
+                                            </div>
+
+                                            <div class="mo_boot_row mo_boot_mt-2">
+                                                <div class="mo_boot_col-sm-5">
+                                                    <input class="mo_saml_idp_textfield mo_form-control mo_idp_block_cursor"
+                                                        type="text"
+                                                        placeholder="<?php echo Text::_('COM_JOOMLAIDP_SAML_PROFILE_ATTRIBUTE_HEADER'); ?>"
+                                                        disabled />
+                                                </div>
+                                                <div class="mo_boot_col-sm-5 mo_boot_offset-sm-1">
+                                                    <input class="mo_saml_idp_textfield mo_form-control mo_idp_block_cursor"
+                                                        type="text"
+                                                        placeholder="<?php echo Text::_('COM_JOOMLAIDP_SAML_IDP_PROFILE_ATTRIBUTE'); ?>"
+                                                        disabled />
+                                                </div>
+                                                <i class="fa fa-trash-o mo_boot_btn mo_boot_btn-sm mo_idp_block_cursor"
+                                                    style="color: #D90F0F; cursor: pointer; background: transparent; border: none; padding: 8px 12px; font-size: 20px;"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mo_boot_row mo_boot_m-2 mo_idp_highlight_background_url_note mo_boot_mt-4">
+                                    <div class="mo_boot_col-sm-12 mo_boot_m-4">
+                                        <div class="mo_boot_d-flex mo_boot_align-items-center mo_boot_justify-content-between">
+                                            <h4 class="mo_boot_mb-0 mo_boot_col-sm-6 ">
+                                                <?php echo Text::_('COM_JOOMLAIDP_ADDITIONAL_USER_FIELD_ATTRIBUTES'); ?>
+                                            <sup>
+                                                <div class="mo_tooltip">
+                                                    <img class="crown_img_small mo_idp_ml_px"
+                                                        src="<?php echo Uri::base(); ?>/components/com_joomlaidp/assets/images/crown.webp">
+                                                    <span class="mo_tooltiptext small">
+                                                        <?php echo Text::sprintf('COM_JOOMLAIDP_UPGRADE_NOTE', $licensing_page_link); ?>
+                                                    </span>
+                                                </div>
+                                            </sup>
+                                            </h4>
+                                            
+                                            <div class="mo_boot_col-sm-2 mo_boot_offset-sm-4 mo_boot_p-0">
+                                                <button class="mo_boot_btn btn_cstm mo_idp_block_cursor"
+                                                    disabled><?php echo Text::_('COM_JOOMLAIDP_ADD_BTN'); ?></button>
+                                            </div>
+                                        </div>
+                                        <div class="alert alert-info mo_boot_col-sm-11">
+                                            <?php echo Text::_('COM_JOOMLAIDP_SAML_ATTRIBUTE_FILED_MAPPING_NOTE'); ?>         
+                                        </div>
+
+                                        <div class="mo_boot_col-sm-12 mo_boot_mt-3">
+                                            <div class="mo_boot_row mo_boot_mt-2">
+                                                <div class="mo_boot_col-sm-5">
+                                                    <input class="mo_saml_idp_textfield mo_form-control mo_idp_block_cursor"
+                                                        type="text"
+                                                        placeholder="<?php echo Text::_('COM_JOOMLAIDP_SAML_FIELD_ATTRIBUTE_HEADER'); ?>"
+                                                        disabled />
+                                                </div>
+                                                <div class="mo_boot_col-sm-5 mo_boot_offset-sm-1">
+                                                    <input class="mo_saml_idp_textfield mo_form-control mo_idp_block_cursor"
+                                                        type="text"
+                                                        placeholder="<?php echo Text::_('COM_JOOMLAIDP_SAML_IDP_FIELD_ATTRIBUTE'); ?>"
+                                                        disabled />
+                                                </div>
+                                                <i class="fa fa-trash-o mo_boot_btn mo_boot_btn-sm mo_idp_block_cursor"
+                                                    style="color: #D90F0F; cursor: pointer; background: transparent; border: none; padding: 8px 12px; font-size: 20px;"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="mo_boot_col-sm-12 mo_boot_mt-5">
-                    <div class="mo_boot_row ml-1">
-                        <div class="col-sm-2 col-lg-1">
-                            <label class="mo_saml_switch">
-                                <input type="checkbox" disabled>
-                                <span class="mo_saml_slider"></span>
+            </div>
+            <div class="mo_boot_row m-0 p-0 mo_boot_mt-3">
+                <div class="mo_boot_col-sm-12 m-0 p-0 mo_boot_text-center">
+                    <input type="submit" class="mo_boot_btn btn_cstm mo_idp_block_cursor"
+                        value="<?php echo Text::_('COM_JOOMLAIDP_SAVE_MAPPING'); ?>" disabled />
+                </div>
+            </div>
+
+            <div class="mo_boot_row mo_boot_p-2 mo_boot_mt-4">
+                <div class="mo_boot_d-flex mo_boot_align-items-center mo_boot_justify-content-between">
+                    <h3 class="mo_boot_mb-0 mo_boot_col-sm-12">
+                    <?php echo Text::_('COM_JOOMLAIDP_CONFIGURE_GROUP_MAPPING'); ?>
+                    <sup>
+                        <div class="mo_tooltip">
+                            <img class="crown_img_small mo_idp_ml_px"
+                                src="<?php echo Uri::base(); ?>/components/com_joomlaidp/assets/images/crown.webp">
+                            <span class="mo_tooltiptext small">
+                                <?php echo Text::sprintf('COM_JOOMLAIDP_UPGRADE_NOTE', $licensing_page_link); ?>
+                            </span>
+                        </div>
+                    </sup>
+                    </h3>
+                </div>
+                <div class="mo_boot_col-sm-12 mo_boot_p-2 mo_boot_mt-4 mo_idp_mini_section">
+                    <div class="mo_boot_col-sm-12 mo_boot_m-3">
+
+                        <div class="mo_boot_d-flex mo_boot_align-items-center mo_boot_justify-content-center">
+                            <h3 class="mo_boot_mb-0 mo_boot_col-sm-6">a)
+                                <?php echo Text::_('COM_JOOMLAIDP_COMMOA_SEPERATED'); ?>
+                            </h3>
+
+                            <label class="mo_saml_toggle-switch-rect mo_boot_ml-3">
+                                <input type="checkbox" id="enable_group_mapping" disabled>
+                                <span class="mo_saml_slider mo_idp_block_cursor"></span>
                             </label>
                         </div>
-                        <div class="mo_boot_col-sm-9" class="mo_idp_adv_note">
-                            <?php echo Text::_('COM_JOOMLAIDP_COMMOA_SEPERATED'); ?><div class="mo_tooltip"><img class="crown_img_small mo_idp_ml_px" src="<?php echo Uri::base();?>/components/com_joomlaidp/assets/images/crown.webp"><span class="mo_tooltiptext small"><?php echo Text::sprintf('COM_JOOMLAIDP_UPGRADE_NOTE',$licensing_page_link); ?></span></div><br>
-                            <span class="small"><strong><?php echo Text::_('COM_MINIORANGE_SAML_NOTE'); ?>: </strong><?php echo Text::_('COM_JOOMLAIDP_SAML_GROUP_MAPPING_CHECKBOX_NOTE'); ?></span>
+                        <div class="mo_boot_col-sm-12 mo_boot_mt-3">
+                            <p class="mo_boot_mb-0"><strong><?php echo Text::_('COM_MINIORANGE_SAML_NOTE'); ?></strong>
+                                <?php echo Text::_('COM_JOOMLAIDP_SAML_GROUP_MAPPING_CHECKBOX_NOTE'); ?></p>
                         </div>
-                    </div>
-                </div>
-                <div class="mo_boot_col-sm-12 mo_boot_mt-5">
-                    <h4 class="form-head form-head-bar"><?php echo Text::_('COM_JOOMLAIDP_ADDITIONAL_USER_ATTRIBUTES'); ?><div class="mo_tooltip"><img class="crown_img_small mo_idp_ml_px" src="<?php echo Uri::base();?>/components/com_joomlaidp/assets/images/crown.webp"><span class="mo_tooltiptext small"><?php echo Text::sprintf('COM_JOOMLAIDP_UPGRADE_NOTE',$licensing_page_link); ?></span></div></h4>
-                    <div class="alert alert-info">
-                        <?php echo Text::_('COM_JOOMLAIDP_SAML_ATTRIBUTE_PROFILE_MAPPING_NOTE'); ?>         
-                    </div>
-                    <div class="mo_boot_p-4">
-                        <div class="mo_boot_row mo_boot_mt-2">
-                            <div class="mo_boot_col-sm-5 mo_boot_text-center">
-                                <?php echo Text::_('COM_JOOMLAIDP_SAML_PROFILE_ATTRIBUTE_HEADER'); ?>
-                            </div>
-                            <div class="mo_boot_col-sm-5 mo_boot_text-center">
-                                <?php echo Text::_('COM_JOOMLAIDP_SAML_IDP_PROFILE_ATTRIBUTE'); ?>
-                            </div>
-                            <div class="mo_boot_col-sm-2 mo_boot_text-center">
-                                <input type="button" class="btn btn_cstm mo_group_mapping_btn" disabled value="+" />
-                            </div>
-                        </div>
-                        <div class="mo_boot_row mo_boot_mt-4">
-                            <div class="mo_boot_col-sm-5">
-                                <input disabled type="text" class="mo_form-control " />
-                            </div>
-                            <div class="mo_boot_col-sm-5">
-                                <input disabled type="text" class="mo_form-control " />
-                            </div>
-                            <div class="mo_boot_col-sm-2 mo_boot_text-center">
-                                <input type="button" class="btn btn_cstm_red mo_group_mapping_btn" disabled value="-" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="mo_boot_col-sm-12 mo_boot_mt-5">
-                    <h4 class="form-head form-head-bar"><?php echo Text::_('COM_JOOMLAIDP_ADDITIONAL_USER_FIELD_ATTRIBUTES'); ?><div class="mo_tooltip"><img class="crown_img_small mo_idp_ml_px" src="<?php echo Uri::base();?>/components/com_joomlaidp/assets/images/crown.webp"><span class="mo_tooltiptext small"><?php echo Text::sprintf('COM_JOOMLAIDP_UPGRADE_NOTE',$licensing_page_link); ?></span></div></h4>
-                    <div class="alert alert-info">
-                        <?php echo Text::_('COM_JOOMLAIDP_SAML_ATTRIBUTE_FILED_MAPPING_NOTE'); ?>         
-                    </div>
-                    <div class="mo_boot_p-4">
-                        <div class="mo_boot_row mo_boot_mt-2">
-                            <div class="mo_boot_col-sm-5 mo_boot_text-center">
-                                <?php echo Text::_('COM_JOOMLAIDP_SAML_FIELD_ATTRIBUTE_HEADER'); ?>
-                            </div>
-                            <div class="mo_boot_col-sm-5 mo_boot_text-center">
-                                <?php echo Text::_('COM_JOOMLAIDP_SAML_IDP_FIELD_ATTRIBUTE'); ?>
-                            </div>
-                            <div class="mo_boot_col-sm-2 mo_boot_text-center">
-                                <input type="button" class="btn btn_cstm mo_group_mapping_btn" disabled value="+" />
-                            </div>
-                        </div>
-                        <div class="mo_boot_row mo_boot_mt-4">
-                            <div class="mo_boot_col-sm-5">
-                                <input disabled type="text" class=" mo_form-control " />
-                            </div>
-                            <div class="mo_boot_col-sm-5">
-                                <input disabled type="text" class=" mo_form-control " />
-                            </div>
-                            <div class="mo_boot_col-sm-2 mo_boot_text-center">
-                                <input type="button" class="btn btn_cstm_red mo_group_mapping_btn" disabled value="-" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="mo_boot_col-sm-10 mo_boot_mt-5">
-                    <div class="mo_boot_text-center">
-                        <input type="submit" class="btn btn_cstm mb-4" disabled value="<?php echo Text::_('COM_JOOMLAIDP_SAVE_MAPPING'); ?>">
-                    </div>
+                    </div>        
                 </div>
             </div>
         </div>
@@ -738,117 +878,151 @@ class JoomlaIdpViewAccountSetup extends HtmlView
         
         ?>
         
-        <div class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0">
-            <div class="mo_boot_row mo_tab_border mo_boot_p-0 mo_boot_m-0">
-                <div class="mo_boot_col-sm-12 mo_boot_mt-3">
-                    <div class="mo_boot_row">
-                        <div class="mo_boot_col-lg-5">
-                            <h3 class="mo_saml_form_head"><?php echo Text::_('COM_JOOMLAIDP_IDP_METADATA'); ?></h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="mo_boot_col-sm-12 mo_boot_mt-5">
-                    <h4 class="form-head form-head-bar"><?php echo Text::_('COM_JOOMLAIDP_PROVIDE_METADATA'); ?></h4>
-                    <div class="mo_boot_row mo_boot_mt-4">
-                        <div class="mo_boot_col-sm-3 mo_boot_col-lg-2">
-                            <span ><?php echo Text::_('COM_JOOMLAIDP_METADATA_URL'); ?> :</span>
-                        </div>
-                        <div class="mo_boot_col-sm-9 text-wrap">
-                             <span id="idp_metadata_url" class=" mo_saml_highlight_background_url_note mo_saml_dark_bg " >
-                                 <em class="fa fa-lg fa-copy mo_idp_copy_btns mo_boot_p-3" onclick="copyToClipboard('#idp_metadata_url');" title="Copy to clipboard"></em>
-                                 <a class="mo_idp_metadata_link" href='<?php echo Uri::root() . 'plugins/system/joomlaidplogin/saml2idp/metadata/metadata.php' ; ?>' id='metadata-linkss' target='_blank'><?php echo '<strong>' . Uri::root() . 'plugins/system/joomlaidplogin/saml2idp/metadata/metadata.php </strong>'; ?></a>
-                             </span> 
-                        </div> 
-                    </div>
-                  
-                    <div class="mo_boot_row mo_boot_mt-4">
-                        <div class="mo_boot_col-sm-3 mo_boot_col-lg-2">
-                            <span class="mo_boot_mo_boot-ml-5"><?php echo Text::_('COM_JOOMLAIDP_METADATA_FILE'); ?> :</span>
-                        </div>
-                        <div class="mo_boot_col-sm-7 ">
-                            <a href="<?php echo  Uri::root() . 'plugins/system/joomlaidplogin/saml2idp/metadata/metadata.php?download=true'; ?>" class="btn btn_cstm anchor_tag">
-                                <?php echo Text::_('COM_JOOMLAIDP_DOWNLOAD_METADATA'); ?>   
-                            </a>
-                        </div>
-                    </div>
-                    <div class="mo_boot_mt-5 ">
-                        <div class="mo_boot_text-center metadata_or" >
-                            <div class="mo_idp_ip_or">
-                                <span class="mo_saml_rounded_circle mo_boot_p-2" ><?php echo Text::_('COM_JOOMLAIDP_OR'); ?></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="mo_boot_col-sm-12 mo_boot_mt-5">
-                    <h4 class="form-head form-head-bar"><?php echo Text::_('COM_JOOMLAIDP_METADATA_OPTIONS'); ?></h4>
-                    <div id="mo_other_idp" class="p-4">
-                        <table class='customtemp'>
-                            <tr>
-                                <td class="mo_table_td_style"><?php echo Text::_('COM_JOOMLAIDP_ACCOUNTSETUP_ISSUER'); ?></td>
-                                <td><span id="issuer"><?php echo $idp_entity_id; ?></span>
-                                    <em class="fa fa-pull-right  fa-lg fa-copy mo_copy mo_copytooltip mo_boot_p-3" 
-                                        onclick="copyToClipboard('#issuer');"><span class="mo_copytooltiptext copied_text mo_boot_p-2"><?php echo Text::_('COM_JOOMLAIDP_COPY_BTN'); ?></span></em>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="mo_table_td_style"><?php echo Text::_('COM_JOOMLAIDP_ACCOUNTSETUP_SAML_LOGIN'); ?></td>
-                                <td>
-                                    <span id="login_url"><?php echo $site_url . 'index.php';  ?></span>
-                                    <em class="fa fa-pull-right  fa-lg fa-copy mo_copy mo_copytooltip mo_boot_p-3" onclick="copyToClipboard('#login_url');"><span class="mo_copytooltiptext copied_text mo_boot_p-2"><?php echo Text::_('COM_JOOMLAIDP_COPY_BTN'); ?></span> </em>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="mo_table_td_style"><?php echo Text::_('COM_JOOMLAIDP_ACCOUNTSETUP_CERTIFICATE'); ?></td>
-                                <td>
-                                    <?php echo Text::_('COM_JOOMLAIDP_DOWNLOAD_CRT'); ?>
-                                    <a class="btn metadata_btn_cstm anchor_tag "  href="<?php echo Uri::root() . 'plugins/system/joomlaidplogin/saml2idp/cert/idp-signing.crt'; ?>"><i class="fa fa-download" aria-hidden="true"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="mo_table_td_style">
-                                    <?php echo Text::_('COM_JOOMLAIDP_ACCOUNTSETUP_SAML_LOGOUT'); ?>
-                                </td>
-                                <td>
-                                    <a href="index.php?option=com_joomlaidp&amp;view=accountsetup&amp;tab-panel=license"><b><?php echo Text::_('COM_JOOMLAIDP_PREMIUM_FEATURE'); ?></b></a>
-                                    <img class="crown_img_small mo_idp_crown_pos" src="<?php echo Uri::base();?>/components/com_joomlaidp/assets/images/crown.webp">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="mo_table_td_style">
-                                    <?php echo Text::_('COM_JOOMLAIDP_ACCOUNTSETUP_ASSERTION_SIGNED'); ?>
-                                </td>
-                                <td>
-                                <a href="index.php?option=com_joomlaidp&amp;view=accountsetup&amp;tab-panel=license"><b><?php echo Text::_('COM_JOOMLAIDP_PREMIUM_FEATURE'); ?></b></a>
-                                    <img class="crown_img_small mo_idp_crown_pos" src="<?php echo Uri::base();?>/components/com_joomlaidp/assets/images/crown.webp">
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
+        <div class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0 mo_idp_main_content">
+            <div class="mo_boot_row mo_boot_p-2">
+                <div class="mo_boot_col-sm-12 mo_boot_px-2">
+                   <h3>1.<?php echo Text::_('COM_JOOMLAIDP_SAML_UPDATE_ENTITY'); ?></h3>
 
-                <div class="mo_boot_col-sm-12">
-                    <div class="metadata_or mo_idp_ip_or" ></div>
+                    <div class="mo_boot_col-sm-12 mo_boot_p-2 mo_boot_mt-4 mo_idp_mini_section">
+                        <form action="<?php echo Route::_('index.php?option=com_joomlaidp&view=accountsetup&task=accountsetup.updateIdpEntityId'); ?>" method="post" name="updateissueer" id="identity_provider_update_form">
+                            <div class="mo_boot_row mo_boot_mt-4">
+                                <div class="mo_boot_col-sm-2  mo_boot_ml-5">
+                                    <span class="mo_boot_sm-4"><?php echo Text::_('COM_JOOMLAIDP_ACCOUNTSETUP_ISSUER'); ?> :</span>
+                                </div>
+                                <div class="mo_boot_col-sm-8">
+                                    <input class=" mo_form-control mo_saml_proxy_setup" type="text" name="mo_saml_idp_entity_id" value="<?php echo $idp_entity_id; ?>" placeholder="<?php echo Text::_('COM_JOOMLAIDP_ISSUER_OF_IDP'); ?>" required />
+                                    <span class="small"><strong><?php echo Text::_('COM_MINIORANGE_SAML_NOTE'); ?>: </strong><?php echo Text::_('COM_JOOMLAIDP_ISSUER_NOTE'); ?></span>
+                                </div>
+                            </div>
+                            <div class="mo_boot_row mo_boot_mt-4">
+                                <div class="mo_boot_col-sm-12 mo_boot_text-center">
+                                    <input type="submit" class="btn btn_cstm mb-4" value="<?php echo Text::_('COM_JOOMLAIDP_UPDATE_BTN'); ?>"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="mo_boot_col-sm-12 mt-5">
-                    <h4 class="form-head form-head-bar "><?php echo Text::_('COM_JOOMLAIDP_SAML_UPDATE_ENTITY'); ?></h4>
-                    <form action="<?php echo Route::_('index.php?option=com_joomlaidp&view=accountsetup&task=accountsetup.updateIdpEntityId'); ?>" method="post" name="updateissueer" id="identity_provider_update_form">
-                        <div class="mo_boot_row mo_boot_mt-4">
-                            <div class="mo_boot_col-sm-2  mo_boot_ml-5">
-                                <span class="mo_boot_ml-5"><?php echo Text::_('COM_JOOMLAIDP_ACCOUNTSETUP_ISSUER'); ?> :</span>
-                            </div>
-                            <div class="mo_boot_col-sm-8">
-                                <input class=" mo_form-control mo_saml_proxy_setup" type="text" name="mo_saml_idp_entity_id" value="<?php echo $idp_entity_id; ?>" placeholder="<?php echo Text::_('COM_JOOMLAIDP_ISSUER_OF_IDP'); ?>" required />
-                                <span class="small"><strong><?php echo Text::_('COM_MINIORANGE_SAML_NOTE'); ?>: </strong><?php echo Text::_('COM_JOOMLAIDP_ISSUER_NOTE'); ?></span>
-                            </div>
-                        </div>
-                        <div class="mo_boot_row mo_boot_mt-4">
+                <div class="mo_boot_col-sm-12 mo_boot_px-2 mo_boot_mt-4 ">
+                <h3>2.<?php echo Text::_('COM_MINIORANGE_IDP_SHARE_METADATA'); ?></h3>
+                <ul class="switch_tab_idp mo_boot_text-center mo_boot_p-0 mo_boot_mt-4 mo_boot_m-0">
+                    <li class="mo_idp_tab_current" id="metadata-url-tab-btn">
+                        <a href="#" class="mo_idp_bs_btn" onclick="showMetadataTab('metadata-url', event)">
+                            <i class="fa fa-link"></i>&nbsp;<?php echo Text::_('COM_JOOMLAIDP_METADATA_URL'); ?>
+
+                        </a>
+                    </li>
+                    <li class="" id="download-xml-tab-btn">
+                        <a href="#" class="mo_idp_bs_btn" onclick="showMetadataTab('download-xml', event)">
+                            <i class="fa fa-download"></i>&nbsp;<?php echo Text::_('COM_JOOMLAIDP_DOWNLOAD_METADATA'); ?>
+
+                        </a>
+                    </li>
+                    <li class="" id="manual-info-tab-btn">
+                        <a href="#" class="mo_idp_bs_btn" onclick="showMetadataTab('manual-info', event)">
+                            <i class="fa fa-hand-o-up"></i>&nbsp;<?php echo Text::_('COM_MINIORANGE_IDP_MANUAL_INFO'); ?>
+                        </a>
+                    </li>
+                </ul>
+                <div class="mo_boot_col-sm-12 mo_boot_p-2 mo_boot_mt-4 mo_idp_mini_section">
+                    <div id="metadata-url-tab" class="metadata-tab-content mo_boot_display_block">
+                        <div class="mo_boot_row">
                             <div class="mo_boot_col-sm-12 mo_boot_text-center">
-                                <input type="submit" class="btn btn_cstm mb-4" value="<?php echo Text::_('COM_JOOMLAIDP_UPDATE_BTN'); ?>"/>
+                                <div class="mo_boot_row mo_boot_m-4">
+                                    <p><?php echo Text::_('COM_MINIORANGE_IDP_SHARE_METADATA_TEXT'); ?></p>
+
+                                </div>
+                                <div class="mo_boot_row mo_boot_m-4">
+                                    <span id="idp_metadata_url"
+                                        class=" mo_saml_highlight_background_url_note mo_saml_float_right">
+                                        <a class="mo_idp_metadata_link" href='<?php echo Uri::root() . 'plugins/system/joomlaidplogin/saml2idp/metadata/metadata.php' ; ?>' id='metadata-linkss' target='_blank'><?php echo '<strong>' . Uri::root() . 'plugins/system/joomlaidplogin/saml2idp/metadata/metadata.php </strong>'; ?></a>
+
+                                    </span>
+                                    <div class="mo_boot_col-sm-1">
+                                        <em class="fa fa-pull-right  fa-lg fa-copy mo_copy mo_copytooltip mo_boot_p-3"
+                                            onclick="copyToClipboard('#idp_metadata_url');"></em>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
 
+
+                    <div id="download-xml-tab" class="metadata-tab-content mo_saml_display_none">
+                        <div class="mo_boot_row">
+                            <div class="mo_boot_col-sm-12 ">
+                                <div class="mo_boot_row mo_boot_m-4">
+                                    <p><?php echo Text::_('COM_MINIORANGE_IDP_DOWNLOAD_METADATA_TEXT'); ?></p>
+                                    <div class="mo_boot_col-sm-12 mo_boot_p-0">
+                                    <a href="<?php echo  Uri::root() . 'plugins/system/joomlaidplogin/saml2idp/metadata/metadata.php?download=true'; ?>" class="btn btn_cstm anchor_tag">
+                                        <?php echo Text::_('COM_JOOMLAIDP_DOWNLOAD_METADATA'); ?>   
+                                    </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div id="manual-info-tab" class="metadata-tab-content mo_saml_display_none">
+                        <div class="mo_boot_row">
+                            <div class="mo_boot_col-sm-12 ">
+                                <div class="mo_boot_row mo_boot_m-4">
+                                    <p><?php echo Text::_('COM_MINIORANGE_IDP_MANUAL_INFO_TITLE'); ?></p>
+                                    <table class='customtemp mo_boot_col-sm-12'>
+                                        <tr>
+                                            <td class="mo_table_td_style mo_boot_p-3">
+                                                <?php echo Text::_('COM_JOOMLAIDP_ACCOUNTSETUP_ISSUER'); ?>
+                                            </td>
+                                            <td><span id="issuer"><?php echo $idp_entity_id; ?></span>
+                                                <em class="fa fa-pull-right  fa-lg fa-copy mo_copy mo_copytooltip mo_boot_p-3" 
+                                                    onclick="copyToClipboard('#issuer');"><span class="mo_copytooltiptext copied_text mo_boot_p-2"><?php echo Text::_('COM_JOOMLAIDP_COPY_BTN'); ?></span></em>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mo_table_td_style mo_boot_p-3">
+                                                <?php echo Text::_('COM_JOOMLAIDP_ACCOUNTSETUP_SAML_LOGIN'); ?>
+                                            </td>
+                                            <td>
+                                                <span id="login_url"><?php echo $site_url . 'index.php';  ?></span>
+                                                <em class="fa fa-pull-right  fa-lg fa-copy mo_copy mo_copytooltip mo_boot_p-3" onclick="copyToClipboard('#login_url');"><span class="mo_copytooltiptext copied_text mo_boot_p-2"><?php echo Text::_('COM_JOOMLAIDP_COPY_BTN'); ?></span> </em>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mo_table_td_style mo_boot_p-3">
+                                                <?php echo Text::_('COM_JOOMLAIDP_ACCOUNTSETUP_CERTIFICATE'); ?>
+                                            </td>
+                                            <td>
+                                                <?php echo Text::_('COM_JOOMLAIDP_DOWNLOAD_CRT'); ?>
+                                                <a class="metadata_btn_cstm btn btn_cstm"  href="<?php echo Uri::root() . 'plugins/system/joomlaidplogin/saml2idp/cert/idp-signing.crt'; ?>"><i class="fa fa-download" aria-hidden="true"></i></a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mo_table_td_style mo_boot_p-3">
+                                                <?php echo Text::_('COM_JOOMLAIDP_ACCOUNTSETUP_SAML_LOGOUT'); ?>
+                                            </td>
+                                            <td>
+                                                <a href="index.php?option=com_joomlaidp&amp;view=accountsetup&amp;tab-panel=license"><b><?php echo Text::_('COM_JOOMLAIDP_PREMIUM_FEATURE'); ?></b></a>
+                                                <img class="crown_img_small mo_idp_crown_pos" src="<?php echo Uri::base();?>/components/com_joomlaidp/assets/images/crown.webp">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mo_table_td_style mo_boot_p-3">
+                                                <?php echo Text::_('COM_JOOMLAIDP_ACCOUNTSETUP_ASSERTION_SIGNED'); ?>
+                                            </td>
+                                            <td>
+                                                <a href="index.php?option=com_joomlaidp&amp;view=accountsetup&amp;tab-panel=license"><b><?php echo Text::_('COM_JOOMLAIDP_PREMIUM_FEATURE'); ?></b></a>
+                                                    <img class="crown_img_small mo_idp_crown_pos" src="<?php echo Uri::base();?>/components/com_joomlaidp/assets/images/crown.webp">
+                                                </td>
+                                        </tr>
+                                       
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
      
@@ -871,15 +1045,12 @@ class JoomlaIdpViewAccountSetup extends HtmlView
          
         ?> 
         
-        <div class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0">
-        <div class="mo_boot_row mo_tab_border mo_boot_p-2 mo_boot_m-0">
-            <div class="mo_boot_col-sm-12 mo_boot_mt-3">
-                <div class="mo_boot_row">
-                    <div class="mo_boot_col-lg-5">
-                        <h3 class="mo_saml_form_head"><?php echo Text::_('COM_JOOMLAIDP_LICENSING_HEADER'); ?></h3>
-                    </div>
-                </div>
+        <div class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0 mo_idp_main_content">
+        <div class="mo_boot_row mo_boot_p-2">
+            <div class="mo_boot_col-sm-12 mo_boot_px-2">
+                <h3><?php echo Text::_('COM_JOOMLAIDP_SELECT_PLAN_TO_UPGRADE'); ?></h3>
             </div>
+         
     
         <div id="mo_saml_pricing_page" class="mo_idp_pricing_page mo_boot_col-sm-12 my-2">
             <div class="mo_boot_row mo_idp_pricing_snippet_grid justify-content-center">
@@ -893,16 +1064,37 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                        <a href="#"
                            class="upgrade_button mo_idp_license_btns"><?php echo Text::_('COM_JOOMLAIDP_ACTIVE_PLAN'); ?></a>
                    </div>
-                   <ul class="mt-mo-4 grow mo_idp_license_point mo_idp_first_Plan mo_boot_mt-5">
-                   <li class="mo_saml_feature_snippet"><span><?php echo $circle_icon; ?></span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_FREE_NOW_DESC_A'); ?></span></li>
-                   <li class="mo_saml_feature_snippet"><span><?php echo $circle_icon; ?></span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_FREE_NOW_DESC_B'); ?></span></li>
-                   <li class="mo_saml_feature_snippet"><span><?php echo $circle_icon; ?></span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_FREE_NOW_DESC_C'); ?></span></li>
-                   <li class="mo_saml_feature_snippet"><span><?php echo $circle_icon; ?></span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_FREE_NOW_DESC_D'); ?></span></li>
-                   <li class="mo_saml_feature_snippet"><span><?php echo $circle_icon; ?></span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_FREE_NOW_DESC_E'); ?></span></li>
-                   <li class="mo_saml_feature_snippet"><span><?php echo $circle_icon; ?></span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_FREE_NOW_DESC_F'); ?></span></li>
-                   <li class="mo_saml_feature_snippet"><span><?php echo $circle_icon; ?></span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_FREE_NOW_DESC_G'); ?></span></li>
-                   <li class="mo_saml_feature_snippet"><span><?php echo $circle_icon; ?></span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_FREE_NOW_DESC_H'); ?></span></li>                       
-                   </ul>
+                   <div class="mo_boot_mb-0 mo_boot_text-center mo_idp_feature_header mo_boot_mt-5">
+                       <a href="#" onclick="toggleIncludedFeatures('free_plan_features'); return false;">
+                           <i class="fa fa-check-circle"></i> <strong>Included Features</strong>
+                       </a>
+                       <ul id="free_plan_features" class="mt-mo-4 grow mo_idp_license_point mo_idp_first_Plan mo_boot_mt-3 mo_idp_features_list" style="display: none;">
+                       <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_FREE_NOW_DESC_A'); ?></span></li>
+                       <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_FREE_NOW_DESC_B'); ?></span></li>
+                       <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_FREE_NOW_DESC_C'); ?></span></li>
+                       <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_FREE_NOW_DESC_D'); ?></span></li>
+                       <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_FREE_NOW_DESC_E'); ?></span></li>
+                       <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_FREE_NOW_DESC_F'); ?></span></li>
+                       <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_FREE_NOW_DESC_G'); ?></span></li>
+                       <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_FREE_NOW_DESC_H'); ?></span></li>                       
+                       </ul>
+                   </div>
+                   <div class="mo_boot_mb-0 mo_boot_text-center mo_idp_feature_header mo_boot_mt-3">
+                       <a href="#" onclick="toggleIncludedFeatures('free_plan_not_included_features'); return false;">
+                           <i class="fa fa-times-circle" style="color: #cc0000;"></i> <strong>Not-Included Features</strong>
+                       </a>
+                       <ul id="free_plan_not_included_features" class="mt-mo-4 grow mo_idp_license_point mo_idp_first_Plan mo_boot_mt-3 mo_idp_features_list" style="display: none;">
+                       <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_B'); ?></span></li>
+                       <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_C'); ?></span></li>
+                       <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_D'); ?></span></li>
+                       <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_E'); ?></span></li>
+                       <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_F'); ?></span></li>
+                       <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_G'); ?></span></li>
+                       <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_H'); ?></span></li>
+                       <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_I'); ?></span></li>
+                       <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_J'); ?></span></li>
+                       </ul>
+                   </div>
                         </div>
                         <div class=" mo_idp_pricing_card">
 
@@ -1024,19 +1216,30 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                             </div>
     
                             <div class="pricing-content">
-                                <ul class=" grow mo_idp_license_point mo_boot_mt-5">
-                                    <li class="mo_saml_feature_snippet"><span><?php echo $circle_icon; ?></span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_A'); ?></span></li>
-                                    <li class="mo_saml_feature_snippet"><span><?php echo $circle_icon; ?></span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_B'); ?></span></li>
-                                    <li class="mo_saml_feature_snippet"><span><?php echo $circle_icon; ?></span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_C'); ?></span></li>
-                                    <li class="mo_saml_feature_snippet"><span><?php echo $circle_icon; ?></span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_D'); ?></span></li>
-                                    <li class="mo_saml_feature_snippet"><span><?php echo $circle_icon; ?></span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_E'); ?></span></li>
-                                    <li class="mo_saml_feature_snippet"><span><?php echo $circle_icon; ?></span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_F'); ?></span></li>
-                                    <li class="mo_saml_feature_snippet"><span><?php echo $circle_icon; ?></span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_G'); ?></span></li>
-                                    <li class="mo_saml_feature_snippet"><span><?php echo $circle_icon; ?></span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_H'); ?></span></li>
-                                    <li class="mo_saml_feature_snippet"><span><?php echo $circle_icon; ?></span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_I'); ?></span></li>
-                                    <li class="mo_saml_feature_snippet"><span><?php echo $circle_icon; ?></span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_J'); ?></span></li>
-                                </ul>
-
+                                <div class="mo_boot_mb-0 mo_boot_text-center mo_idp_feature_header mo_boot_mt-5">
+                                    <a href="#" onclick="toggleIncludedFeatures('premium_plan_features', event); return false;">
+                                        <i class="fa fa-check-circle"></i> <strong>Included Features</strong>
+                                    </a>
+                                    <ul id="premium_plan_features" class="mt-mo-4 grow mo_idp_license_point mo_boot_mt-3 mo_idp_features_list" style="display: none;">
+                                        <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_A'); ?></span></li>
+                                        <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_B'); ?></span></li>
+                                        <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_C'); ?></span></li>
+                                        <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_D'); ?></span></li>
+                                        <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_E'); ?></span></li>
+                                        <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_F'); ?></span></li>
+                                        <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_G'); ?></span></li>
+                                        <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_H'); ?></span></li>
+                                        <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_I'); ?></span></li>
+                                        <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_J'); ?></span></li>
+                                    </ul>
+                                </div>
+                                <!-- Hidden "Not-Included Features" section to match free card height -->
+                                <div class="mo_boot_mb-0 mo_boot_text-center mo_idp_feature_header mo_boot_mt-3 mo_idp_hidden_not_included">
+                                    <a href="#" onclick="toggleIncludedFeatures('premium_plan_not_included_features', event); return false;">
+                                     <strong>Not-Included Features</strong>
+                                    </a>
+                                  
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1052,121 +1255,399 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                     </div>
                 </div>
             </div>
-            <div class=" mo_boot_col-sm-12 mo_boot_my-4">
-                <h4 class="form-head form-head-bar"><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER');?></h4>
-                <section id="mo_saml_section-steps" class="mo_boot_mt-4">
-                    <div class="mo_boot_col-sm-12 mo_boot_row ">
-                        <div class=" mo_boot_col-sm-6 mo_works-step mo_idp_faq_page">
-                            <div class="mo_boot_pt-1"><strong>1</strong></div>
-                            <p><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_ONE');?></p>
+
+        <div class="mo_boot_col-sm-12">
+            <div class="mo_boot_col-sm-12 mo_boot_p-4 mo_boot_mt-4 mo_idp_mini_section">
+                <div class="mo_boot_d-flex mo_boot_justify-content-between mo_boot_align-items-center"
+                    onclick="toggleUpgradeSection()" style="cursor: pointer;">
+                    <h3 class="mo_boot_mb-0 mo_boot_col-sm-7"><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER'); ?>
+                    </h3>
+                    <button class="mo_boot_col-sm-1 mo_boot_offset-sm-4 mo_idp_toggle_btn_black"
+                        id="upgrade-toggle">+</button>
+                </div>
+                <div id="upgrade-content" style="display: none;">
+                    <div class="mo_boot_row mo_boot_mt-3 mo_boot_col-sm-12">
+                        <div class="mo_boot_col-sm-12 mo_boot_row">
+                            <div class="mo_boot_col-sm-6 mo_works-step mo_boot_d-flex">
+                                <div class="mo_saml_step_number">1</div>
+                                <p class="mo_boot_mb-0"><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_ONE'); ?></p>
+                            </div>
+
+                            <div class="mo_boot_col-sm-6 mo_works-step mo_boot_d-flex">
+                                <div class="mo_saml_step_number">4</div>
+                                <p class="mo_boot_mb-0"><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_FOUR'); ?></p>
+                            </div>
                         </div>
-                        <div class="mo_boot_col-sm-6 mo_works-step">
-                            <div class="mo_boot_pt-1"><strong>4</strong></div>
-                            <p><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_FOUR');?></p>
+
+                        <div class="mo_boot_col-sm-12 mo_boot_row">
+                            <div class="mo_boot_col-sm-6 mo_works-step mo_boot_d-flex">
+                                <div class="mo_saml_step_number">2</div>
+                                <p class="mo_boot_mb-0"><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_TWo'); ?></p>
+                            </div>
+
+                            <div class="mo_boot_col-sm-6 mo_works-step mo_boot_d-flex">
+                                <div class="mo_saml_step_number">5</div>
+                                <p class="mo_boot_mb-0"><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_FIVE'); ?></p>
+                            </div>
                         </div>
+
+                        <div class="mo_boot_col-sm-12 mo_boot_row">
+                            <div class="mo_boot_col-sm-6 mo_works-step mo_boot_d-flex">
+                                <div class="mo_saml_step_number">3</div>
+                                <p class="mo_boot_mb-0"><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_THREE'); ?></p>
+                            </div>
+
+                            <div class="mo_boot_col-sm-6 mo_works-step mo_boot_d-flex">
+                                <div class="mo_saml_step_number">6</div>
+                                <p class="mo_boot_mb-0"><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_SIX'); ?></p>
+                            </div>
+                        </div>
+
                     </div>
-    
-                    <div class="mo_boot_col-sm-12 mo_boot_row">
-                        <div class=" mo_boot_col-sm-6 mo_works-step mo_idp_faq_page">
-                            <div class="mo_boot_pt-1"><strong>2</strong></div>
-                            <p> <?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_TWo');?> </p>
-                        </div>
-                        <div class="mo_boot_col-sm-6 mo_works-step">
-                            <div class="mo_boot_pt-1"><strong>5</strong></div>
-                            <p><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_FIVE');?> </p>
-                        </div>
-                    </div>
-    
-                    <div class="mo_boot_col-sm-12 mo_boot_row ">
-                        <div class="mo_boot_col-sm-6 mo_works-step mo_idp_faq_page">
-                            <div class="mo_boot_pt-1"><strong>3</strong></div>
-                            <p><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_THREE');?></p>
-                        </div>
-                        <div class=" mo_boot_col-sm-6 mo_works-step">
-                            <div class="mo_boot_pt-1"><strong>6</strong></div>
-                            <p><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_SIX');?></p>
-                        </div>
-                    </div>
-                </section>
+                </div>
             </div>
-            <div class=" mo_boot_col-sm-12 mo_boot_my-4">
-                <h4 class="form-head form-head-bar"><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER_DETAILS_RETURN_POLICY');?></h4>
-                <section id="mo_saml_section-steps" class="mo_boot_mt-4">
-                    <p><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER_DETAILS'); ?></p>
-                    <strong class="mo_boot_mt-2"><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER_DETAILS_B'); ?></strong>
-                        <ol class="mo_boot_mt-1">1.<?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER_DETAILS_C'); ?> <a href="mailto:joomlasupport@xecurify.com">joomlasupport@xecurify.com</a></ol>
-                        <ol>2.<?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER_DETAILS_D'); ?></ol>
-                        <ol class="mo_boot_mb-1">3.<?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER_DETAILS_E'); ?></ol>
-                    <strong class="mo_boot_mt-3"><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER_DETAILS_F'); ?></strong>
-                        <ol class="mo_boot_mt-1"><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER_DETAILS_G'); ?></ol>
-                        <ol><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER_DETAILS_H'); ?></ol>
-                        <ol class="mo_boot_mb-1"><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER_DETAILS_I'); ?></ol>
-                </section>
-            </div>
-            <div class=" mo_boot_col-sm-12 mo_boot_my-4">
-                <h4 class="form-head form-head-bar"><?php echo Text::_('COM_JOOMLAIDP_FRQUENTLY_ASKED');?></h4>
-                <div class="mo_boot_mx-4">
-                    <div class="mo_boot_row">
-                        <div class="mo_boot_col-sm-6">
-                            <h3 class="mo_saml_faq_page"><?php echo Text::_('COM_JOOMLAIDP_FAQ1');?></h3>
-                            <div class="mo_saml_faq_body">
-                                <p><?php echo Text::_('COM_JOOMLAIDP_FAQ1_DETAILS');?></p>
-                            </div>
-                            <hr class="mo_saml_hr_line">
-                        </div>
-    
-                        <div class="mo_boot_col-sm-6">
-                            <h3 class="mo_saml_faq_page"><?php echo Text::_('COM_JOOMLAIDP_FAQ2');?></h3>
-                            <div class="mo_saml_faq_body">
-                                <p><?php echo Text::_('COM_JOOMLAIDP_FAQ2_DETAILS');?></p>
-                            </div>
-                            <hr class="mo_saml_hr_line">
-                        </div>
-                    </div>
-                    <div class="mo_boot_row">
-                        <div class="mo_boot_col-sm-6">
-                            <h3 class="mo_saml_faq_page"><?php echo Text::_('COM_JOOMLAIDP_FAQ3');?></h3>
-                            <div class="mo_saml_faq_body">
-                                <p><?php echo Text::_('COM_JOOMLAIDP_FAQ3_DETAILS');?></p>
-                            </div>
-                            <hr class="mo_saml_hr_line">
-                        </div>
-    
-                        <div class="mo_boot_col-sm-6">
-                            <h3 class="mo_saml_faq_page"><?php echo Text::_('COM_JOOMLAIDP_FAQ4');?></h3>
-                            <div class="mo_saml_faq_body">
-                                <p><?php echo Text::_('COM_JOOMLAIDP_FAQ4_DETAILS');?></p>
-                            </div>
-                            <hr class="mo_saml_hr_line">
-                        </div>
-                    </div>
-                    <div class="mo_boot_row">
-                        <div class="mo_boot_col-sm-6">
-                            <h3 class="mo_saml_faq_page"><?php echo Text::_('COM_JOOMLAIDP_FAQ5');?></h3>
-                            <div class="mo_saml_faq_body">
-                                <p><?php echo Text::_('COM_JOOMLAIDP_FAQ5_DETAILS');?></p>
-                            </div>
-                            <hr class="mo_saml_hr_line">
-                        </div>
-                        <div class="mo_boot_col-sm-6">
-                            <h3 class="mo_saml_faq_page"><?php echo Text::_('COM_JOOMLAIDP_FAQ6');?></h3>
-                            <div class="mo_saml_faq_body">
-                                <?php echo Text::_('COM_JOOMLAIDP_FAQ6_DETAILS');?>
-                            </div>
-                            <hr class="mo_saml_hr_line">
+        </div>
+
+        <div class="mo_boot_col-sm-12 mo_boot_mt-4">
+            <div class="mo_boot_col-sm-12 mo_boot_p-4 mo_boot_mt-4 mo_idp_mini_section">
+                <div class="mo_boot_d-flex mo_boot_justify-content-between mo_boot_align-items-center"
+                    onclick="toggleLicensingSection()" style="cursor: pointer;">
+                    <h3 class="mo_boot_mb-0 mo_boot_col-sm-7">
+                        <?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER_DETAILS_RETURN_POLICY'); ?>
+                    </h3>
+                    <button class="mo_boot_col-sm-1 mo_boot_offset-sm-4 mo_idp_toggle_btn_black"
+                        id="licensing-toggle">+</button>
+                </div>
+                <div id="licensing-content" style="display: none;">
+                    <div class="mo_boot_mt-3 mo_boot_col-sm-12">
+
+                        <div>
+                            <p class="mo_boot_mb-2"><?php echo Text::_('COM_JOOMLAIDP_RETURN_POLICY_DESC'); ?></p>
+                            <h4 class="mo_boot_mb-3"><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER_DETAILS_B'); ?></h4>
+                            <p>1. <?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER_DETAILS_C'); ?> <a
+                                    href="mailto:joomlasupport@xecurify.com">joomlasupport@xecurify.com</a></p>
+                            <p>2. <?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER_DETAILS_D'); ?></p>
+                            <p>3. <?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER_DETAILS_E'); ?></p>
+
+                            <h4 class="mo_boot_mb-3"><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER_DETAILS_F'); ?></h4>
+                            <ol class="mo_boot_mb-0" style="padding-left: 20px;">
+                                <p><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER_DETAILS_G'); ?></p>
+                                <p><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER_DETAILS_H'); ?></p>
+                                <p><?php echo Text::_('COM_JOOMLAIDP_SAML_UPGRADE_HEADER_DETAILS_I'); ?></p>
+                            </ol>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+            
         </div>
     </div>
         <?php
     }
 
 
-    public static function showServiceProviderConfigurations()
+    public static function showServiceProviderList()
     {
-        $attribute = IDP_Utilities::fetchDatabaseValues('#__miniorangesamlidp', 'loadAssoc', '*'); 
+        $db = MoSamlIdpDb::getDb();
+        $query = $db->getQuery(true);
+        $query->select('*')
+              ->from($db->quoteName('#__miniorangesamlidp'))
+              ->order($db->quoteName('id') . ' ASC');
+        $db->setQuery($query);
+        $sp_list = $db->loadObjectList() ?: [];
+        
+        $siteUrl = Uri::root();
+        $sp_base_url = $siteUrl;
+        $app = Factory::getApplication();
+        $input = method_exists($app, 'getInput') ? $app->getInput() : $app->input;
+        $id_param = $input->get('id', '');
+        $sp_id = $input->get('sp_id', 0);
+        $show_form = $id_param === 'new' || $sp_id > 0;
+        
+        if ($show_form) {
+            if ($id_param === 'new') {
+                // New SP
+                $sp_id = 0;
+                $attribute = array();
+            } elseif ($sp_id > 0) {
+                // Edit existing SP
+                $attribute = IDP_Utilities::fetchDatabaseValues('#__miniorangesamlidp', 'loadAssoc', '*', 'id', $sp_id);
+            } else {
+                $attribute = array();
+            }
+            self::showServiceProviderConfigurations($attribute, $sp_id);
+        } else {
+            // Show list view
+            // Check if there's any configured SP
+            $sp_configured = false;
+            foreach ($sp_list as $sp) {
+                if (!empty($sp->sp_entityid) && !empty($sp->acs_url)) {
+                    $sp_configured = true;
+                    break;
+                }
+            }
+            $licensing_page_link=Uri::base().'index.php?option=com_joomlaidp&view=accountsetup&tab-panel=license';
+            ?>
+            <div id="sp_list_table" class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0 mo_idp_main_content">
+                <div class="mo_boot_row mo_boot_p-2">
+                    <div class="mo_boot_col-sm-12 mo_boot_px-2">
+                        <div class="mo_boot_row mo_boot_mb-4">
+                            <div class="mo_boot_col-sm-9">
+                                <h3 class="mo_saml_form_heading">
+                                    <?php echo Text::_('COM_JOOMLAIDP_LIST_OF_SP'); ?>
+                                </h3>
+                            </div>
+                            <div class="mo_boot_col-sm-3">
+                                <?php if ($sp_configured): ?>
+                                    <button class="mo_boot_btn btn_cstm mo_saml_block_cursor" disabled
+                                        title="Upgrade to Premium to add multiple SPs">
+                                        <i class="fa fa-lock"></i> <?php echo Text::_('COM_JOOMLAIDP_ADD_NEW_SP'); ?>
+                                                        
+                                                        <sup>
+                                    <div class="mo_tooltip">
+                                        <img class="crown_img_small mo_idp_ml_px"
+                                            src="<?php echo Uri::base(); ?>/components/com_joomlaidp/assets/images/crown.webp">
+                                        <span class="mo_tooltiptext small">
+                                            <?php echo Text::sprintf('COM_JOOMLAIDP_UPGRADE_NOTE', $licensing_page_link); ?>
+                                        </span>
+                                    </div>
+                                </sup>
+                                    </button>
+                                <?php else: ?>
+                                    <a href="<?php echo Route::_('index.php?option=com_joomlaidp&view=accountsetup&tab-panel=sp&id=new'); ?>"
+                                        class="mo_boot_btn btn_cstm">
+                                        <i class="fa fa-plus"></i> <?php echo Text::_('COM_JOOMLAIDP_ADD_NEW_SP'); ?>
+                                    </a>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
+                        <div class="mo_boot_row mo_boot_mb-4">
+                            <div class="mo_boot_col-sm-4">
+                                <div class="input-group">
+                                    <input type="text" class="mo-form-control" id="sp-search" placeholder="<?php echo Text::_('COM_JOOMLAIDP_SEARCH_SP_PLACEHOLDER'); ?>" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mo_boot_row">
+                            <div class="mo_boot_col-sm-12">
+                                <div class="mo_idp_mini_section">
+                                    <table class="mo_boot_m-0 mo_boot_col-sm-12">
+                                        <thead>
+                                            <tr>
+                                                <th class="mo_boot_p-4 mo_boot_text-center">
+                                                    <?php echo Text::_('COM_JOOMLAIDP_NAME_SP_'); ?>
+                                                </th>
+                                                <th class="mo_boot_p-4 mo_boot_text-center">
+                                                    <?php echo Text::_('COM_JOOMLAIDP_SP_ISSUER'); ?>
+                                                </th>
+                                                <th class="mo_boot_p-4 mo_boot_col-sm-3 mo_boot_text-center">
+                                                    <?php echo Text::_('COM_JOOMLAIDP_ACTION'); ?>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3">
+                                                    <hr class="mo_boot_m-0">
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="sp-table-body">
+                                            <?php if (!empty($sp_list)): ?>
+                                                <?php foreach ($sp_list as $sp): ?>
+                                                    <tr class="sp-row" data-sp-name="<?php echo htmlspecialchars($sp->sp_name); ?>">
+                                                        <td>
+                                                            <div class="mo_saml_sp_name mo_boot_p-4 mo_boot_text-center">
+                                                                <strong><?php echo !empty($sp->sp_name) ? htmlspecialchars($sp->sp_name) : 'SP ' . $sp->id; ?></strong>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="mo_saml_sp_entityid mo_boot_p-4 mo_boot_text-center">
+                                                                <span title="<?php echo htmlspecialchars($sp->sp_entityid); ?>">
+                                                                    <?php echo htmlspecialchars($sp->sp_entityid); ?>
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="mo_saml_actions_container mo_boot_pl-lg-5 mo_boot_pr-lg-5">
+                                                                <div class="mo_saml_actions_bar mo_saml_mini_section">
+                                                                    <a href="<?php echo Route::_('index.php?option=com_joomlaidp&view=accountsetup&tab-panel=sp&sp_id=' . $sp->id); ?>"
+                                                                        class="mo_saml_action_btn mo_saml_mini_section"
+                                                                        title="<?php echo Text::_('COM_JOOMLAIDP_EDIT'); ?>">
+                                                                        <i class="fa fa-edit"></i>
+                                                                    </a>
+                                                                    <div class="mo_saml_action_separator"></div>
+                                                                    <form method="post"
+                                                                        action="<?php echo Route::_('index.php?option=com_joomlaidp&view=accountsetup&task=accountsetup.deleteServiceProvider'); ?>"
+                                                                        class="mo_saml_display_inline">
+                                                                        <?php echo HTMLHelper::_('form.token'); ?>
+                                                                        <input type="hidden" name="sp_id" value="<?php echo $sp->id; ?>" />
+                                                                        <button type="submit"
+                                                                            class="mo_saml_action_btn mo_saml_mini_section"
+                                                                            title="<?php echo Text::_('COM_JOOMLAIDP_DELETE'); ?>"
+                                                                            onclick="return confirm('<?php echo Text::_('COM_JOOMLAIDP_DELETE_SP_CONFIRM'); ?>')">
+                                                                            <i class="fa fa-trash-o"></i>
+                                                                        </button>
+                                                                    </form>
+                                                                    <div class="mo_saml_action_separator"></div>
+                                                                    <input type="button" <?php if (empty($sp->sp_entityid)) echo "disabled"; else echo "enabled"; ?> title="<?php echo Text::_('COM_JOOMLAIDP_TEST_TITLE'); ?>" class="mo_saml_test_btn mo_saml_mini_section" onclick="jQuery('#sp_entityid').val('<?php echo htmlspecialchars($sp->sp_entityid ?? '', ENT_QUOTES, 'UTF-8'); ?>'); jQuery('#acs_url').val('<?php echo htmlspecialchars($sp->acs_url ?? '', ENT_QUOTES, 'UTF-8'); ?>'); showTestWindow();" value="<?php echo Text::_('COM_JOOMLAIDP_TEST_CONFIG'); ?>" />
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <tr>
+                                                    <td colspan="3" class="text-center mo_saml_no_data">
+                                                        <div class="mo_saml_empty_state">
+                                                            <i class="fa fa-cloud fa-3x"></i>
+                                                            <p><?php echo Text::_('COM_JOOMLAIDP_NO_SP_CONFIGURED'); ?></p>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            <?php endif; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="sp_entityid" value="" />
+                        <input type="hidden" id="acs_url" value="" />
+                        <input type="hidden" id="idp-initiated-url" value="<?php echo Route::_('index.php?option=com_idpinitiatedlogin'); ?>" />
+
+                        <div class="mo_boot_row mo_boot_mt-4">
+                    <div class="mo_boot_col-sm-12">
+                        <div class="mo_boot_row">
+                            <div class="mo_boot_col-sm-9">
+                                <p><?php echo Text::_('COM_JOOMLAIDP_SWITCHING_ENVIRONMENTS'); ?></p>
+                                <p><?php echo Text::_('COM_JOOMLAIDP_IMPORT_EXPORT_CONFIG_HERE'); ?></p>
+                            </div>
+                            <div class="mo_boot_col-sm-3">
+                                <button class="mo_boot_btn btn_cstm" onclick="showImportExportConfig()">
+                                    <?php echo Text::_('COM_JOOMLAIDP_IMPORT_EXPORT'); ?>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+            jQuery(document).ready(function($) {
+                $('#sp-search').on('keyup', function() {
+                    var value = $(this).val().toLowerCase();
+                    $('#sp-table-body tr').filter(function() {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                    });
+                });
+            });
+            </script>
+            <?php
+            // Render import/export configuration UI (hidden by default)
+            self::import_export_configuration();
+            ?>
+            <?php
+        }
+    }
+
+
+    public static function import_export_configuration()
+{
+    $app = Factory::getApplication();
+    $input = method_exists($app, 'getInput') ? $app->getInput() : $app->input;
+    $sp_id = $input->get('sp_id', 1);
+    $attribute = IDP_Utilities::fetchDatabaseValues('#__miniorangesamlidp', 'loadAssoc', '*', 'id', $sp_id);
+    $sp_entity_id = isset($attribute['sp_entityid']) ? $attribute['sp_entityid'] : '';
+    ?>
+    <div id="mo_idp_import_export_id" class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0 mo_idp_main_content mo_saml_display_none">
+        <div class="mo_boot_row mo_boot_p-2">
+            <div class="mo_boot_col-sm-12 mo_boot_px-2">
+                <div class="mo_boot_row mo_boot_mb-4">
+                    <div class="mo_boot_col-sm-10">
+                        <h3 class="mo_saml_form_heading"><?php echo Text::_('COM_JOOMLAIDP_IMPORT_EXPORT_CONFIG'); ?>
+                        </h3>
+                    </div>
+                    <div class="mo_boot_col-sm-2 text-right">
+                        <button class="mo_boot_btn btn_cstm" onclick="backToIdpList()" id="back_to_idp_list">
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mo_boot_row mo_boot_mb-4">
+                    <div class="mo_boot_col-sm-12">
+                        <div class="mo_boot_p-4 mo_saml_mini_section">
+                            <div class="mo_boot_row">
+                                <div class="mo_boot_col-sm-8">
+                                    <h3 class="mo_saml_form_heading">
+                                        <?php echo Text::_('COM_JOOMLAIDP_EXPORT_CONFIG'); ?>
+                                    </h3>
+                                    <p class="mo_saml_config_text">
+                                        <?php echo Text::_('COM_JOOMLAIDP_DOWNLOAD_CURRENT_PLUGIN_SETTINGS'); ?>
+                                    </p>
+                                </div>
+                                <div class="mo_boot_col-sm-4 text-right">
+                                <input type="button" class="btn btn_cstm mo_idp_crown_pos mo_idp_export_config"<?php if ($sp_entity_id) echo "enabled";else echo "disabled"; ?>  onclick="jQuery('#mo_idp_exportconfig').submit();" value="<?php echo Text::_('COM_JOOMLAIDP_EXPORT_CONFIG'); ?>"> 
+            
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mo_boot_row mo_boot_mb-4">
+                    <div class="mo_boot_col-sm-12">
+                        <div class="mo_boot_p-4 mo_idp_mini_section">
+                            <div class="mo_boot_row">
+                                <div class="mo_boot_col-sm-8">
+                                    <h3 class="mo_saml_form_heading">
+                                        <?php echo Text::_('COM_JOOMLAIDP_IMPORT_CONFIG'); ?>
+                                        <sup>
+                                            <div class="mo_tooltip">
+                                                <img class="crown_img_small mo_idp_ml_px"
+                                                    src="<?php echo Uri::base(); ?>/components/com_joomlaidp/assets/images/crown.webp">
+                                                <span class="mo_tooltiptext small">
+                                                    <?php echo Text::sprintf('COM_JOOMLAIDP_UPGRADE_NOTE', $licensing_page_link); ?>
+                                                </span>
+                                            </div>
+                                        </sup>
+                                    </h3>
+                                    <p class="mo_saml_config_text">
+                                        <?php echo Text::_('COM_JOOMLAIDP_IMPORT_CONFIGURATION_FILE'); ?>
+                                    </p>
+                                </div>
+                                <div class="mo_boot_col-sm-4 text-right">
+                                <input type="button" class="btn btn_cstm mo_idp_crown_pos mo_idp_export_config" disabled="disabled" value="<?php echo Text::_('COM_JOOMLAIDP_IMPORT_CONFIG'); ?>"> 
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mo_boot_row">
+                    <div class="mo_boot_col-sm-12">
+                        <p> <strong><?php echo Text::_('COM_MINIORANGE_SAML_NOTE'); ?>:</strong> <?php echo Text::_('COM_JOOMLAIDP_IMPORT_EXPORT_CONFIG_HELP'); ?></p>
+                    </div>
+                </div>
+                
+                <form name="f" id="mo_idp_exportconfig" method="post" action="<?php echo Route::_('index.php?option=com_joomlaidp&view=accountsetup&task=accountsetup.importExportConfiguration'); ?>">
+                </form>
+            </div>
+        </div>
+    </div>
+    <?php
+}
+
+
+    
+
+    public static function showServiceProviderConfigurations($attribute = null, $sp_id = 0)
+    {
+        if ($attribute === null) {
+            $attribute = IDP_Utilities::fetchDatabaseValues('#__miniorangesamlidp', 'loadAssoc', '*');
+        }
         $sp_name = "";
         $sp_entityid = "";
         $acs_url = "";
@@ -1213,30 +1694,32 @@ class JoomlaIdpViewAccountSetup extends HtmlView
             <?php
         }
         ?>
-        <div class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0">
+        <div class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0 mo_idp_main_content">
             <div class="mo_boot_row mo_boot_m-0 mo_boot_p-0">
-                <div class="mo_boot_col-sm-8 mo_tab_border mo_idp_section">
+                <div class="mo_boot_col-sm-12 mo_tab_border">
                     <div class="mo_boot_col-sm-12 mo_boot_p-2">
                         <form action="<?php echo Route::_('index.php?option=com_joomlaidp&view=accountsetup&task=accountsetup.saveServiceProvider'); ?>" method="post" name="adminForm" id="identity_provider_settings_form" enctype="multipart/form-data">
                             <?php echo HTMLHelper::_('form.token'); ?>
                             <input id="mo_saml_local_configuration_form_action" type="hidden" name="option1" value="mo_saml_save_config"/>
+                            <input type="hidden" name="sp_id" value="<?php echo $sp_id; ?>" />
                             <div class="mo_boot_row mo_boot_mt-3" >
-                                <div class="mo_boot_col-lg-5 mo_boot_col-sm-6">
-                                    <h3 class="mo_saml_form_head mo_idp_sp_head"><?php echo Text::_('COM_JOOMLAIDP_SP'); ?></h3>
+                                <div class="mo_boot_col-lg-9 mo_boot_col-sm-6">
+                                    <h3 class="mo_idp_sp_head"><?php echo Text::_('COM_JOOMLAIDP_CHOOSE_METHOD_TO_SETUP_IDP_CONFIG'); ?></h3>
                                 </div>
-                                <div class="mo_boot_col-lg-7 mo_boot_col-sm-6" >
-                                    <input type="button" class="btn btn_cstm mo_idp_crown_pos mo_idp_export_config"<?php if ($sp_entityid) echo "enabled";else echo "disabled"; ?>  onclick="jQuery('#mo_idp_exportconfig').submit();" value="<?php echo Text::_('COM_JOOMLAIDP_EXPORT_CONFIG'); ?>"> 
+                                <div class="mo_boot_col-sm-12 mo_boot_col-lg-3 mo_boot_text-center" >
+                                    <a href="<?php echo Route::_('index.php?option=com_joomlaidp&view=accountsetup&tab-panel=sp'); ?>" class="mo_boot_btn btn_cstm">
+                                        <i class="fa fa-arrow-left"></i> <?php echo Text::_('COM_JOOMLAIDP_BACK_TO_LIST'); ?>
+                                    </a>                                
                                 </div>
                                 <div class="mo_boot_col-sm-12 mo_boot_mt-3 mo_saml_dark_bg">
-                                    <ul class="switch_tab_sp text-center mo_boot_p-2 mo_saml_dark_bg">
-                                        <li class="mo_saml_current_tab" id="manual_configuration"><a href="#" id="mo_saml_idp_manual_tab" class="mo_saml_bs_btn" onclick="hide_metadata_form()"><?php echo Text::_('COM_MINIORANGE_SAML_MANUAL_CONFIG'); ?></a></li>
-                                        <li class="mo_boot_col-sm-12 mo_boot_col-lg-2"><?php echo Text::_('COM_MINIORANGE_SAML_OR'); ?></li>
-                                        <li class="" id="auto_configuration"><a href="#" id="mo_saml_upload_idp_tab" class="mo_saml_bs_btn" onclick="show_metadata_form()"><?php echo Text::_('COM_JOOMLAIDP_SP_METADATA_BTN'); ?></a></li>
-                                        
+                                    <ul class="switch_tab_sp mo_boot_text-center mo_boot_p-0 mo_boot_mt-4">
+                                    <li class="mo_saml_current_tab" id="auto_configuration" onclick="show_metadata_form()" style="cursor: pointer;"><a href="#" id="mo_saml_upload_idp_tab" class="mo_saml_bs_btn" onclick="return false;"><?php echo Text::_('COM_JOOMLAIDP_SP_METADATA_BTN'); ?></a></li>
+
+                                        <li class="" id="manual_configuration" onclick="hide_metadata_form()" style="cursor: pointer;"><a href="#" id="mo_saml_idp_manual_tab" class="mo_saml_bs_btn" onclick="return false;"><?php echo Text::_('COM_MINIORANGE_SAML_MANUAL_CONFIG'); ?></a></li>
                                     </ul>
                                 </div>
                             </div>
-                            <div id="idpdata" class="mt-4">
+                            <div id="idpdata" class="mt-4 mo_idp_disp_no mo_boot_p-4 mo_idp_mini_section">
                                 <div class="mo_boot_row mo_boot_mt-3" id="name">
                                     <div class="mo_boot_col-sm-4">
                                         <span class="saml_idp_label_css"><?php echo Text::_('COM_JOOMLAIDP_SP_NAME'); ?><span class="mo_saml_required">*</span></span>   
@@ -1246,6 +1729,27 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                         <span class="small"><strong><?php echo Text::_('COM_MINIORANGE_SAML_NOTE'); ?>: </strong><?php echo Text::_('COM_JOOMLAIDP_ENTER_SP_NAME'); ?></span>
                                     </div>
                                 </div>
+                                
+                                <div class="mo_boot_row mo_boot_mt-3">
+                                    <div class="mo_boot_col-sm-4">
+                                        <span class="saml_idp_label_css"><?php echo Text::_('COM_MINIORANGE_IDP_SP_GUIDES'); ?></span>   
+                                    </div>
+                                    <div class="mo_boot_col-sm-8">
+                                        <select id="idp_setup_guide_dropdown" class="mo_form-control mo_saml_proxy_setup" onchange="if(this.value) window.open(this.value, '_blank'); this.value='';">
+                                            <option value=""><?php echo Text::_('COM_JOOMLAIDP_SELECT_IDP_GUIDE'); ?></option>
+                                            <?php 
+                                            if (!empty($setup_guides) && is_array($setup_guides)) {
+                                                foreach ($setup_guides as $guide) {
+                                                    if (isset($guide['name']) && isset($guide['link'])) {
+                                                        echo '<option value="' . htmlspecialchars($guide['link']) . '">' . htmlspecialchars($guide['name']) . '</option>';
+                                                    }
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                
                                 <div class="mo_boot_row mo_boot_mt-3" id="sp_entity">
                                     <div class="mo_boot_col-sm-4">
                                         <span class="saml_idp_label_css"><?php echo Text::_('COM_JOOMLAIDP_SP_ISSUER'); ?><span class="mo_saml_required">*</span></span>   
@@ -1303,72 +1807,80 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                         <br><span class="small"><strong><?php echo Text::_('COM_MINIORANGE_SAML_NOTE'); ?>: </strong><?php echo Text::_('COM_JOOMLAIDP_CHECK_SIGN'); ?></span>
                                     </div>
                                 </div><br>
-                                <details !important class="mo_saml_dark_bg">
-                                    <summary class="mo_saml_main_summary mo_saml_dark_text" ><?php echo Text::_('COM_JOOMLAIDP_ADVACE_FEATURES'); ?> <sup><a href="index.php?option=com_joomlaidp&view=accountsetup&tab-panel=license">
-                                        <img class="crown_img_small mo_idp_ml_px" src="<?php echo Uri::base();?>/components/com_joomlaidp/assets/images/crown.webp" alt="Premium">
-                                           </a></strong></sup></summary><hr><div class="mo_tooltip">
-                                    <div class="mo_boot_row mo_boot_mt-3" id="sp_slo">
-                                        <div class="mo_boot_col-sm-4"><?php echo Text::_('COM_MINIORANGE_IDP_LOGOUT_URL'); ?>
-                                        </div>
-                                        <div class="mo_boot_col-sm-8">
-                                            <input class=" mo_form-control" type="text" name="single_logout_url" placeholder="Enter the SLO URL" disabled>
+                                <div class="mo_boot_col-sm-12 mo_boot_p-4 mo_boot_mt-4 mo_adv_feat">
+                                    <div class="mo_boot_d-flex mo_boot_justify-content-between mo_boot_align-items-center"
+                                        onclick="toggleAdvancedFeatures()" style="cursor: pointer;">
+                                        <h3 class="mo_boot_mb-0 mo_boot_col-sm-7"><?php echo Text::_('COM_JOOMLAIDP_ADVACE_FEATURES'); ?> <sup><a href="index.php?option=com_joomlaidp&view=accountsetup&tab-panel=license">
+                                            <img class="crown_img_small mo_idp_ml_px" src="<?php echo Uri::base();?>/components/com_joomlaidp/assets/images/crown.webp" alt="Premium">
+                                               </a></sup></h3>
+                                        <button class="mo_boot_col-sm-1 mo_boot_offset-sm-4 mo_idp_toggle_btn_black"
+                                            id="advanced-features-toggle">+</button>
+                                    </div>
+                                    <div id="advanced-features-content" class="mo_boot_p-3" style="display: none;">
+                                        <div class="mo_tooltip">
+                                            <div class="mo_boot_row mo_boot_mt-3" id="sp_slo">
+                                                <div class="mo_boot_col-sm-4"><?php echo Text::_('COM_MINIORANGE_IDP_LOGOUT_URL'); ?>
+                                                </div>
+                                                <div class="mo_boot_col-sm-8">
+                                                    <input class=" mo_form-control mo_idp_block_cursor" type="text" name="single_logout_url" placeholder="Enter the SLO URL" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="mo_boot_row mo_boot_mt-3" id="sp_binding_type">
+                                                <div class="mo_boot_col-sm-4">
+                                                    <?php echo Text::_('COM_JOOMLAIDP_BINDING'); ?>
+                                                </div>
+                                                <div class="mo_boot_col-sm-8">
+                                                    <input type="radio" class="mo_idp_block_cursor" name="miniorange_saml_sp_sso_binding" value="HttpRedirect" checked=1 aria-invalid="false" disabled><span class="ml-1"><?php echo Text::_('COM_MINIORANGE_IDP_SP_REDIRECT'); ?></span><br />
+                                                    <input type="radio" class="mo_idp_block_cursor" name="miniorange_saml_idp_sso_binding" value="HttpPost" aria-invalid="false" disabled><span class="ml-1"><?php echo Text::_('COM_MINIORANGE_IDP_SP_POST'); ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="mo_boot_row mo_boot_mt-3" id="sp_certificate_signed">
+                                                <div class="mo_boot_col-sm-4"><?php echo Text::_('COM_MINIORANGE_IDP_SP_CERT_A'); ?>
+                                                </div>
+                                                <div class="mo_boot_col-sm-8">
+                                                    <textarea rows="3" cols="80" name="certificate" class="mo_idp_certificate mo_idp_block_cursor" disabled></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="mo_boot_row mo_boot_mt-3" id="sp_certificate_assertion">
+                                                <div class="mo_boot_col-sm-4"><?php echo Text::_('COM_MINIORANGE_IDP_SP_CERT_B'); ?>
+                                                </div>
+                                                <div class="mo_boot_col-sm-8">
+                                                    <textarea rows="3" cols="80" name="certificate" class="mo_idp_certificate mo_idp_block_cursor"  disabled></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="mo_boot_row mo_boot_mt-3" id="sp_slo">
+                                                <div class="mo_boot_col-sm-4">
+                                                    <?php echo Text::_('COM_JOOMLAIDP_SIGNED'); ?>
+                                                </div>
+                                                <div class="mo_boot_col-sm-8">
+                                                    <label class="mo_saml_switch">
+                                                        <input type="checkbox" disabled>
+                                                        <span class="mo_saml_slider mo_idp_block_cursor"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="mo_boot_row mo_boot_mt-3" id="sp_slo">
+                                                <div class="mo_boot_col-sm-4">
+                                                    <?php echo Text::_('COM_JOOMLAIDP_ENCRYPT'); ?>
+                                                </div>
+                                                <div class="mo_boot_col-sm-8">
+                                                    <label class="mo_saml_switch">
+                                                        <input type="checkbox" disabled>
+                                                        <span class="mo_saml_slider mo_idp_block_cursor"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="mo_boot_row mo_boot_mt-3" id="sp_slo">
+                                                <div class="mo_boot_col-sm-4">
+                                                    <?php echo Text::_('COM_JOOMLAIDP_VALIDATE_TIME'); ?>
+                                                </div>
+                                                <div class="mo_boot_col-sm-8">
+                                                    <input class=" mo_form-control mo_idp_block_cursor" type="text"  placeholder="<?php echo Text::_('COM_JOOMLAIDP_ENTER_TIME'); ?>" name="saml_response_validation_time" disabled>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="mo_boot_row mo_boot_mt-3" id="sp_binding_type">
-                                        <div class="mo_boot_col-sm-4">
-                                            <?php echo Text::_('COM_JOOMLAIDP_BINDING'); ?>
-                                        </div>
-                                        <div class="mo_boot_col-sm-8">
-                                            <input type="radio" name="miniorange_saml_sp_sso_binding" value="HttpRedirect" checked=1 aria-invalid="false" disabled><span class="ml-1"><?php echo Text::_('COM_MINIORANGE_IDP_SP_REDIRECT'); ?></span><br />
-                                            <input type="radio" name="miniorange_saml_idp_sso_binding" value="HttpPost" aria-invalid="false" disabled><span class="ml-1"><?php echo Text::_('COM_MINIORANGE_IDP_SP_POST'); ?></span>
-                                        </div>
-                                    </div>
-                                    <div class="mo_boot_row mo_boot_mt-3" id="sp_certificate_signed">
-                                        <div class="mo_boot_col-sm-4"><?php echo Text::_('COM_MINIORANGE_IDP_SP_CERT_A'); ?>
-                                        </div>
-                                        <div class="mo_boot_col-sm-8">
-                                            <textarea rows="3" cols="80" name="certificate" class="mo_idp_certificate" disabled></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="mo_boot_row mo_boot_mt-3" id="sp_certificate_assertion">
-                                        <div class="mo_boot_col-sm-4"><?php echo Text::_('COM_MINIORANGE_IDP_SP_CERT_B'); ?>
-                                        </div>
-                                        <div class="mo_boot_col-sm-8">
-                                            <textarea rows="3" cols="80" name="certificate" class="mo_idp_certificate"  disabled></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="mo_boot_row mo_boot_mt-3" id="sp_slo">
-                                        <div class="mo_boot_col-sm-4">
-                                            <?php echo Text::_('COM_JOOMLAIDP_SIGNED'); ?>
-                                        </div>
-                                        <div class="mo_boot_col-sm-8">
-                                            <label class="mo_saml_switch">
-                                                <input type="checkbox" disabled>
-                                                <span class="mo_saml_slider"></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="mo_boot_row mo_boot_mt-3" id="sp_slo">
-                                        <div class="mo_boot_col-sm-4">
-                                            <?php echo Text::_('COM_JOOMLAIDP_ENCRYPT'); ?>
-                                        </div>
-                                        <div class="mo_boot_col-sm-8">
-                                            <label class="mo_saml_switch">
-                                                <input type="checkbox" disabled>
-                                                <span class="mo_saml_slider"></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="mo_boot_row mo_boot_mt-3" id="sp_slo">
-                                        <div class="mo_boot_col-sm-4">
-                                            <?php echo Text::_('COM_JOOMLAIDP_VALIDATE_TIME'); ?>
-                                        </div>
-                                        <div class="mo_boot_col-sm-8">
-                                            <input class=" mo_form-control" type="text"  placeholder="<?php echo Text::_('COM_JOOMLAIDP_ENTER_TIME'); ?>" name="saml_response_validation_time" disabled>
-                                        </div>
-                                    </div>
-                                    
-                                </details>
+                                </div>
                                 
                                 <div class="mo_boot_row mo_boot_mt-5">
                                     <div class="mo_boot_col-sm-12 mo_boot_text-center">
@@ -1384,14 +1896,13 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                         </form>
                         <form name="f" id="mo_idp_exportconfig"  method="post" action="<?php echo Route::_('index.php?option=com_joomlaidp&view=accountsetup&task=accountsetup.importExportConfiguration'); ?>" >
                         </form>
-                        <div class="mo_boot_row mo_boot_mt-5 mo_boot_mt-3 mo_boot_py-3 mo_boot_px-2 mo_idp_disp_no" id="upload_metadata_form">
-                            <div class="mo_boot_col-sm-12 mo_boot_mt-1">
+                        <div class="mt-4 mo_boot_p-4 mo_idp_mini_section" id="upload_metadata_form">
                                 <form action="<?php echo Route::_('index.php?option=com_joomlaidp&view=accountsetup&task=accountsetup.handleUploadMetadata'); ?>" name="metadataForm" method="post" id="IDP_metadata_form" enctype="multipart/form-data">
                                     <div class="mo_boot_row">
                                         <div class="mo_boot_col-sm-3">
                                             <span class="saml_idp_label_css"><?php echo Text::_('COM_JOOMLAIDP_SP_NAME'); ?><span class="mo_saml_required">*</span> :</span>   
                                         </div>
-                                        <div class="mo_boot_col-sm-9">
+                                        <div class="mo_boot_col-sm-7 mo_boot_col-lg-6">
                                             <input type="text" class="mo_boot_form-control mo_boot_form-text-control" id="sp_upload_name" name="sp_upload_name" placeholder="<?php echo Text::_('COM_JOOMLAIDP_SP_NAME_PLACEHOLDER'); ?>" required>
                                         </div>
                                     </div>  
@@ -1404,8 +1915,8 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                             <input type="hidden" name="action"  value="upload_metadata" />
                                             <input type="file"  id="metadata_uploaded_file" class="form-control-file"  name="metadata_file" />
                                         </div>
-                                        <div class="mo_boot_col-sm-9 mo_boot_col-lg-3 ">
-                                            <button type="button" class="btn btn_cstm mo_idp_crown_pos mo_idp_upl_metadata mo_idp_adv_feat_btns" id="upload_metadata_file"  name="option1" method="post"><svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                        <div class="mo_boot_col-sm-12 mo_boot_col-lg-3 mo_boot_text-center">
+                                            <button type="button" class="float-lg-right btn btn_cstm mo_idp_adv_feat_btns" id="upload_metadata_file"  name="option1" method="post"><svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                             <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
                                             <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z" />
                                             </svg>&nbsp;&nbsp;<?php echo Text::_('COM_JOOMLAIDP_CRT_UPLOAD'); ?></button>
@@ -1424,7 +1935,7 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                             <?php echo Text::_('COM_JOOMLAIDP_SP_METADATA_URL'); ?>:
                                         </div>
                                         <div class="mo_boot_col-sm-7 mo_boot_col-lg-6">
-                                            <input type="url" id="metadata_url" name="metadata_url" placeholder=" <?php echo Text::_('COM_JOOMLAIDP_ENTER_METADATA_URL'); ?>" class="form-control"/>
+                                            <input type="url" id="metadata_url" name="metadata_url" placeholder=" <?php echo Text::_('COM_JOOMLAIDP_ENTER_METADATA_URL'); ?>" class="mo_boot_form-control mo_boot_form-text-control"/>
                                         </div>
                                         <div class=" mo_boot_col-sm-12 mo_boot_col-lg-3 mo_boot_text-center ">
                                             <button type="button" class=" float-lg-right btn btn_cstm mo_idp_adv_feat_btns" name="option1" method="post" id="fetch_metadata">
@@ -1436,51 +1947,10 @@ class JoomlaIdpViewAccountSetup extends HtmlView
                                         </div>
                                     </div>
                                 </form>
-                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="mo_boot_col-sm-4 mo_tab_border">
-                    <div class=" mo_boot_m-0 mo_boot_p-0">
-                        <div class="mo_boot_col-sm-12 mo_boot_p-2">
-                            <div class="mo_setup_guide_title text-center">
-                                <strong><?php echo Text::_('COM_MINIORANGE_IDP_SP_GUIDES'); ?></strong>
-                            </div>
-                        </div>
-                        <div class="mo_boot_col-sm-12  mo_boot_m-0 mo_boot_px-4 mo_boot_py-4 mo_boot_mo_idp_setup" >
-                            <?php 
-                            for($i=1;$i<$guide_count;$i+=2)
-                            {
-                                if(isset($setup_guides[$i]) && isset($setup_guides[$i+1]))
-                                {
-                            ?>
-                             <div class="mo_boot_row mo_boot_m-0 mo_boot_p-2" >
-                            <div class="mo_boot_col-sm-6 mo_boot_m-0 mo_boot_p-0 mo_boot_text-center">
-                                <strong><a class="mo_idp_guide_color" href="<?php  echo $setup_guides[$i]['link']; ?>" target="_blank" ><?php  echo $setup_guides[$i]['name']; ?></a></strong>
-                            </div>
-                            <div class="mo_boot_col-sm-6 mo_boot_m-0 mo_boot_p-0 mo_boot_text-center">
-                                <strong><a class="mo_idp_guide_color" href="<?php  echo $setup_guides[$i+1]['link']; ?>" target="_blank" ><?php  echo $setup_guides[$i+1]['name']; ?></a></strong>
-                            </div>
-                        </div>
-                        <hr>
-                        <?php
-                            }
-                            else if(isset($setup_guides[$i]))
-                            {
-                            ?>
-                            <div class="mo_boot_row mo_boot_m-0 mo_boot_p-2" >
-                            <div class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0 mo_boot_text-center">
-                                <strong><a class="mo_idp_guide_color" href="<?php  echo $setup_guides[$i]['link']; ?>" target="_blank" ><?php  echo $setup_guides[$i]['name']; ?></a></strong>
-                            </div>
-                        </div>
-                        <hr>
-                    <?php
-                            }
-                        }
-                        ?>
-                        </div>
-                    </div>
-                </div>
+               
             </div>
         </div>
         <?php

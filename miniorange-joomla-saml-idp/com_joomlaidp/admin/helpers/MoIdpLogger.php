@@ -13,8 +13,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
-$language = Factory::getLanguage();
-$language->load('com_joomlaidp', JPATH_ADMINISTRATOR, null, false, true);
+include_once JPATH_SITE . DIRECTORY_SEPARATOR . 'administrator' . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_joomlaidp' . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'DbHelper.php';
 
 class MoIdpLogger
 {
@@ -54,7 +53,7 @@ class MoIdpLogger
 
     public static function saveLogToDatabase(string $message, string $type, string $file, int $line, string $function): void
     {
-        $db = Factory::getDbo();
+        $db = MoSamlIdpDb::getDb();
         $query = $db->getQuery(true);
 
         $maxLogs = 10000;
@@ -94,6 +93,8 @@ class MoIdpLogger
 
     public static function getLogCode(string $message): array
     {
+        $lang = Factory::getLanguage();
+        $lang->load('com_joomlaidp', JPATH_SITE) || $lang->load('com_joomlaidp', JPATH_ADMINISTRATOR);
         $logDetails = [
             'Invalid request'          => ['code' => 'JRQ-A01', 'issue' => Text::_('COM_MINIORANGE_CAUSE1')],
             'Unsupported SAML version' => ['code' => 'JRQ-A02', 'issue' => Text::_('COM_MINIORANGE_CAUSE2')],
@@ -121,7 +122,7 @@ class MoIdpLogger
     }
     public static function getAllLogs(): array
     {
-        $db = Factory::getDbo();
+        $db = MoSamlIdpDb::getDb();
         $query = $db->getQuery(true)->select($db->quoteName(['timestamp', 'log_level', 'message', 'file', 'function_call']))->from($db->quoteName('#__mo_idp_logs'))->order($db->quoteName('timestamp') . ' DESC');
         return $db->setQuery($query)->loadObjectList() ?: [];
     }

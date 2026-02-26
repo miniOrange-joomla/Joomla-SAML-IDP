@@ -21,13 +21,13 @@ require_once JPATH_BASE . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Factory;
 jimport('miniorangejoomlaidpplugin.utility.IDP_Utilities');
-
+include_once JPATH_SITE . DIRECTORY_SEPARATOR . 'administrator' . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_joomlaidp' . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'DbHelper.php';
 $header = isset($_REQUEST['download']) && boolval($_REQUEST['download']) ? 'Content-Disposition: attachment; filename="Metadata.xml"' : 'Content-Type: text/xml';
 
 $site_url = URI::root();	
 $site_url = substr($site_url, 0, strpos($site_url, 'plugins'));
 $entity_id = $site_url . 'plugins/user/miniorangejoomlaidp/';
-$db = Factory::getDbo();
+$db = MoSamlIdpDb::getDb();
 $query = $db->getQuery(true);
 $query->select(array($db->quoteName('idp_entity_id')));
 $query->from($db->quoteName('#__miniorange_saml_idp_customer'));

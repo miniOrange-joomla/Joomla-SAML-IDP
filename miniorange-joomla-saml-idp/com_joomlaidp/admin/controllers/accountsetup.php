@@ -13,6 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+include_once JPATH_SITE . DIRECTORY_SEPARATOR . 'administrator' . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_joomlaidp' . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'DbHelper.php';
 /**
  * AccountSetup Controller
  *
@@ -39,22 +40,34 @@ class JoomlaIdpControllerAccountSetup extends FormController
             return;
         }
 		$isDelete = isset($post['mo_saml_delete']) ? $post['mo_saml_delete'] : '';
+        $sp_id = isset($post['sp_id']) ? (int)$post['sp_id'] : 0;
 
 		if ($isDelete == "Delete SP Configuration")
         {
-            $data = new stdClass();
-            $data->id = 1;
-            $data->sp_name = '';
-            $data->sp_entityid = '';
-            $data->acs_url = '';
-            $data->nameid_format = '';
-            $data->nameid_attribute = '';
-            $data->default_relay_state = '';
-            $data->assertion_signed = 0;
-            $data->enabled = 0;
+            if ($sp_id > 0) {
+                // Delete specific SP
+                $db = MoSamlIdpDb::getDb();
+                $query = $db->getQuery(true);
+                $query->delete($db->quoteName('#__miniorangesamlidp'))
+                      ->where($db->quoteName('id') . ' = ' . $sp_id);
+                $db->setQuery($query);
+                $db->execute();
+            } else {
+                // Legacy: Clear SP with id=1
+                $data = new stdClass();
+                $data->id = 1;
+                $data->sp_name = '';
+                $data->sp_entityid = '';
+                $data->acs_url = '';
+                $data->nameid_format = '';
+                $data->nameid_attribute = '';
+                $data->default_relay_state = '';
+                $data->assertion_signed = 0;
+                $data->enabled = 0;
 
-            $db = Factory::getDBO();
-            $this->updateOrInsertRecord($db, '#__miniorangesamlidp', $data);
+                $db = MoSamlIdpDb::getDb();
+                $this->updateOrInsertRecord($db, '#__miniorangesamlidp', $data);
+            }
 
             $message = Text::_('COM_JOOMLAIDP_MSG_5');
             $this->setRedirect('index.php?option=com_joomlaidp&view=accountsetup&tab-panel=sp', $message );
@@ -68,7 +81,7 @@ class JoomlaIdpControllerAccountSetup extends FormController
             $assertionSigned = isset($post['assertion_signed']) ? isset($post['assertion_signed']) : 0;
             if(empty($spName) || empty($issuer) || empty($acsUrl) || empty($nameIdFormat)){
                 $message = Text::_('COM_JOOMLAIDP_MSG_6');
-                $this->setRedirect('index.php?option=com_joomlaidp&view=samlidpsettings',  $message,'error');
+                $this->setRedirect('index.php?option=com_joomlaidp&view=accountsetup&tab-panel=sp',  $message,'error');
                 return FALSE;
             }
 
@@ -77,7 +90,11 @@ class JoomlaIdpControllerAccountSetup extends FormController
             $acsUrl = trim($acsUrl);
 
             $data = new stdClass();
-            $data->id = 1;
+            if ($sp_id > 0) {
+                $data->id = $sp_id;
+            } else {
+                $data->id = 1; // Default to id=1 for backward compatibility
+            }
             $data->sp_name = $spName;
             $data->sp_entityid = $issuer;
             $data->acs_url = $acsUrl;
@@ -86,7 +103,7 @@ class JoomlaIdpControllerAccountSetup extends FormController
             $data->assertion_signed = $assertionSigned;
             $data->enabled = TRUE;
 
-            $db = Factory::getDBO();
+            $db = MoSamlIdpDb::getDb();
             $this->updateOrInsertRecord($db, '#__miniorangesamlidp', $data);
 
             IDP_Utilities::isValidCheck($spName, $acsUrl,'Save Details','');
@@ -95,15 +112,37 @@ class JoomlaIdpControllerAccountSetup extends FormController
         }
 	}
 
+	function deleteServiceProvider(){
+		$app = Factory::getApplication();
+        $input = method_exists($app, 'getInput') ? $app->getInput() : $app->input;
+        $post = ($input && $input->post) ? $input->post->getArray() : [];
+        $sp_id = isset($post['sp_id']) ? (int)$post['sp_id'] : 0;
+
+        if ($sp_id > 0) {
+            $db = MoSamlIdpDb::getDb();
+            $query = $db->getQuery(true);
+            $query->delete($db->quoteName('#__miniorangesamlidp'))
+                  ->where($db->quoteName('id') . ' = ' . $sp_id);
+            $db->setQuery($query);
+            $db->execute();
+            
+            $message = Text::_('COM_JOOMLAIDP_MSG_5');
+            $this->setRedirect('index.php?option=com_joomlaidp&view=accountsetup&tab-panel=sp', $message);
+        } else {
+            $this->setRedirect('index.php?option=com_joomlaidp&view=accountsetup&tab-panel=sp', Text::_('COM_JOOMLAIDP_MSG_6'), 'error');
+        }
+	}
+
 	/**
 	 * Helper function to check if record exists and update or insert accordingly
 	 */
 	function updateOrInsertRecord($db, $table, $data) {
-		// Check if record with id=1 exists
+		// Check if record with the given id exists
+		$record_id = isset($data->id) ? $data->id : 1;
 		$query = $db->getQuery(true);
 		$query->select('id')
 			  ->from($db->quoteName($table))
-			  ->where($db->quoteName('id') . ' = 1');
+			  ->where($db->quoteName('id') . ' = ' . (int)$record_id);
 		$db->setQuery($query);
 		$result = $db->loadResult();
 		
@@ -158,7 +197,7 @@ class JoomlaIdpControllerAccountSetup extends FormController
         $data = new stdClass();
         $data->id = 1;
         $data->nameid_attribute = empty($post['nameid_attribute']) ? 'emailAddress' : $post['nameid_attribute'];
-        $db = Factory::getDBO();
+        $db = MoSamlIdpDb::getDb();
         $this->updateOrInsertRecord($db, '#__miniorangesamlidp', $data);
         $message=Text::_('COM_JOOMLAIDP_MSG_W');
         $this->setRedirect('index.php?option=com_joomlaidp&view=accountsetup&tab-panel=advance_mapping', $message );
@@ -255,7 +294,7 @@ class JoomlaIdpControllerAccountSetup extends FormController
 			$data->assertion_signed = $is_assertion_signed;
 			$data->enabled = TRUE;
 		
-		    $db = Factory::getDBO();
+		    $db = MoSamlIdpDb::getDb();
 		    $this->updateOrInsertRecord($db, '#__miniorangesamlidp', $data);
             IDP_Utilities::isValidCheck($sp_name, $acs_url,'Save Details','');
 		    $message = Text::_('COM_JOOMLAIDP_MSG_7') .' (' . $sp_name . ') '.Text::_('COM_JOOMLAIDP_MSG_8');
@@ -341,7 +380,7 @@ class JoomlaIdpControllerAccountSetup extends FormController
         $app = Factory::getApplication();
         $input = method_exists($app, 'getInput') ? $app->getInput() : $app->input;
         $post = ($input && $input->post) ? $input->post->getArray() : [];
-        $db = Factory::getDbo();
+        $db = MoSamlIdpDb::getDb();
         $query = $db->getQuery(true);
         $fields = array(
             $db->quoteName('email') . ' = '.$db->quote($post['admin_email']),
@@ -369,7 +408,9 @@ class JoomlaIdpControllerAccountSetup extends FormController
         } else{
             $query = $post['mo_saml_query'];
             $email = $post['mo_saml_query_email'];
-            $phone = $post['mo_saml_query_phone'];
+            $countryCode = isset($post['mo_saml_country_code']) ? trim($post['mo_saml_country_code']) : '';
+            $phoneNum = isset($post['mo_saml_query_phone']) ? trim($post['mo_saml_query_phone']) : '';
+            $phone = $countryCode !== '' ? $countryCode . ' ' . $phoneNum : $phoneNum;
 
             if(isset($post['mo_saml_select_plan']) && !empty($post['mo_saml_select_plan'] && $post['mo_saml_select_plan'] != 'none')
                 || isset($post['number_of_users']) && !empty($post['number_of_users']))
@@ -464,7 +505,7 @@ class JoomlaIdpControllerAccountSetup extends FormController
 
     public function resetLogs(): void
     {
-        $db = Factory::getDbo();
+        $db = MoSamlIdpDb::getDb();
         $countQuery = $db->getQuery(true)
             ->select('COUNT(*)')
             ->from($db->quoteName('#__mo_idp_logs'));
@@ -483,7 +524,7 @@ class JoomlaIdpControllerAccountSetup extends FormController
 
     public function downloadLogs(): void
     {
-        $db = Factory::getDbo();
+        $db = MoSamlIdpDb::getDb();
         $query = $db->getQuery(true)
             ->select('*')
             ->from($db->quoteName('#__mo_idp_logs'))

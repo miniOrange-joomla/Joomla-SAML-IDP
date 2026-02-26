@@ -14,14 +14,16 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Version;
 $lang = Factory::getLanguage();
-$lang->load('lib_miniorangejoomlaidpplugin',JPATH_SITE);
+$lang->load('lib_miniorangejoomlaidpplugin', JPATH_SITE) || $lang->load('lib_miniorangejoomlaidpplugin', JPATH_ADMINISTRATOR);
 include "xmlseclibs.php";
+include_once JPATH_SITE . DIRECTORY_SEPARATOR . 'administrator' . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_joomlaidp' . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'DbHelper.php';
 include_once JPATH_SITE . DIRECTORY_SEPARATOR. 'administrator' .DIRECTORY_SEPARATOR. 'components'.DIRECTORY_SEPARATOR. 'com_joomlaidp'.DIRECTORY_SEPARATOR. 'helpers'.DIRECTORY_SEPARATOR. 'mo_saml_idp_customer_setup.php';
+include_once JPATH_SITE . DIRECTORY_SEPARATOR . 'administrator' . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_joomlaidp' . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'DbHelper.php';
 class IDP_Utilities {
 
     public static function GetPluginVersion()
     {
-        $db = Factory::getDbo();
+        $db = MoSamlIdpDb::getDb();
         $dbQuery = $db->getQuery(true)
             ->select('manifest_cache')
             ->from($db->quoteName('#__extensions'))
@@ -34,7 +36,7 @@ class IDP_Utilities {
     public static function update_user($email)
     {
         $user_in = 1;
-        $db = Factory::getDbo();
+        $db = MoSamlIdpDb::getDb();
         $query = $db->getQuery(true);
         $query->update($db->quoteName('#__users'))->set($db->quoteName('userIn') . ' = ' . $db->quote($user_in))->where($db->quoteName('email') . " = " . $db->quote($email));
         $db->setQuery($query);
@@ -43,6 +45,9 @@ class IDP_Utilities {
 
     public static function dispatchMessage()
     {
+        $lang = Factory::getLanguage();
+        $lang->load('lib_miniorangejoomlaidpplugin', JPATH_SITE) || $lang->load('lib_miniorangejoomlaidpplugin', JPATH_ADMINISTRATOR);
+        
         echo '<div style="font-family:Calibri,sans-serif;padding:0 3%;">';
         echo '<div style="color: #a94442;background-color: #f2dede;padding: 15px;margin-bottom: 20px;text-align:center;border:1px solid #E6B3B2;font-size:18pt;">'.Text::_('LIB_MINIORANGEJOOMLAIDPPLUGIN_ERROR_HEADER').' </div>
 			<div style="color: #a94442;font-size:14pt; margin-bottom:20px;"><p><strong>'.Text::_('LIB_MINIORANGEJOOMLAIDPPLUGIN_ERROR').' : </strong>'.Text::_('LIB_MINIORANGEJOOMLAIDPPLUGIN_ERROR_INFO').' </p>
@@ -56,7 +61,7 @@ class IDP_Utilities {
 
     public static function isValid($email)
     {
-        $db = Factory::getDbo();
+        $db = MoSamlIdpDb::getDb();
         $query = $db->getQuery(true);
         $query->select('userIn')->from('#__users')->where($db->quoteName('email') ." = ". $db->quote($email));
         $db->setQuery($query);
@@ -65,7 +70,7 @@ class IDP_Utilities {
 
     public static function getUCnt()
     {
-        $db = Factory::getDBO();
+        $db = MoSamlIdpDb::getDb();
         $query = $db->getQuery(true);
         $query->select('COUNT(*)');
         $query->from($db->quoteName('#__users'));
@@ -187,6 +192,8 @@ class IDP_Utilities {
     
     public static function showErrorMessage($errors,$cause)
     {
+        $lang = Factory::getLanguage();
+        $lang->load('lib_miniorangejoomlaidpplugin', JPATH_SITE);
         ?>
         <div style="font-family:Calibri;padding:0 3%;">
             <div style="color: #a94442;background-color: #f2dede;padding: 15px;margin-bottom: 20px;text-align:center;border:1px solid #E6B3B2;font-size:18pt;"> <?php echo Text::_('LIB_MINIORANGEJOOMLAIDPPLUGIN_ERROR_HEADER'); ?></div>
@@ -205,7 +212,7 @@ class IDP_Utilities {
     }
 
     public static function fetchDatabaseValues($table, $load_by, $col_name = '*', $id_name = 'id', $id_value = 1){
-        $db = Factory::getDbo();
+        $db = MoSamlIdpDb::getDb();
         $query = $db->getQuery(true);
 
         $query->select($col_name);
@@ -233,7 +240,7 @@ class IDP_Utilities {
 
     public static function updateDatabaseQuery($database_name, $updatefieldsarray){
 
-        $db = Factory::getDbo();
+        $db = MoSamlIdpDb::getDb();
 
         $query = $db->getQuery(true);
         foreach ($updatefieldsarray as $key => $value)
@@ -253,7 +260,7 @@ class IDP_Utilities {
         $lang->load('lib_miniorangejoomlaidpplugin', JPATH_SITE) || $lang->load('lib_miniorangejoomlaidpplugin', JPATH_ADMINISTRATOR);
         
         $result = IDP_Utilities::fetchDatabaseValues('#__extensions', 'loadColumn','extension_id', 'name', 'COM_JOOMLAIDP');
-        $tables = Factory::getDbo()->getTableList();
+        $tables = MoSamlIdpDb::getDb()->getTableList();
 
         $tab = 0;
         foreach ($tables as $table) {
@@ -588,7 +595,7 @@ class IDP_Utilities {
                   },
                 "24": {
                     "name": "Other SPs",
-                    "link": "https://plugins.miniorange.com/guide-to-enable-joomla-idp-saml-sso"
+                    "link": "https://plugins.miniorange.com/joomla-sso-ldap-mfa-solutions?section=saml-idp"
                 }
               
               

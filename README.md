@@ -13,6 +13,31 @@ Simplify authentication on your Joomla site with the **SAML 2.0 Identity Provide
 - **Attribute & Role Mapping**:  
   Map Joomla user attributes (e.g., username, groups) to SP attributes effortlessly.
 
+## Installation
+
+Download the latest installable package:
+
+**[Download Joomla SAML IDP Latest Version](https://prod-marketing-site.s3.amazonaws.com/plugins/joomla/miniorange-joomla-saml-idp.zip)**
+
+OR
+
+Go to **Releases → miniorange-joomla-saml-idp.zip**
+
+
+## Quick Setup:
+1. Login to Joomla Administrator  
+   `https://your-site.com/administrator`   
+
+2. Go to **Extensions → Manage → Install**
+
+3. Upload the zip – ***miniorange-joomla-saml-idp.zip***  
+   OR search for the **SAML IDP Plugin** and install it.
+
+4. Once installation is successful, click ***Get Started***
+
+5. Configure the plugin using the **[Setup Guide](https://plugins.miniorange.com/joomla-sso-ldap-mfa-solutions?section=saml-idp)**
+
+
 ## Free Version Features:
 - Secure **SP-Initiated Login**
 - Basic Attribute Mapping
@@ -47,3 +72,9 @@ Secure your SSO experience today!
 
 ## Website:
 Check out our website! Visit [https://plugins.miniorange.com/joomla](https://plugins.miniorange.com/joomla) to see all our Joomla plugins.
+
+
+![GitHub Downloads](https://img.shields.io/github/downloads/miniOrange-joomla/Joomla-SAML-IDP/total?cacheSeconds=60)
+<img src="https://komarev.com/ghpvc/?username=miniOrange-joomla&label=Repo%20Views&color=0e75b6&style=flat" />
+
+

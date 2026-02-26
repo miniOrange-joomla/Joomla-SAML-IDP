@@ -16,6 +16,8 @@
 **/
 defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
+include_once JPATH_SITE . DIRECTORY_SEPARATOR . 'administrator' . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_joomlaidp' . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'DbHelper.php';
+
 class MoSamlIdpUtility{
 
 	public static function is_customer_registered() {
@@ -49,7 +51,7 @@ class MoSamlIdpUtility{
 	}
 	
 	public static function getCustomerDetails(){
-		$db = Factory::getDbo();
+		$db = MoSamlIdpDb::getDb();
 		$query = $db->getQuery(true);
 		$query->select('*');
 		$query->from($db->quoteName('#__miniorange_saml_idp_customer'));

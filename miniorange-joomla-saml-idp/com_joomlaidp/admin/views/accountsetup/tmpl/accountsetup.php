@@ -20,6 +20,7 @@ HTMLHelper::_('jquery.framework');
 $document = Factory::getApplication()->getDocument();
 $document->addScript(Uri::base() . 'components/com_joomlaidp/assets/js/bootstrap-select-min.js');
 $document->addScript(Uri::base() . 'components/com_joomlaidp/assets/js/utilityjs.js');
+$document->addScript(Uri::base() . 'components/com_joomlaidp/assets/js/country.js');
 $document->addStyleSheet(Uri::base() . 'components/com_joomlaidp/assets/css/miniorange_boot.css');
 $document->addStyleSheet(Uri::base() . 'components/com_joomlaidp/assets/css/miniorange_idp.css');
 $document->addStyleSheet('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css');
@@ -104,17 +105,18 @@ if (isset($tab['tab-panel']) && !empty($tab['tab-panel']))
 
                 </a>
 
+                <a id="errorlogtab" class="mo_boot_p-3  mo_nav-tab mo_nav_tab_<?php echo $idp_active_tab == 'errorlog' ? 'active' : ''; ?>" href="#error-logs" onclick="add_css_tab('#errorlogtab');" data-toggle="tab">
+                    <span><i class="fas fa-shield-alt"></i>
+                    <span class="mo_idp_tab "> <?php echo Text::_('COM_MINIORANGE_IDP_LOG_TAB'); ?></span>
+
+                </a>
+                
                 <a id="licensingtab" class="mo_boot_p-3  mo_nav-tab mo_nav_tab_<?php echo $idp_active_tab == 'license' ? 'active' : ''; ?>" href="#licensing-plans" onclick="add_css_tab('#licensingtab');" data-toggle="tab">
                     <span><i class="fa-solid fa-circle-up"></i>
                     <span class="mo_idp_tab "> <?php echo Text::_('COM_JOOMLAIDP_TAB6_LICENSING_PLANS'); ?></span>
 
                 </a>
 
-                <a id="errorlogtab" class="mo_boot_p-3  mo_nav-tab mo_nav_tab_<?php echo $idp_active_tab == 'errorlog' ? 'active' : ''; ?>" href="#error-logs" onclick="add_css_tab('#errorlogtab');" data-toggle="tab">
-                    <span><i class="fas fa-shield-alt"></i>
-                    <span class="mo_idp_tab "> <?php echo Text::_('COM_MINIORANGE_IDP_LOG_TAB'); ?></span>
-
-                </a>
 
              
                 <?php
@@ -135,9 +137,9 @@ if (isset($tab['tab-panel']) && !empty($tab['tab-panel']))
     </div>
 
     
-    <div class="mo_container tab-content" id="myTabContent">
+    <div class="mo_container tab-content mo_idp_tab_content" id="myTabContent">
 
-        <div id="overview_plugin" class="tab-pane <?php echo $idp_active_tab == 'overview' ? 'active' : '';?>"> 
+        <div id="overview_plugin" class="tab-pane mo_boot_mt-3 <?php echo $idp_active_tab == 'overview' ? 'active' : '';?>"> 
             <?php
                 $class_name = "JoomlaIdpViewAccountSetup";
                 $func_name = "showPluginOverview";
@@ -145,15 +147,15 @@ if (isset($tab['tab-panel']) && !empty($tab['tab-panel']))
             ?>
         </div>
 
-        <div id="service-provider" class="tab-pane <?php echo $idp_active_tab == 'sp' ? 'active' : '';?>"> 
+        <div id="service-provider" class="tab-pane mo_boot_mt-3 <?php echo $idp_active_tab == 'sp' ? 'active' : '';?>"> 
             <?php
                 $class_name = "JoomlaIdpViewAccountSetup";
-                $func_name = "showServiceProviderConfigurations";
+                $func_name = "showServiceProviderList";
                 call_user_func(array($class_name, $func_name));
             ?>
         </div>
 
-        <div id="identity-provider" class="tab-pane <?php echo $idp_active_tab == 'idp' ? 'active' : ''; ?>"> 
+        <div id="identity-provider" class="tab-pane mo_boot_mt-3 <?php echo $idp_active_tab == 'idp' ? 'active' : ''; ?>"> 
             <?php
                 $class_name = "JoomlaIdpViewAccountSetup";
                 $func_name = "showIdentityProviderConfigurations";
@@ -161,7 +163,7 @@ if (isset($tab['tab-panel']) && !empty($tab['tab-panel']))
             ?>
         </div>
 
-        <div id="iadvance_mapping" class="tab-pane <?php echo $idp_active_tab == 'advance_mapping' ? 'active' : ''; ?>"> 
+        <div id="iadvance_mapping" class="tab-pane mo_boot_mt-3 <?php echo $idp_active_tab == 'advance_mapping' ? 'active' : ''; ?>"> 
             <?php
                 $class_name = "JoomlaIdpViewAccountSetup";
                 $func_name = "showAdvanceMapping";
@@ -169,7 +171,7 @@ if (isset($tab['tab-panel']) && !empty($tab['tab-panel']))
             ?>
         </div>
 
-        <div id="role_relay_restriciton_id" class="tab-pane <?php echo $idp_active_tab == 'role_relay_restriciton' ? 'active' : ''; ?>"> 
+        <div id="role_relay_restriciton_id" class="tab-pane mo_boot_mt-3 <?php echo $idp_active_tab == 'role_relay_restriciton' ? 'active' : ''; ?>"> 
             <?php
                 $class_name = "JoomlaIdpViewAccountSetup";
                 $func_name = "showRoleRelayRestriction";
@@ -177,7 +179,7 @@ if (isset($tab['tab-panel']) && !empty($tab['tab-panel']))
             ?>
         </div>
 
-        <div id="signin_settings_id" class="tab-pane <?php echo $idp_active_tab == 'signin_settings' ? 'active' : ''; ?>"> 
+        <div id="signin_settings_id" class="tab-pane mo_boot_mt-3 <?php echo $idp_active_tab == 'signin_settings' ? 'active' : ''; ?>"> 
             <?php
                 $class_name = "JoomlaIdpViewAccountSetup";
                 $func_name = "showIDPInitiatedLoginDetails";
@@ -185,7 +187,7 @@ if (isset($tab['tab-panel']) && !empty($tab['tab-panel']))
             ?>
         </div>
 
-        <div id="licensing-plans" class="tab-pane <?php echo $idp_active_tab == 'license' ? 'active' : ''; ?>">
+        <div id="licensing-plans" class="tab-pane mo_boot_mt-3 <?php echo $idp_active_tab == 'license' ? 'active' : ''; ?>">
            
                         <?php
                             $result      = IDP_Utilities::fetchDatabaseValues('#__miniorange_saml_idp_customer', 'loadAssoc','*');
@@ -207,26 +209,24 @@ if (isset($tab['tab-panel']) && !empty($tab['tab-panel']))
             </form>
         </div>
 
-        <div id="error-logs" class="tab-pane <?php echo $idp_active_tab == 'errorlog' ? 'active' : ''; ?>">
+        <div id="error-logs" class="tab-pane mo_boot_mt-3 <?php echo $idp_active_tab == 'errorlog' ? 'active' : ''; ?>">
            
-        <div class="mo_boot_col-sm-12 mo_tab_border mo_boot_p-2 mo_boot_m-0">
+        <div class="mo_boot_col-sm-12 mo_tab_border mo_boot_p-2 mo_idp_main_content">
                 <div class="col-sm-12" >
                     <?php moLoggers();?>
                 </div>
             </div>
         </div>
 
-        <div id="request-demo" class="tab-pane <?php if ($idp_active_tab == 'request_demo') echo 'active'; ?>">
+        <div id="request-demo" class="tab-pane mo_boot_mt-3 <?php if ($idp_active_tab == 'request_demo') echo 'active'; ?>">
         <?php
             $class_name = "JoomlaIdpViewAccountSetup";
             $func_name = "requestfordemo";
             call_user_func(array($class_name, $func_name));
         ?>
         </div>
-        <div id="support-tab" class="tab-pane <?php if ($idp_active_tab == 'support_tab') echo 'active'; ?>" >
-            <div class="mo_boot_row">
+        <div id="support-tab" class="tab-pane mo_boot_mt-3 <?php if ($idp_active_tab == 'support_tab') echo 'active'; ?>" >
                 <?php mo_saml_idp_support(); ?>
-            </div>
         </div>
     </div>
 </div>
@@ -237,31 +237,34 @@ function moLoggers(): void
     $list = MoIdpLogger::getAllLogs();
 
     ?>
-    <div class="card card-outline-primary">
-    <div class="mo_boot_d-flex  mo_saml_justify-content-end mo_boot_mt-3 mo_saml_gap pr-4">
-        <form method="post" action="index.php?option=com_joomlaidp&view=accountsetup&task=accountsetup.resetLogs">
-    
-        <button type="submit" name="reset_logs" class="mo_boot_btn mo_boot_px-4 mo_boot_py-2 shadow-lg mo_boot_btn-danger mo_saml_height">
-            <i class="fas fa-trash-alt me-2"></i>
-        </button>
+  
+        <div class="card-header text-white mo_boot_d-flex mo_boot_align-items-center mo_boot_position-relative">
+            <div class="mo_boot_flex-1"></div>
+            <div class="mo_boot_text-center mo_boot_position-absolute mo_idp_log_btn">
+                <h2 class="fw-bold mo_boot_m-0">
+                    <i class="fas fa-clipboard-list me-2"></i> <?php echo Text::_('COM_MINIORANGE_LOGGER_TITLE'); ?>
+                </h2>
+            </div>
+            <div class="mo_boot_d-flex mo_saml_justify-content-end mo_saml_gap pr-4 mo_boot_ml-auto">
+                <form method="post" action="index.php?option=com_joomlaidp&view=accountsetup&task=accountsetup.resetLogs" class="mo_boot_d-inline">
+            
+                <button type="submit" name="reset_logs" class="mo_boot_btn mo_boot_px-4 mo_boot_py-2 shadow-lg mo_boot_btn-danger mo_saml_height mo_boot_d-flex mo_boot_align-items-center mo_boot_justify-content-center">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
 
-        <?php echo HTMLHelper::_('form.token'); ?>
-        </form>
-        <a href="index.php?option=com_joomlaidp&view=accountsetup&tab-panel=errorlog"
-        class="mo_boot_btn mo_boot_px-4 mo_boot_py-2 shadow-lg mo_boot_btn-primary mo_saml_height btn_cstm">
-            <i class="fas fa-sync-alt me-2"></i>
-        </a>
+                <?php echo HTMLHelper::_('form.token'); ?>
+                </form>
+                <a href="index.php?option=com_joomlaidp&view=accountsetup&tab-panel=errorlog"
+                class="mo_boot_btn mo_boot_px-4 mo_boot_py-2 shadow-lg mo_boot_btn-primary mo_saml_height btn_cstm mo_boot_d-flex mo_boot_align-items-center mo_boot_justify-content-center">
+                    <i class="fas fa-sync-alt"></i>
+                </a>
 
-        <a href="index.php?option=com_joomlaidp&view=accountsetup&task=accountsetup.downloadLogs"
-        class="mo_boot_btn mo_boot_px-4 mo_boot_py-2 shadow-lg mo_boot_btn-success mo_saml_height btn_cstm">
-            <i class="fas fa-download me-2"></i>
-        </a>
+                <a href="index.php?option=com_joomlaidp&view=accountsetup&task=accountsetup.downloadLogs"
+                class="mo_boot_btn mo_boot_px-4 mo_boot_py-2 shadow-lg mo_boot_btn-success mo_saml_height btn_cstm mo_boot_d-flex mo_boot_align-items-center mo_boot_justify-content-center">
+                    <i class="fas fa-download"></i>
+                </a>
 
-    </div>
-        <div class="card-header text-white text-center mo_boot_d-flex mo_saml_justify-content-center ">
-            <h2 class="fw-bold mo_boot_m-0">
-                <i class="fas fa-clipboard-list me-2"></i> <?php echo Text::_('COM_MINIORANGE_LOGGER_TITLE'); ?>
-            </h2>
+            </div>
         </div>
         <div class="card-body mo_boot_p-4 mo_boot_mb-4">
             <table class="table table-striped table-bordered table-hover mo_log_table">
@@ -331,7 +334,6 @@ function moLoggers(): void
                 </tbody>
             </table>
         </div>
-    </div>
     <?php
 }
 
@@ -346,15 +348,11 @@ function moLoggers(): void
         if ($admin_email == '' || empty($admin_email))
             $admin_email = $current_user->email;
         ?>
-            <div class="mo_boot_col-sm-12 mo_boot_m-0">
-                <div class="mo_boot_row mo_tab_border mo_boot_p-2 mo_boot_m-0">
-                    <div class="mo_boot_col-sm-12 mo_boot_mt-3">
-                        <div class="mo_boot_row">
-                            <div class="mo_boot_col-lg-5">
-                                <h3 class="mo_saml_form_head"><?php echo Text::_('COM_JOOMLAIDP_SUPPORT_HEADER'); ?></h3>
+            <div class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0 mo_idp_main_content">
+                <div class="mo_boot_row mo_boot_p-2">
+                            <div class="mo_boot_col-sm-12 mo_boot_px-2">
+                                <h3><?php echo Text::_('COM_JOOMLAIDP_SUPPORT_HEADER'); ?></h3>
                             </div>
-                        </div>
-                    </div>
                     <div class="mo_boot_col-sm-12">
                         <div class=" mo_boot_offset-1">
                             <div class="mo_boot_row">
@@ -367,6 +365,8 @@ function moLoggers(): void
                     <div class="mo_boot_col-sm-12 mo_boot_p-2">
                         <form  name="f" method="post" action="<?php echo Route::_('index.php?option=com_joomlaidp&view=accountsetup&task=accountsetup.contactUs');?>">
                             <input type="hidden" name="option1" value="mo_saml_login_send_query"/>
+                            <input type="hidden" name="moClientTimezone" id="moClientTimezone" value="" />
+                            <input type="hidden" name="moClientTimezoneOffset" id="moClientTimezoneOffset" value="" />
                             <div class="mo_boot_offset-1 mo_boot_mt-2 ">
                                 <div class="mo_boot_row">
                                     <div class="mo_boot_col-sm-3">
@@ -383,7 +383,16 @@ function moLoggers(): void
                                         <?php echo Text::_('COM_JOOMLAIDP_SAML_SUPPORT_NUMBER'); ?> :
                                     </div>
                                     <div class="mo_boot_col-sm-8">
-                                        <input type="text" class=" mo_boot_form-control mo_boot_form-text-control mo_saml_proxy_setup" name="mo_saml_query_phone" pattern="[\+]\d{11,14}|[\+]\d{1,4}([\s]{0,1})(\d{0}|\d{9,10})" value="<?php echo $admin_phone; ?>" placeholder="<?php echo Text::_('COM_JOOMLAIDP_SAML_PHONE_PLACEHOLDER'); ?>"/>
+                                        <div class="mo_boot_row mo_boot_gutter-0">
+                                            <div class="mo_boot_col-sm-4">
+                                                <select id="mo_saml_country_code" name="mo_saml_country_code" class="mo_boot_form-control mo_boot_form-text-control mo_saml_proxy_setup" title="Country code">
+                                                    <option value="">--</option>
+                                                </select>
+                                            </div>
+                                            <div class="mo_boot_col-sm-8">
+                                                <input type="text" class="mo_boot_form-control mo_boot_form-text-control mo_saml_proxy_setup" name="mo_saml_query_phone" id="mo_saml_query_phone" value="<?php echo htmlspecialchars($admin_phone ?? ''); ?>" placeholder="<?php echo Text::_('COM_JOOMLAIDP_SAML_PHONE_PLACEHOLDER'); ?>"/>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>  
                             </div>

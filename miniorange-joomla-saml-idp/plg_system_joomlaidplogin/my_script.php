@@ -3,6 +3,7 @@
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\Database\DatabaseInterface;
 /**
  * @package     Joomla.Plugin
  * @subpackage  plg_system_joomlaidplogin
@@ -37,8 +38,9 @@ class plgSystemJoomlaidploginInstallerScript
      */
     public function install($parent) 
     {
-
-          $db  = Factory::getDbo();
+          $db = method_exists(Factory::class, 'getContainer')
+              ? Factory::getContainer()->get(DatabaseInterface::class)
+              : Factory::getDbo();
           $query = $db->getQuery(true);
           $query->update('#__extensions');
           $query->set($db->quoteName('enabled') . ' = 1');

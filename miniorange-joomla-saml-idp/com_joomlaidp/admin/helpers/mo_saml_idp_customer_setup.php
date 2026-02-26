@@ -226,7 +226,30 @@ class MoSamlIdpCustomer{
 		$os_version    =  IDP_Utilities::_get_os_info();
         $serverSoftware = isset($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] : 'Unknown';
         $webServer = !empty($serverSoftware) ? trim(explode('/', $serverSoftware)[0]) : 'Unknown';
-        $query = '[Joomla: '.$jCmsVersion.' SAML SAML IDP Free Plugin | '.$moPluginVersion.' ] | PHP: ' . $phpVersion.' | OS: '.$os_version.' | Web Server: '.$webServer.' | Query: '. $query;
+        // Timezone: prefer browser (support form), else Joomla config
+        $tzName = '';
+        $tzOffset = '';
+        $app = Factory::getApplication();
+        $input = method_exists($app, 'getInput') ? $app->getInput() : $app->input;
+        if ($input) {
+            $tzName = $input->getString('moClientTimezone', '');
+            $tzOffset = $input->getString('moClientTimezoneOffset', '');
+        }
+        if ($tzName !== '' || $tzOffset !== '') {
+            $tzStr = $tzName;
+            if ($tzOffset !== '') {
+                $offsetMins = (int) $tzOffset; // minutes behind UTC from JS getTimezoneOffset()
+                $offsetMins = -$offsetMins;    // convert to UTC offset: ahead = positive
+                $offsetHours = (int) floor($offsetMins / 60);
+                $offsetMinsRem = (int) abs($offsetMins % 60);
+                $sign = $offsetMins >= 0 ? '+' : '-';
+                $tzStr .= ' (UTC' . $sign . sprintf('%02d:%02d', abs($offsetHours), $offsetMinsRem) . ')';
+            }
+            $timezoneStr = trim($tzStr) !== '' ? $tzStr : 'Unknown';
+        } else {
+            $timezoneStr = Factory::getConfig()->get('offset', date_default_timezone_get() ?: 'UTC');
+        }
+        $query = '[Joomla: '.$jCmsVersion.' SAML SAML IDP Free Plugin | '.$moPluginVersion.' ] | PHP: ' . $phpVersion.' | OS: '.$os_version.' | Web Server: '.$webServer.' | Timezone: '.$timezoneStr.' | Query: '. $query;
 		$content = '<div >Hello, <br><br>
 					<strong>Company</strong> :<a href="'.$_SERVER['SERVER_NAME'].'" target="_blank" >'.$_SERVER['SERVER_NAME'].'</a><br><br>
 					<strong>Phone Number</strong> :'.$q_phone.'<br><br>

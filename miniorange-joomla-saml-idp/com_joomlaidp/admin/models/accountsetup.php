@@ -14,7 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
-
+include_once JPATH_SITE . DIRECTORY_SEPARATOR . 'administrator' . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_joomlaidp' . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'DbHelper.php';
 
 /**
  * AccountSetup Model
@@ -59,7 +59,7 @@ class JoomlaidpModelAccountSetup extends AdminModel
 	public function getList()
 	{
 		// Initialize variables.
-		$db    = Factory::getDbo();
+		$db    = MoSamlIdpDb::getDb();
 		$query = $db->getQuery(true);
  
 		// Create the base select statement.

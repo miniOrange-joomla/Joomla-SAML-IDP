@@ -202,4 +202,170 @@ document.addEventListener('DOMContentLoaded', function () {
             body.style.display = body.style.display === 'none' || body.style.display =="" ? 'block' : 'none';
         });
     });
+
+    // Support form: capture browser timezone into hidden fields if present
+    (function setClientTimezoneFields() {
+        var tzEl = document.getElementById('moClientTimezone');
+        var offsetEl = document.getElementById('moClientTimezoneOffset');
+        if (!tzEl && !offsetEl) {
+            return;
+        }
+        var tzName = '';
+        try {
+            tzName = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+        } catch (e) {
+            tzName = '';
+        }
+        var offsetMinutes = new Date().getTimezoneOffset();
+        if (tzEl) tzEl.value = tzName;
+        if (offsetEl) offsetEl.value = String(offsetMinutes);
+    })();
+
+    // Support form: populate country code dropdown (requires country.js)
+    if (typeof moIdpPopulateCountryCodeSelect === 'function') {
+        moIdpPopulateCountryCodeSelect('mo_saml_country_code', '91');
+    }
 });
+
+
+// Function to show metadata tabs
+function showMetadataTab(tabName, event) {
+    // Prevent default link behavior (page scroll to top)
+    if (event) {
+        event.preventDefault();
+    }
+
+    // Hide all metadata tab contents
+    var tabContents = document.querySelectorAll('.metadata-tab-content');
+    tabContents.forEach(function (content) {
+        content.classList.remove('mo_boot_display_block');
+        content.classList.add('mo_saml_display_none');
+    });
+
+    // Remove active class from all metadata tab buttons only
+    var tabButtons = document.querySelectorAll('#metadata-url-tab-btn, #download-xml-tab-btn, #manual-info-tab-btn');
+    tabButtons.forEach(function (button) {
+        button.classList.remove('mo_idp_tab_current');
+    });
+
+    // Add active class to selected metadata tab button
+    var selectedButton = document.getElementById(tabName + '-tab-btn');
+    if (selectedButton) {
+        selectedButton.classList.add('mo_idp_tab_current');
+    }
+
+    // Show the selected tab content
+    var selectedTab = document.getElementById(tabName + '-tab');
+    if (selectedTab) {
+        selectedTab.classList.remove('mo_saml_display_none');
+        selectedTab.classList.add('mo_boot_display_block');
+    }
+}
+
+
+// Function to toggle additional attributes section
+function toggleAdditionalAttributes() {
+    const content = document.getElementById('additional-attributes-content');
+    const toggle = document.getElementById('additional-attributes-toggle');
+
+    if (content.style.display === 'none' || content.style.display === '') {
+        content.style.display = 'block';
+        toggle.innerHTML = '-';
+    } else {
+        content.style.display = 'none';
+        toggle.innerHTML = '+';
+    }
+}
+
+// Function to toggle included features section
+function toggleIncludedFeatures(featureId, event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    
+    const featureList = document.getElementById(featureId);
+    if (featureList) {
+        // Toggle using class instead of inline style for better control
+        if (featureList.classList.contains('mo_features_expanded')) {
+            featureList.classList.remove('mo_features_expanded');
+            featureList.style.display = 'none';
+        } else {
+            featureList.style.display = 'block';
+            featureList.classList.add('mo_features_expanded');
+        }
+    }
+    return false;
+}
+
+function toggleUpgradeSection() {
+    var upgradeContent = document.getElementById('upgrade-content');
+    var toggleButton = document.getElementById('upgrade-toggle');
+
+    if (upgradeContent.style.display === 'none' || upgradeContent.style.display === '') {
+        upgradeContent.style.display = 'block';
+        toggleButton.innerHTML = '-';
+    } else {
+        upgradeContent.style.display = 'none';
+        toggleButton.innerHTML = '+';
+    }
+}
+
+// Function to toggle licensing section
+function toggleLicensingSection() {
+    var licensingContent = document.getElementById('licensing-content');
+    var toggleButton = document.getElementById('licensing-toggle');
+
+    if (licensingContent.style.display === 'none' || licensingContent.style.display === '') {
+        licensingContent.style.display = 'block';
+        toggleButton.innerHTML = '-';
+    } else {
+        licensingContent.style.display = 'none';
+        toggleButton.innerHTML = '+';
+    }
+}
+
+// Function to toggle advanced features section
+function toggleAdvancedFeatures() {
+    var advancedContent = document.getElementById('advanced-features-content');
+    var toggleButton = document.getElementById('advanced-features-toggle');
+
+    if (advancedContent.style.display === 'none' || advancedContent.style.display === '') {
+        advancedContent.style.display = 'block';
+        toggleButton.innerHTML = '-';
+    } else {
+        advancedContent.style.display = 'none';
+        toggleButton.innerHTML = '+';
+    }
+}
+
+
+function showImportExportConfig() {
+    var listTable = document.getElementById('sp_list_table');
+    var importExportDiv = document.getElementById('mo_idp_import_export_id');
+    
+    if (listTable) {
+        listTable.style.display = 'none';
+    }
+    
+    if (importExportDiv) {
+        importExportDiv.classList.remove('mo_saml_display_none');
+        importExportDiv.style.setProperty('display', 'block', 'important');
+    } else {
+        console.error('Import/Export div not found!');
+    }
+}
+
+function backToIdpList() {
+    var listTable = document.getElementById('sp_list_table');
+    var importExportDiv = document.getElementById('mo_idp_import_export_id');
+    
+    if (importExportDiv) {
+        importExportDiv.style.display = 'none';
+        importExportDiv.classList.add('mo_saml_display_none');
+    }
+    
+    if (listTable) {
+        listTable.style.display = 'block';
+    }
+}

@@ -148,13 +148,21 @@ class pkg_MiniorangeJoomlaSAMLIdpSSOInstallerScript
         }
       
         .btn_cstm {
-        background: linear-gradient(0deg,rgb(14 42 71) 0,rgb(26 69 138) 100%)!important;
+        background: #3D618F !important;
         border: none;
         font-size: 1.1rem;
         padding: 0.3rem 1.5rem;
         color: #fff!important;
         cursor: pointer;
       }
+
+        :root[data-color-scheme=dark] .btn_cstm {
+            background: #007DB0 !important;
+        }
+
+        a[target=_blank]:before {
+            display: none;
+        }
     
     </style>
     <h3>miniOrange SAML IDP plugin</h3>
