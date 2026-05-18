@@ -2,7 +2,7 @@
 <extension version="3.5.1" type="package" method="upgrade">
 	<name>Package miniOrange SAML IDP Login</name>
 	<packagename>MiniorangeJoomlaSamlIdpSSO</packagename>
-	<version>7.4</version>
+	<version>7.7</version>
 	<author>miniOrange Security Software Pvt. Ltd.</author>
     <authorEmail>info@xecurify.com</authorEmail>
     <authorUrl>https://www.miniorange.com/</authorUrl>

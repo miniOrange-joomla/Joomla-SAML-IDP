@@ -53,7 +53,7 @@ class MoSamlIdpCustomer{
         $timestampHeader 	 = "Timestamp: " .  number_format($currentTimeInMillis, 0, '', '');
         $authorizationHeader = "Authorization: " . $hashValue;
         $fromEmail 			 = !empty($email)?$email:$adEmail;
-        $subject             = "MiniOrange Joomla Feedback for SAML IDP ";
+        $subject             = "miniOrange Joomla SAML IDP Free Feedback - " . $fromEmail;
 
         //Get PHP Version
         $phpVersion = phpversion();
@@ -249,7 +249,7 @@ class MoSamlIdpCustomer{
         } else {
             $timezoneStr = Factory::getConfig()->get('offset', date_default_timezone_get() ?: 'UTC');
         }
-        $query = '[Joomla: '.$jCmsVersion.' SAML SAML IDP Free Plugin | '.$moPluginVersion.' ] | PHP: ' . $phpVersion.' | OS: '.$os_version.' | Web Server: '.$webServer.' | Timezone: '.$timezoneStr.' | Query: '. $query;
+        $query = '[Joomla SAML IDP Free: '.$jCmsVersion.' | '.$moPluginVersion.' ] | PHP: ' . $phpVersion.' | OS: '.$os_version.' | Web Server: '.$webServer.' | Timezone: '.$timezoneStr.' | Query: '. $query;
 		$content = '<div >Hello, <br><br>
 					<strong>Company</strong> :<a href="'.$_SERVER['SERVER_NAME'].'" target="_blank" >'.$_SERVER['SERVER_NAME'].'</a><br><br>
 					<strong>Phone Number</strong> :'.$q_phone.'<br><br>
@@ -266,7 +266,7 @@ class MoSamlIdpCustomer{
                 'fromName' 		=> 'miniOrange',
                 'toEmail' 		=> 'joomlasupport@xecurify.com',
                 'toName' 		=> 'joomlasupport@xecurify.com',
-                'subject' 		=> 'Query for miniOrange Joomla SAML IDP Free',
+                'subject' 		=> 'Query for Joomla SAML IDP Free',
                 'content' 		=> $content
             ),
 		);
@@ -397,7 +397,7 @@ class MoSamlIdpCustomer{
         $timestampHeader 	= "Timestamp: " .  number_format($currentTimeInMillis, 0, '', '');
         $authorizationHeader= "Authorization: " . $hashValue;
         $fromEmail 			= $email;
-        $subject            = "Joomla SAML IDP Demo/Trial Request";
+        $subject            = "Joomla SAML IDP Request for Trial";
 
         //Get PHP Version
         $phpVersion = phpversion();
