@@ -767,7 +767,7 @@ a::before {
 .mo_tooltip .mo_tooltiptext {
     visibility: hidden;
     width: 200px;
-    background-color: black;
+    background-color: #000;
     color: #fff;
     border-radius: 6px;
     text-align: center;
@@ -776,7 +776,8 @@ a::before {
     bottom: 150%;
     left: 50%;
     position: absolute;
-    z-index: 1;
+    z-index: 10000;
+    opacity: 1;
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
@@ -796,6 +797,32 @@ a::before {
 
 .mo_tooltip:hover .mo_tooltiptext {
     visibility: visible;
+}
+
+.mo_idp_premium_btn_wrap {
+    position: relative;
+    display: inline-block;
+}
+
+.mo_idp_premium_btn_wrap .mo_tooltiptext_wide {
+    width: 260px;
+    margin-left: -130px;
+}
+
+.mo_idp_premium_btn_wrap .btn_cstm:disabled {
+    pointer-events: none;
+}
+
+.mo_idp_crown_link {
+    pointer-events: auto;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.mo_boot_btn.btn_cstm:disabled,
+.mo_boot_btn.btn_cstm[disabled] {
+    opacity: 1 !important;
+    cursor: not-allowed !important;
 }
 
 .mo_copytooltip {
@@ -1167,7 +1194,7 @@ input[disabled].btn_cstm {
 }
 
 .mo_saml_required {
-    color: red;
+    color: red !important;
 }
 
 .saml_sp_label_css {
@@ -1333,7 +1360,6 @@ details {
     margin-right: 10px;
 }
 .customtemp {
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
 }
@@ -1709,7 +1735,7 @@ li {
         background-color: rgb(8, 10, 26) !important;
     }
 
-    .mo_nav-tab {
+    .mo_nav-tab,.mo_saml_action_btn,.mo_saml_test_btn {
         color: #ffffff;
     }
 
@@ -1725,7 +1751,7 @@ li {
         background-color: rgb(8, 10, 26) !important;
     }
 
-    .mo_form-control {
+    .mo_form-control,.mo_saml_actions_bar {
         background-color: #0f151d !important;
         color: white;
 
@@ -1899,6 +1925,7 @@ li {
     width: 100%;
     border: 1px solid #868383 !important;
     border-radius: 4px;
+    resize: vertical;
 }
 
 .mo_idp_setup_guide {
@@ -2616,8 +2643,60 @@ li {
     border-radius: 4px;
 }
 
-.mo_idp_log_btn{
-    left: 50%; transform: translateX(-50%);
+.mo_idp_log_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.mo_idp_log_actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.mo_idp_log_actions form {
+    margin: 0;
+    display: inline-flex;
+}
+
+.mo_idp_log_action_btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.15);
+    text-decoration: none;
+    color: #fff !important;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.mo_idp_log_action_btn i {
+    margin: 0;
+    line-height: 1;
+    font-size: 1rem;
+}
+
+.mo_idp_log_action_btn_danger {
+    background-color: #dc3545 !important;
+}
+
+.mo_idp_log_action_btn_primary {
+    background-color: #3D618F !important;
+}
+
+.mo_idp_log_action_btn_success {
+    background-color: #28a745 !important;
 }
 
 .mo_idp_feature_header{
@@ -2676,16 +2755,21 @@ li {
     justify-content: center;
     min-width: 40px;
     height: 40px;
+    text-decoration: none;
+    box-sizing: border-box;
 }
 .mo_saml_action_separator {
     width: 1px;
     height: 20px;
     background-color: #8BC9E0;
     margin: 0 5px;
+    flex-shrink: 0;
 }
 
 .mo_saml_actions_bar {
     display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
     background: rgb(255, 255, 255);
@@ -2695,12 +2779,20 @@ li {
     gap: 0;
 }
 
+.mo_saml_actions_bar form,
+.mo_saml_display_inline {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
 .mo_saml_test_btn {
-    background: none;
-    border: none;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
     padding: 8px 12px;
     cursor: pointer;
-    color: #007cba;
+    color: #007cba !important;
     text-decoration: underline;
     font-weight: 500;
     transition: all 0.2s;
@@ -2727,4 +2819,8 @@ li {
 
 .mo_idp_tab_content *:not(button):not(.btn):not(input[type="button"]):not(input[type="submit"]):not(a):not(i) {
     color: #001B69;
+}
+
+.mo_boot_btn-fetch{
+    color:white !important;
 }

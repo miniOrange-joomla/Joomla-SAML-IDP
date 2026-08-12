@@ -7,7 +7,7 @@
  * @license     GNU General Public License version 3; see LICENSE.txt
  * @contact     info@xecurify.com
  */
- 
+
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
@@ -33,10 +33,10 @@ class JoomlaIdpModelSamlIdpSettings extends AdminModel
 	 */
 	public function getTable($type = 'SamlIdpSettings', $prefix = 'JoomlaIdpTable', $config = array())
 	{
-		
-			return Table::getInstance((string)$type,(string)$prefix, $config);
+
+			return Table::getInstance((string) $type, (string) $prefix, $config);
 	}
- 
+
 	/**
 	 * Method to get the record form.
 	 *
@@ -58,15 +58,15 @@ class JoomlaIdpModelSamlIdpSettings extends AdminModel
 				'load_data' => $loadData
 			)
 		);
- 
+
 		if (empty($form))
 		{
 			return false;
 		}
- 
+
 		return $form;
 	}
- 
+
 	/**
 	 * Method to get the data that should be injected in the form.
 	 *
@@ -81,12 +81,12 @@ class JoomlaIdpModelSamlIdpSettings extends AdminModel
 			'com_joomlaidp.edit.samlidpsettings.data',
 			array()
 		);
- 
+
 		if (empty($data))
 		{
 			$data = $this->getItem(1);
 		}
- 
+
 		return $data;
 	}
 }

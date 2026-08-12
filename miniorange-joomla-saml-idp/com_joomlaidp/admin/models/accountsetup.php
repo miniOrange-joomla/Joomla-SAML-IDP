@@ -8,7 +8,7 @@
  * @license     GNU General Public License version 3; see LICENSE.txt
  * @contact     info@xecurify.com
  */
- 
+
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
@@ -23,7 +23,7 @@ include_once JPATH_SITE . DIRECTORY_SEPARATOR . 'administrator' . DIRECTORY_SEPA
  */
 class JoomlaidpModelAccountSetup extends AdminModel
 {
-	
+
 	/**
 	 * Method to get the record form.
 	 *
@@ -34,8 +34,8 @@ class JoomlaidpModelAccountSetup extends AdminModel
 	 *
 	 * @since   1.6
 	 */
-	
-	
+
+
 	public function getForm($data = array(), $loadData = true)
 	{
 		// Get the form.
@@ -47,27 +47,28 @@ class JoomlaidpModelAccountSetup extends AdminModel
 				'load_data' => $loadData
 			)
 		);
- 
+
 		if (empty($form))
 		{
 			return false;
 		}
- 
+
 		return $form;
 	}
-	
+
 	public function getList()
 	{
 		// Initialize variables.
 		$db    = MoSamlIdpDb::getDb();
 		$query = $db->getQuery(true);
- 
+
 		// Create the base select statement.
 		$query->select('sp_name')
-                ->from($db->quoteName('#__miniorangesamlidp'));
+			->from($db->quoteName('#__miniorangesamlidp'));
 		$result = array();
 		$result = BaseDatabaseModel::_getList($query);
+
 		return $result;
 	}
-	
+
 }

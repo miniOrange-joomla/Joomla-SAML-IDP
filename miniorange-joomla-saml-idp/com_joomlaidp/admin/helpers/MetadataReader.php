@@ -12,76 +12,116 @@ defined('_JEXEC') or die;
 
 class MetadataReader
 {
-    private $serviceProviders;
+	/**
+	 * Parsed service providers from metadata.
+	 *
+	 * @var  array
+	 */
+	private $serviceProviders;
 
-    public function __construct(\DOMNode $xml = NULL) {
-        $this->serviceProviders = array();
-        $entityDescriptors = MoSamlIdpUtility::xpQuery($xml, './saml_metadata:EntityDescriptor');
-        foreach ($entityDescriptors as $entityDescriptor) {
-            $SPSSODescriptor = MoSamlIdpUtility::xpQuery($entityDescriptor, './saml_metadata:SPSSODescriptor');
-            if(isset($SPSSODescriptor) && !empty($SPSSODescriptor)){
-                array_push($this->serviceProviders, new ServiceProviders($entityDescriptor));
-            }
-        }
-    }
+	public function __construct(\DOMNode $xml = null)
+	{
+		$this->serviceProviders = array();
+		$entityDescriptors = MoSamlIdpUtility::xpQuery($xml, './saml_metadata:EntityDescriptor');
 
-    public function getServiceProviders(){
-        return $this->serviceProviders;
-    }
+		foreach ($entityDescriptors as $entityDescriptor)
+		{
+			$SPSSODescriptor = MoSamlIdpUtility::xpQuery($entityDescriptor, './saml_metadata:SPSSODescriptor');
+
+			if (isset($SPSSODescriptor) && !empty($SPSSODescriptor))
+			{
+				array_push($this->serviceProviders, new ServiceProviders($entityDescriptor));
+			}
+		}
+	}
+
+	public function getServiceProviders()
+	{
+		return $this->serviceProviders;
+	}
 }
 
-class ServiceProviders{
+class ServiceProviders
+{
+	/**
+	 * The SP entity ID.
+	 *
+	 * @var  string
+	 */
+	private $entityID;
 
-    private $entityID;
-    private $acsURL;
-    private $assertionsSigned;
+	/**
+	 * The assertion consumer service URL.
+	 *
+	 * @var  string
+	 */
+	private $acsURL;
 
-    public function __construct(\DOMElement $xml = NULL) {
+	/**
+	 * Whether assertions should be signed.
+	 *
+	 * @var  string
+	 */
+	private $assertionsSigned;
 
-        if ($xml->hasAttribute('entityID')) {
-            $this->entityID = $xml->getAttribute('entityID');
-        }
+	public function __construct(\DOMElement $xml = null)
+	{
+		if ($xml->hasAttribute('entityID'))
+		{
+			$this->entityID = $xml->getAttribute('entityID');
+		}
 
-        $SPSSODescriptor = MoSamlIdpUtility::xpQuery($xml, './saml_metadata:SPSSODescriptor');
+		$SPSSODescriptor = MoSamlIdpUtility::xpQuery($xml, './saml_metadata:SPSSODescriptor');
 
-        if (count($SPSSODescriptor) > 1) {
-            throw new Exception('More than one <SPSSODescriptor> in <EntityDescriptor>.');
-        } elseif (empty($SPSSODescriptor)) {
-            throw new Exception('Missing required <SPSSODescriptor> in <EntityDescriptor>.');
-        }
+		if (count($SPSSODescriptor) > 1)
+		{
+			throw new Exception('More than one <SPSSODescriptor> in <EntityDescriptor>.');
+		}
+		elseif (empty($SPSSODescriptor))
+		{
+			throw new Exception('Missing required <SPSSODescriptor> in <EntityDescriptor>.');
+		}
 
-        $this->parseAcsURL($SPSSODescriptor);
-        $this->assertionsSigned($SPSSODescriptor);
-    }
+		$this->parseAcsURL($SPSSODescriptor);
+		$this->assertionsSigned($SPSSODescriptor);
+	}
 
-    private function parseAcsURL($SPSSODescriptor){
+	private function parseAcsURL($SPSSODescriptor)
+	{
+		$assertionConsumerService = MoSamlIdpUtility::xpQuery($SPSSODescriptor[0], './saml_metadata:AssertionConsumerService');
 
-        $AssertionConsumerService = MoSamlIdpUtility::xpQuery($SPSSODescriptor[0], './saml_metadata:AssertionConsumerService');
-        foreach ($AssertionConsumerService as $sign) {
-            if($sign->hasAttribute('Location')){
-                $this->acsURL = $sign->getAttribute('Location');
-            }
-        }
-    }
+		foreach ($assertionConsumerService as $sign)
+		{
+			if ($sign->hasAttribute('Location'))
+			{
+				$this->acsURL = $sign->getAttribute('Location');
+			}
+		}
+	}
 
-    private function assertionsSigned($SPSSODescriptor){
+	private function assertionsSigned($SPSSODescriptor)
+	{
+		foreach ($SPSSODescriptor as $sign)
+		{
+			if ($sign->hasAttribute('WantAssertionsSigned'))
+			{
+				$this->assertionsSigned = $sign->getAttribute('WantAssertionsSigned');
+			}
+		}
+	}
 
-        foreach ($SPSSODescriptor as $sign) {
-            if($sign->hasAttribute('WantAssertionsSigned')){
-                $this->assertionsSigned = $sign->getAttribute('WantAssertionsSigned');
-            }
-        }
-    }
+	public function getEntityID()
+	{
+		return $this->entityID;
+	}
 
-    public function getEntityID(){
-        return $this->entityID;
-    }
+	public function getAcsURL()
+	{
+		return $this->acsURL;
+	}
 
-    public function getAcsURL(){
-        return $this->acsURL;
-    }
-
-    public function getAssertionsSigned(){
-        return $this->assertionsSigned;
-    }
+	public function getAssertionsSigned()
+	{
+		return $this->assertionsSigned;
+	}
 }

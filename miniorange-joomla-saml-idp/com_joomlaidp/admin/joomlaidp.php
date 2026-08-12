@@ -8,7 +8,7 @@
  * @license     GNU General Public License version 3; see LICENSE.txt
  * @contact     info@xecurify.com
  */
- 
+
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
@@ -16,6 +16,12 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\BaseController;
 require_once JPATH_COMPONENT . '/helpers/mo_saml_idp_customer_setup.php';
 require_once JPATH_COMPONENT . '/helpers/mo_saml_idp_utility.php';
+
+// Ensure the shared IDP_Utilities library is loaded even when the system plugin is disabled.
+if (!class_exists('IDP_Utilities'))
+{
+	require_once JPATH_LIBRARIES . '/miniorangejoomlaidpplugin/utility/IDP_Utilities.php';
+}
 
 // Access check.
 if (!Factory::getUser()->authorise('core.manage', 'com_joomlaidp'))
@@ -27,7 +33,7 @@ if (!Factory::getUser()->authorise('core.manage', 'com_joomlaidp'))
 jimport('joomla.application.component.controller');
 
 JLoader::registerPrefix('JoomlaIdp', JPATH_COMPONENT_ADMINISTRATOR);
- 
+
 // Get an instance of the controller prefixed by JoomlaIdp
 $controller = BaseController::getInstance('JoomlaIdp');
 

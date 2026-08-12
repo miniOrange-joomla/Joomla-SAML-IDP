@@ -1,5 +1,5 @@
 <?php
- defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 /**
  * @package     Joomla.Component
  * @subpackage  com_joomlaidp
@@ -7,21 +7,25 @@
  * @copyright   Copyright (C) 2015 miniOrange (https://www.miniorange.com)
  * @license     GNU General Public License version 3; see LICENSE.txt
  * @contact     info@xecurify.com
-*/
+ */
 
-include "BasicIDPEnum.php";
+include 'BasicIDPEnum.php';
 
-class mo_sp_info extends BasicIDPEnum{
-	
-    const sp_name = "sp_name";
-	const sp_entityid="sp_entityid";
-	const acs_url ="acs_url";
-	const default_relay_state = "default_relay_state";
-    const nameid_attribute = 'nameid_attribute';
-    const nameid_format = 'nameid_format';
-    const enabled = 'enabled';
-    const assertion_signed = 'assertion_signed';
+class MoSpInfo extends BasicIDPEnum
+{
+	const SP_NAME = 'sp_name';
 
+	const SP_ENTITYID = 'sp_entityid';
+
+	const ACS_URL = 'acs_url';
+
+	const DEFAULT_RELAY_STATE = 'default_relay_state';
+
+	const NAMEID_ATTRIBUTE = 'nameid_attribute';
+
+	const NAMEID_FORMAT = 'nameid_format';
+
+	const ENABLED = 'enabled';
+
+	const ASSERTION_SIGNED = 'assertion_signed';
 }
-
- 

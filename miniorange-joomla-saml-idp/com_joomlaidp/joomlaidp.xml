@@ -8,7 +8,7 @@
     <authorUrl>https://www.miniorange.com/</authorUrl>
     <copyright>Copyright (C) 2015 miniOrange. All rights reserved.</copyright>
     <license>GNU General Public License version 3; see LICENSE.txt</license>   
-	<version>7.7</version>
+	<version>7.9</version>
 	<description>COM_JOOMLAIDP_DESCRIPTION</description>
  
 	<install> <!-- Runs on install -->
@@ -37,9 +37,8 @@
 			<menu link="option=com_joomlaidp&amp;view=accountsetup&amp;tab-panel=advance_mapping">COM_JOOMLAIDP_MAPPING</menu>
 			<menu link="option=com_joomlaidp&amp;view=accountsetup&amp;tab-panel=role_relay_restriciton">COM_JOOMLAIDP_RELAY_RESTRICTION_TAB_NAME</menu>
 			<menu link="option=com_joomlaidp&amp;view=accountsetup&amp;tab-panel=signin_settings">COM_JOOMLAIDP_SIGNIN_SETTINGS</menu>
+			<menu link="option=com_joomlaidp&amp;view=accountsetup&amp;tab-panel=logs">COM_MINIORANGE_IDP_LOG_TAB</menu>
 			<menu link="option=com_joomlaidp&amp;view=accountsetup&amp;tab-panel=license">COM_JOOMLAIDP_LICENSING_PLANS</menu>
-			<menu link="option=com_joomlaidp&amp;view=accountsetup&amp;tab-panel=errorlog">COM_MINIORANGE_IDP_LOG_TAB</menu>
-
 		</submenu>
 		
 		<files folder="admin">

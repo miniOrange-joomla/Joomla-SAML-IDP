@@ -9,82 +9,107 @@
  */
 
 /** miniOrange enables user to log in using saml credentials.
-* This class contains all the utility functions
-*/
+ * This class contains all the utility functions
+ */
 /**
 
-**/
+ **/
 defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 include_once JPATH_SITE . DIRECTORY_SEPARATOR . 'administrator' . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_joomlaidp' . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'DbHelper.php';
 
-class MoSamlIdpUtility{
+class MoSamlIdpUtility
+{
 
-	public static function is_customer_registered() {
+	public static function isCustomerRegistered()
+	{
 		$result = self::getCustomerDetails();
 		$email 			= $result['email'];
 		$customerKey 	= $result['customer_key'];
 		$status = $result['registration_status'];
-		if($email && $customerKey && is_numeric(trim($customerKey)) && $status == 'SUCCESS'){
+
+		if ($email && $customerKey && is_numeric(trim($customerKey)) && $status == 'SUCCESS')
+		{
 			return 1;
-		} else{
+		}
+		else
+		{
 			return 0;
 		}
 	}
-	
-	public static function checkEmptyOrNull( $value ) {
-		if( ! isset( $value ) || empty( $value ) ) {
+
+	public static function checkEmptyOrNull( $value )
+	{
+		if (! isset($value) || empty($value))
+		{
 			return true;
 		}
+
 		return false;
 	}
-	
-	public static function is_curl_installed() {
-		if  (in_array  ('curl', get_loaded_extensions())) {
+
+	public static function isCurlInstalled()
+	{
+		if (in_array('curl', get_loaded_extensions()))
+		{
 			return 1;
-		} else 
+		}
+		else
+		{
 			return 0;
+		}
 	}
-	
-	public static function getHostname(){
+
+	public static function getHostname()
+	{
 		return 'https://login.xecurify.com';
 	}
-	
-	public static function getCustomerDetails(){
+
+	public static function getCustomerDetails()
+	{
 		$db = MoSamlIdpDb::getDb();
 		$query = $db->getQuery(true);
 		$query->select('*');
 		$query->from($db->quoteName('#__miniorange_saml_idp_customer'));
-		$query->where($db->quoteName('id')." = 1");
+		$query->where($db->quoteName('id') . " = 1");
 		$db->setQuery($query);
-		$customer_details = $db->loadAssoc();
-		return $customer_details;
+		$customerDetails = $db->loadAssoc();
+
+		return $customerDetails;
 	}
 
-	public static function xpQuery(DOMNode $node, $query){
-        static $xpCache = NULL;
+	public static function xpQuery(DOMNode $node, $query)
+	{
+		static $xpCache = null;
 
-        if ($node instanceof DOMDocument) {
-            $doc = $node;
-        } else {
-            $doc = $node->ownerDocument;
-        }
+		if ($node instanceof DOMDocument)
+		{
+			$doc = $node;
+		}
+		else
+		{
+			$doc = $node->ownerDocument;
+		}
 
-        if ($xpCache === NULL || !$xpCache->document->isSameNode($doc)) {
-            $xpCache = new DOMXPath($doc);
-            $xpCache->registerNamespace('soap-env', 'http://schemas.xmlsoap.org/soap/envelope/');
-            $xpCache->registerNamespace('saml_protocol', 'urn:oasis:names:tc:SAML:2.0:protocol');
-            $xpCache->registerNamespace('saml_assertion', 'urn:oasis:names:tc:SAML:2.0:assertion');
-            $xpCache->registerNamespace('saml_metadata', 'urn:oasis:names:tc:SAML:2.0:metadata');
-            $xpCache->registerNamespace('ds', 'http://www.w3.org/2000/09/xmldsig#');
-            $xpCache->registerNamespace('xenc', 'http://www.w3.org/2001/04/xmlenc#');
-        }
+		if ($xpCache === null || !$xpCache->document->isSameNode($doc))
+		{
+			$xpCache = new DOMXPath($doc);
+			$xpCache->registerNamespace('soap-env', 'http://schemas.xmlsoap.org/soap/envelope/');
+			$xpCache->registerNamespace('saml_protocol', 'urn:oasis:names:tc:SAML:2.0:protocol');
+			$xpCache->registerNamespace('saml_assertion', 'urn:oasis:names:tc:SAML:2.0:assertion');
+			$xpCache->registerNamespace('saml_metadata', 'urn:oasis:names:tc:SAML:2.0:metadata');
+			$xpCache->registerNamespace('ds', 'http://www.w3.org/2000/09/xmldsig#');
+			$xpCache->registerNamespace('xenc', 'http://www.w3.org/2001/04/xmlenc#');
+		}
 
-        $results = $xpCache->query($query, $node);
-        $ret = array();
-        for ($i = 0; $i < $results->length; $i++) {
-            $ret[$i] = $results->item($i);
-        }
+		$results = $xpCache->query($query, $node);
+		$ret = array();
+
+		for ($i = 0; $i < $results->length; $i++)
+		{
+			$ret[$i] = $results->item($i);
+		}
+
 		return $ret;
-    }
+	}
 }

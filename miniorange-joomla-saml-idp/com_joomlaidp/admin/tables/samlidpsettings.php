@@ -10,7 +10,7 @@
 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
- 
+
 /**
  * JoomlaIdp Table class
  *
@@ -23,7 +23,7 @@ class JoomlaIdpTableSamlIdpSettings extends \Joomla\CMS\Table\Table
 	 *
 	 * @param   JDatabaseDriver  &$db  A database connector object
 	 */
-	function __construct(&$db)
+	public function __construct(&$db)
 	{
 		parent::__construct('#__miniorangesamlidp', 'id', $db);
 	}
