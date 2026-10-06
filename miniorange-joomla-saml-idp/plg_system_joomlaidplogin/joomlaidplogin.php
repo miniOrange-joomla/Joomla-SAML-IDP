@@ -14,6 +14,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Installer\Installer;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Session\Session;
 use Joomla\CMS\Uri\Uri;
 
 jimport('joomla.plugin.plugin');
@@ -35,6 +36,14 @@ class PlgSystemJoomlaidplogin extends CMSPlugin
 
 		if (isset($post['mojsp_feedback']) || isset($post['mojsp_skip_feedback']))
 		{
+			$user    = Factory::getUser();
+			$isAdmin = method_exists($app, 'isClient') ? $app->isClient('administrator') : $app->isAdmin();
+
+			if (!$isAdmin || $user->guest || !$user->authorise('core.manage', 'com_installer') || !Session::checkToken())
+			{
+				return;
+			}
+
 			$radio = $post['deactivate_plugin'] ?? '';
 			$data = $post['query_feedback'] ?? '';
 			$feedbackEmail = isset($post['feedback_email']) ? $post['feedback_email'] : '';
@@ -52,13 +61,12 @@ class PlgSystemJoomlaidplogin extends CMSPlugin
 			$adminEmail = !empty($customerResult['email']) ? $customerResult['email'] : $checkEmail;
 			$data1 = $radio . ' : ' . $data;
 
-			if (isset($post['mojsp_skip_feedback']))
+			if (!isset($post['mojsp_skip_feedback']))
 			{
-				$data1 = 'Skipped the feedback';
+				require_once JPATH_BASE . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_joomlaidp' . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'mo_saml_idp_customer_setup.php';
+				MoSamlIdpCustomer::submitFeedbackForm($adminEmail, $data1, $feedbackEmail);
 			}
 
-			require_once JPATH_BASE . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_joomlaidp' . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'mo_saml_idp_customer_setup.php';
-			MoSamlIdpCustomer::submitFeedbackForm($adminEmail, $data1, $feedbackEmail);
 			require_once JPATH_SITE . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Installer' . DIRECTORY_SEPARATOR . 'Installer.php';
 
 			if (!empty($post['result']) && is_array($post['result']))

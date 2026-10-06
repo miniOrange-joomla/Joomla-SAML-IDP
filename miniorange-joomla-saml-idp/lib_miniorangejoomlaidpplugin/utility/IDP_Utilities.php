@@ -11,6 +11,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Version;
@@ -207,12 +208,6 @@ class IDP_Utilities
 
 	public static function isValidCheck($spName, $acsUrl, $task, $error)
 	{
-		$jConfig = new JConfig;
-		$email = $jConfig->mailfrom;
-		$baseURL = Uri::root();
-		$crntTime = date('m/d/Y H:i:s', time());
-		$customer = new MoSamlIdpCustomer;
-		$customer->isVal($email, $spName, $acsUrl, $baseURL, $crntTime, $task, $error);
 	}
 
 	public static function getJoomlaCmsVersion()
@@ -368,9 +363,9 @@ class IDP_Utilities
 
 		$cidHtml = '';
 
-		foreach ($tpostData['cid'] as $key)
+		foreach ((array) ($tpostData['cid'] ?? array()) as $key)
 		{
-			$cidHtml .= '<input type="hidden" name="result[]" value=' . $key . '>';
+			$cidHtml .= '<input type="hidden" name="result[]" value="' . (int) $key . '">';
 		}
 
 		echo '<link rel="stylesheet" type="text/css" href="' . Uri::base() . '/components/com_joomlaidp/assets/css/miniorange_idp.css" />';
@@ -378,16 +373,18 @@ class IDP_Utilities
 		echo '<h1>' . Text::_('LIB_MINIORANGEJOOMLAIDPPLUGIN_FEEDBACK_FORM') . '</h1>';
 		echo '<h3>' . Text::_('LIB_MINIORANGEJOOMLAIDPPLUGIN_FEEDBACK_FORM_REASON1') . ' </h3>';
 		echo '<form name="f" method="post" action="" id="mojsp_feedback">';
+		echo HTMLHelper::_('form.token');
 		echo '<input type="hidden" name="mojsp_feedback" value="mojsp_feedback"/>';
 		echo '<div><p style="margin-left:2%">' . $reasonsHtml . '</p><br>';
 		echo '<textarea id="query_feedback" name="query_feedback" rows="4" style="margin-left:2%" cols="50" placeholder="' . Text::_('LIB_MINIORANGEJOOMLAIDPPLUGIN_FEEDBACK_QUERY') . '"></textarea><br><br><br>';
 		echo '<tr><td width="20%"><b>' . Text::_('LIB_MINIORANGEJOOMLAIDPPLUGIN_FEEDBACK_EMAIL') . '<span style="color: #ff0000;">*</span>:</b></td>';
-		echo '<td><input type="email" name="feedback_email" required value="' . $feedbackEmail . '" placeholder="' . Text::_('LIB_MINIORANGEJOOMLAIDPPLUGIN_FEEDBACK_EMAIL_PLACEHOLDER') . '" style="width:55%"/></td></tr>';
+		echo '<td><input type="email" name="feedback_email" required value="' . htmlspecialchars($feedbackEmail, ENT_QUOTES, 'UTF-8') . '" placeholder="' . Text::_('LIB_MINIORANGEJOOMLAIDPPLUGIN_FEEDBACK_EMAIL_PLACEHOLDER') . '" style="width:55%"/></td></tr>';
 		echo $cidHtml;
 		echo '<br><br><div class="mojsp_modal-footer">';
 		echo '<input type="submit" name="miniorange_feedback_submit" style="cursor: pointer;" class="button button-primary button-large" value="' . Text::_('LIB_MINIORANGEJOOMLAIDPPLUGIN_SUBMIT_BTN') . '"/>';
 		echo '</div></div></form>';
 		echo '<form name="f" method="post" action="" id="mojsp_feedback_form_close">';
+		echo HTMLHelper::_('form.token');
 		echo '<input type="hidden" name="mojsp_skip_feedback" value="mojsp_skip_feedback"/>';
 		echo $cidHtml;
 		echo '<div style="text-align:center"><button type="submit" style="background:none;border:none;padding:0;color:#2a69b8;text-decoration:underline;cursor:pointer;font-size:inherit;">' . Text::_('LIB_MINIORANGEJOOMLAIDPPLUGIN_SKIP_FEEDBACK_BTN') . '</button></div>';

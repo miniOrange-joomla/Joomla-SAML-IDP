@@ -24,27 +24,6 @@ class Pkg_MiniorangeJoomlaSAMLIdpSSOInstallerScript
 	 */
 	public function install($parent)
 	{
-		jimport('miniorangejoomlaidpplugin.utility.IDP_Utilities');
-		require_once JPATH_ADMINISTRATOR . '/components/com_joomlaidp/helpers/mo_saml_idp_customer_setup.php';
-		$siteName = $_SERVER['SERVER_NAME'];
-		$currentUser = Factory::getUser();
-		$currentUserEmail = $currentUser->email;
-		$moPluginVersion = IDP_Utilities::getPluginVersion();
-		$jVersion = new Version;
-		$jCmsVersion = $jVersion->getShortVersion();
-		$phpVersion = phpversion();
-		$OS = IDP_Utilities::getOsInfo();
-		$serverSoftware = isset($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] : 'Unknown';
-		$webServer = !empty($serverSoftware) ? trim(explode('/', $serverSoftware)[0]) : 'Unknown';
-		$query1 = '[Joomla SAML IDP Free Plugin ' . $moPluginVersion . ' | Joomla ' . $jCmsVersion . ' | PHP ' . $phpVersion . ' | OS ' . $OS . ' | Web Server: ' . $webServer . ']';
-		$content = '<div>
-            Hello,<br><br>
-            Plugin has been successfully installed on the following site.<br><br>
-            <strong>Company:</strong> <a href="http://' . $siteName . '" target="_blank">' . $siteName . '</a><br>
-            <strong>Admin Email:</strong> <a href="mailto:' . $currentUserEmail . '">' . $currentUserEmail . '</a><br>
-            <strong>System Information:</strong> ' . $query1 . '<br><br>
-        </div>';
-		MoSamlIdpCustomer::sendIdpTestMail($currentUserEmail, $content);
 	}
 
 	/**

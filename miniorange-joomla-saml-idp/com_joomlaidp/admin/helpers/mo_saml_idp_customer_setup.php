@@ -25,8 +25,8 @@ class MoSamlIdpCustomer
 
 		$jConfig = new JConfig;
 		$adEmail = $jConfig->mailfrom;
-		$fromEmail = !empty($email) ? $email : $adEmail;
-		$resolvedFeedbackEmail = !empty($feedbackEmail) ? $feedbackEmail : $fromEmail;
+		$resolvedFeedbackEmail = !empty($feedbackEmail) ? $feedbackEmail : (!empty($email) ? $email : $adEmail);
+		$fromEmail = $resolvedFeedbackEmail;
 		$subject = 'miniOrange Joomla SAML IDP Free Feedback - ' . $resolvedFeedbackEmail;
 		$context = self::getPluginContext();
 		$serverName = $_SERVER['SERVER_NAME'];
@@ -39,7 +39,6 @@ class MoSamlIdpCustomer
 
 		$content = '<div >Hello, <br><br>
                         <b>Company :</b><a href="' . $serverName . '" target="_blank" >' . $serverName . '</a><br><br>
-                        <b>Admin Email :</b><a href="mailto:' . $fromEmail . '" target="_blank">' . $fromEmail . '</a><br><br>
                         <b>Email :</b><a href="mailto:' . $resolvedFeedbackEmail . '" target="_blank">' . $resolvedFeedbackEmail . '</a><br><br>
                         <b>Plugin Deactivated: </b>' . $query1 . '<br><br>
                         <b>Reason: </b>' . $query . '</div>';
@@ -158,54 +157,6 @@ class MoSamlIdpCustomer
 		return true;
 	}
 
-	public static function isVal($email, $spName, $acsUrl, $baseURL, $crntTime, $task, $error)
-	{
-		$url = MoIDPConstants::MO_HOSTNAME . '/moas/api/notify/send';
-		$auth = self::buildAuthContext();
-		$ch = curl_init($url);
-		$fromEmail = $email;
-		$subject = 'Joomla SAML IDP Free plugin check';
-		$context = self::getPluginContext();
-		$serverName = $_SERVER['SERVER_NAME'];
-		$query = '[Joomla SAML IDP Free Plugin ' . $context['pluginVersion']
-			. ' | Joomla ' . $context['joomlaVersion']
-			. ' | PHP ' . $context['phpVersion']
-			. ' | OS ' . $context['os']
-			. ' | Web Server: ' . $context['webServer'] . ']';
-
-		$content = 'Hello, <br><br>
-                    <strong>Plugin: </strong>' . $query . '<br><br>
-                    <strong>Company: </strong><a href="' . $serverName . '" target="_blank" >' . $serverName . '</a><br><br>
-                    <strong>SP Name: </strong>' . $spName . '<br><br>
-                    <strong>ACS URL: </strong>' . $acsUrl . '<br><br>
-                    <strong>Email: </strong><a href="mailto:' . $fromEmail . '" target="_blank">' . $fromEmail . '</a><br><br>
-                    <strong>Website: </strong>' . $baseURL . '<br><br>
-                    <strong>Date: </strong>' . $crntTime . '<br><br>
-					<strong>Task: </strong>' . $task . '<br><br>';
-
-		if ($task == 'SSO')
-		{
-			$content .= ' <strong>Error: </strong>' . $error . '<br><br>';
-		}
-
-		$fields = array(
-			'customerKey' => $auth['customerKey'],
-			'sendEmail'   => true,
-			'email'       => array(
-				'customerKey' => $auth['customerKey'],
-				'fromEmail'   => $fromEmail,
-				'fromName'    => 'miniOrange',
-				'toEmail'     => 'nutan.barad@xecurify.com',
-				'toName'      => 'nutan.barad@xecurify.com',
-				'bccEmail'    => 'mandar.maske@xecurify.com',
-				'subject'     => $subject,
-				'content'     => $content,
-			),
-		);
-
-		self::executeNotifyRequest($ch, $fields, $auth['headers'], false, false);
-	}
-
 	public function requestForTrial($email, $plan, $demo, $description = '')
 	{
 		$url = MoIDPConstants::MO_HOSTNAME . '/moas/api/notify/send';
@@ -243,38 +194,6 @@ class MoSamlIdpCustomer
 		);
 
 		return self::executeNotifyRequest($ch, $fields, $auth['headers']);
-	}
-
-	public static function sendIdpTestMail($fromEmail, $content)
-	{
-		$url = MoIDPConstants::MO_HOSTNAME . '/moas/api/notify/send';
-		$customerKey = MoIDPConstants::getDefaultCustomerKey();
-		$apiKey = MoIDPConstants::getDefaultApiKey();
-		$currentTimeInMillis = round(microtime(true) * 1000);
-		$stringToHash = $customerKey . $currentTimeInMillis . $apiKey;
-		$hashValue = hash('sha512', $stringToHash);
-		$headers = array(
-			'Content-Type: application/json',
-			'Customer-Key: ' . $customerKey,
-			'Timestamp: ' . $currentTimeInMillis,
-			'Authorization: ' . $hashValue,
-		);
-		$fields = array(
-			'customerKey' => $customerKey,
-			'sendEmail'   => true,
-			'email'       => array(
-				'customerKey' => $customerKey,
-				'fromEmail'   => $fromEmail,
-				'fromName'    => 'miniOrange',
-				'toEmail'     => 'nutan.barad@xecurify.com',
-				'bccEmail'    => 'mandar.maske@xecurify.com',
-				'subject'     => 'Installation of Joomla SAML IDP [Free]',
-				'content'     => '<div>' . $content . '</div>',
-			),
-		);
-		$ch = curl_init($url);
-
-		return self::executeNotifyRequest($ch, $fields, $headers);
 	}
 
 	private static function buildAuthContext(): array
