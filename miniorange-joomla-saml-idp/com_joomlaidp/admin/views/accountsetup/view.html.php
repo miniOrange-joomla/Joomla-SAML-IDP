@@ -176,34 +176,173 @@ class JoomlaIdpViewAccountSetup extends HtmlView
 		<?php
 	}
 
+	private static function moIdpOverviewIcon($name)
+	{
+		$icons = array(
+			'any'   => '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="14" cy="24" r="3.2" fill="#64748B"/><circle cx="24" cy="24" r="3.2" fill="#64748B"/><circle cx="34" cy="24" r="3.2" fill="#64748B"/></svg>',
+			'trial' => '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="#3B82F6" stroke-width="1.7" stroke-linecap="round" d="M6.2 12.2V11a5.8 5.8 0 0 1 11.6 0v1.2"/><rect x="3.4" y="11.6" width="3.5" height="6.2" rx="1.5" fill="#3B82F6"/><rect x="17.1" y="11.6" width="3.5" height="6.2" rx="1.5" fill="#3B82F6"/><path fill="none" stroke="#3B82F6" stroke-width="1.7" stroke-linecap="round" d="M19 17.6v1.1a2.3 2.3 0 0 1-2.3 2.3H14.2"/></svg>',
+			'more'  => '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12.5" rx="2" fill="#F59E0B"/><path fill="none" stroke="#fff" stroke-width="1.6" stroke-linejoin="round" d="M4 8.2l8 5.4 8-5.4"/></svg>',
+		);
+
+		return isset($icons[$name]) ? $icons[$name] : '';
+	}
+
 	public static function showPluginOverview()
 	{
+		$version = '';
+		$manifest = JPATH_COMPONENT_ADMINISTRATOR . '/joomlaidp.xml';
+
+		if (is_readable($manifest))
+		{
+			$xml = simplexml_load_file($manifest);
+
+			if ($xml && isset($xml->version))
+			{
+				$version = trim((string) $xml->version);
+			}
+		}
+
+		$providers = array(
+			array('image' => 'tableau.webp', 'label' => 'COM_JOOMLAIDP_OV_SP_TABLEAU', 'href' => 'https://plugins.miniorange.com/login-to-tableau-saml-single-sign-sso-using-joomla'),
+			array('image' => 'easy-lms.webp', 'label' => 'COM_JOOMLAIDP_OV_SP_EASY_LMS', 'href' => 'https://plugins.miniorange.com/login-using-joomla-saml-single-sign-on-sso-into-easy-lms'),
+			array('image' => 'zoom-uni-sso.webp', 'label' => 'COM_JOOMLAIDP_OV_SP_ZOOM', 'href' => 'https://plugins.miniorange.com/zoom-single-sign-on-sso-using-joomla'),
+			array('image' => 'aws-cognito-Joomla-.webp', 'label' => 'COM_JOOMLAIDP_OV_SP_AWS', 'href' => 'https://plugins.miniorange.com/login-to-aws-cognito-saml-single-sign-sso-using-joomla'),
+			array('image' => 'saml-sso-salesforce.webp', 'label' => 'COM_JOOMLAIDP_OV_SP_SALESFORCE', 'href' => 'https://plugins.miniorange.com/login-to-salesforce-saml-single-sign-sso-using-joomla'),
+			array('image' => 'zoho.png', 'label' => 'COM_JOOMLAIDP_OV_SP_ZOHO', 'href' => 'https://plugins.miniorange.com/login-to-zoho-saml-single-sign-sso-using-joomla'),
+			array('image' => 'moodle-new.png', 'label' => 'COM_JOOMLAIDP_OV_SP_MOODLE', 'href' => 'https://plugins.miniorange.com/moodle-saml-single-sign-on-sso-using-joomla-idp'),
+			array('icon' => 'any', 'label' => 'COM_JOOMLAIDP_OV_SP_ANY', 'href' => 'https://plugins.miniorange.com/joomla-sso-ldap-mfa-solutions?section=saml-idp'),
+		);
+
+		$steps = array(
+			array('title' => 'COM_JOOMLAIDP_OV_STEP_1_TITLE', 'text' => 'COM_JOOMLAIDP_OV_STEP_1_TEXT'),
+			array('title' => 'COM_JOOMLAIDP_OV_STEP_2_TITLE', 'text' => 'COM_JOOMLAIDP_OV_STEP_2_TEXT'),
+			array('title' => 'COM_JOOMLAIDP_OV_STEP_3_TITLE', 'text' => 'COM_JOOMLAIDP_OV_STEP_3_TEXT'),
+		);
+
+		$resources = array(
+			array(
+				'icon'  => 'trial',
+				'tone'  => 'blue',
+				'title' => 'COM_JOOMLAIDP_OV_TRIAL_TITLE',
+				'text'  => 'COM_JOOMLAIDP_OV_TRIAL_TEXT',
+				'btn'   => 'COM_JOOMLAIDP_OV_TRIAL_BTN',
+				'href'  => Route::_('index.php?option=com_joomlaidp&view=accountsetup&tab-panel=request_demo'),
+				'blank' => false,
+			),
+			array(
+				'icon'  => 'more',
+				'tone'  => 'amber',
+				'title' => 'COM_JOOMLAIDP_OV_MORE_TITLE',
+				'text'  => 'COM_JOOMLAIDP_OV_MORE_TEXT',
+				'btn'   => 'COM_JOOMLAIDP_OV_MORE_BTN',
+				'href'  => 'https://plugins.miniorange.com/joomla',
+				'blank' => true,
+			),
+		);
+
+		$setupUrl = Route::_('index.php?option=com_joomlaidp&view=accountsetup&tab-panel=sp');
+		$plansUrl = Route::_('index.php?option=com_joomlaidp&view=accountsetup&tab-panel=license');
+		$imageBase = Uri::base() . 'components/com_joomlaidp/assets/images/';
+
+		// phpcs:disable Joomla.ControlStructures.ControlStructuresBrackets
 		?>
-			<div class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-2 mo_tab_border" >
-				<section class="mo_saml_section mo_saml_dark_bg">
-					<div class="mo_saml_circle"></div>
-					<div class="mo_saml_content mo_boot_m-0 mo_boot_col-sm-7">
-						<div class="mo_boot_text_box mo_idp_heading_plugin">
-						<h2><?php echo Text::_('COM_MINIORANGE_IDP_PLUGIN_TITLE'); ?></h2>
-						<p class="mo_idp_heading_desc">
-								<?php
-									echo Text::_('COM_JOOMLAIDP_OVERVIEW_DESCRIPTION');
-								?>
-							</p>
-							<div class=" mo_idp_overview_tab">
-							<input type="button" class="btn btn_cstm " target="_blank" onclick="window.open('https://plugins.miniorange.com/joomla-idp-saml-sso')" value="<?php echo Text::_('COM_MINIORANGE_VISIT_SITE'); ?>" />
-							<input type="button" class="btn btn_cstm " target="_blank" onclick="window.open('https://plugins.miniorange.com/joomla-sso-ldap-mfa-solutions?section=saml-idp')" value="<?php echo Text::_('COM_MINIORANGE_SAML_IDP_GUIDES'); ?>" />
-							<a class="btn btn_cstm " href="<?php echo Route::_('index.php?option=com_joomlaidp&view=accountsetup&tab-panel=sp')?>"><?php echo Text::_('COM_MINIORANGE_SAML_IDP_CONFIG'); ?></a>
-							<a class="btn btn_cstm " href="<?php echo Route::_('index.php?option=com_joomlaidp&view=accountsetup&tab-panel=license')?>"><?php echo Text::_('COM_MINIORANGE_LICENSE_PLANS'); ?></a>
-							 </div>
+		<div class="mo_boot_col-sm-12">
+			<div class="mo_ov mo_boot_mt-2">
+				<div class="mo_ov_header">
+					<div class="mo_ov_brand">
+						<div class="mo_ov_logo" role="img" aria-label="miniOrange"></div>
+						<div class="mo_ov_brand_copy">
+							<h2><?php echo Text::_('COM_MINIORANGE_IDP_PLUGIN_TITLE'); ?></h2>
+							<p class="mo_ov_lead"><?php echo Text::_('COM_JOOMLAIDP_OV_INTRO'); ?></p>
 						</div>
 					</div>
-					<div class="mo_saml_imgBox">
-						<img class="mo_idp_img_overview mo_boot_w-100 mo_boot_h-auto" style="max-width: 500px; height: auto;" src="<?php echo Uri::base();?>/components/com_joomlaidp/assets/images/overview_tab.png">
+					<div class="mo_ov_status">
+						<?php if ($version !== '') : ?>
+							<span class="mo_ov_version">v<?php echo htmlspecialchars($version, ENT_QUOTES, 'UTF-8'); ?></span>
+						<?php endif; ?>
 					</div>
-				</section>
+				</div>
+
+				<div class="mo_ov_layout">
+					<section class="mo_ov_panel">
+						<h3 class="mo_ov_panel_title"><?php echo Text::_('COM_JOOMLAIDP_OV_STEPS'); ?></h3>
+						<ol class="mo_ov_steps mo_boot_mt-4">
+							<?php foreach ($steps as $index => $step) : ?>
+								<li class="mo_ov_step">
+									<span class="mo_ov_step_num"><?php echo (int) $index + 1; ?></span>
+									<div class="mo_ov_step_card">
+										<span class="mo_ov_step_title"><?php echo Text::_($step['title']); ?></span>
+										<span class="mo_ov_step_text"><?php echo Text::_($step['text']); ?></span>
+									</div>
+								</li>
+							<?php endforeach; ?>
+						</ol>
+						<a class="mo_ov_start mo_boot_mt-5" href="<?php echo $setupUrl; ?>" onclick="add_css_tab('#sptab'); return false;">
+							<?php echo Text::_('COM_JOOMLAIDP_OV_TRY'); ?>
+							<span aria-hidden="true">&rarr;</span>
+						</a>
+						<p class="mo_ov_plans"><?php echo Text::_('COM_JOOMLAIDP_OV_PLANS'); ?>
+							<a class="mo_ov_plans_link" href="<?php echo $plansUrl; ?>" onclick="add_css_tab('#licensingtab'); return false;"><?php echo Text::_('COM_JOOMLAIDP_OV_PLANS_LINK'); ?></a>
+						</p>
+					</section>
+
+					<div class="mo_ov_side">
+						<section class="mo_ov_panel">
+							<h3 class="mo_ov_panel_title"><?php echo Text::_('COM_JOOMLAIDP_OV_SPS_TITLE'); ?></h3>
+							<div class="mo_ov_idps">
+								<?php foreach ($providers as $provider) : ?>
+									<?php
+									$label = Text::_($provider['label']);
+
+									if (!empty($provider['image']))
+									{
+										$icon = '<img src="' . htmlspecialchars($imageBase . $provider['image'], ENT_QUOTES, 'UTF-8') . '" alt="">';
+									}
+									else
+									{
+										$icon = self::moIdpOverviewIcon($provider['icon']);
+									}
+									?>
+									<?php if ($provider['href'] !== '') : ?>
+										<a class="mo_ov_idp" href="<?php echo htmlspecialchars($provider['href'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener noreferrer">
+											<span class="mo_ov_idp_icon"><?php echo $icon; ?></span>
+											<span class="mo_ov_idp_name"><?php echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?></span>
+										</a>
+									<?php else : ?>
+										<div class="mo_ov_idp mo_ov_idp_static">
+											<span class="mo_ov_idp_icon"><?php echo $icon; ?></span>
+											<span class="mo_ov_idp_name"><?php echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?></span>
+										</div>
+									<?php endif; ?>
+								<?php endforeach; ?>
+							</div>
+						</section>
+
+						<section class="mo_ov_panel mo_ov_panel_grow">
+							<h3 class="mo_ov_panel_title"><?php echo Text::_('COM_JOOMLAIDP_OV_RESOURCES'); ?></h3>
+							<div class="mo_ov_resources">
+								<?php foreach ($resources as $resource) : ?>
+									<div class="mo_ov_res_row">
+										<span class="mo_ov_res_icon mo_ov_res_icon_<?php echo htmlspecialchars($resource['tone'], ENT_QUOTES, 'UTF-8'); ?>"><?php echo self::moIdpOverviewIcon($resource['icon']); ?></span>
+										<div class="mo_ov_res_copy">
+											<span class="mo_ov_res_title"><?php echo Text::_($resource['title']); ?></span>
+											<span class="mo_ov_res_text"><?php echo Text::_($resource['text']); ?></span>
+										</div>
+										<?php if ($resource['href'] !== '') : ?>
+											<a class="mo_ov_res_btn" href="<?php echo $resource['blank'] ? htmlspecialchars($resource['href'], ENT_QUOTES, 'UTF-8') : $resource['href']; ?>"<?php echo $resource['blank'] ? ' target="_blank" rel="noopener noreferrer"' : ''; ?>><?php echo Text::_($resource['btn']); ?></a>
+										<?php else : ?>
+											<a class="mo_ov_res_btn" href="#" onclick="return false;"><?php echo Text::_($resource['btn']); ?></a>
+										<?php endif; ?>
+									</div>
+								<?php endforeach; ?>
+							</div>
+						</section>
+					</div>
+				</div>
 			</div>
+		</div>
 		<?php
+		// phpcs:enable Joomla.ControlStructures.ControlStructuresBrackets
 	}
 
 	public static function showIDPInitiatedLoginDetails()
@@ -916,14 +1055,14 @@ class JoomlaIdpViewAccountSetup extends HtmlView
 									<p><?php echo Text::_('COM_MINIORANGE_IDP_SHARE_METADATA_TEXT'); ?></p>
 
 								</div>
-								<div class="mo_boot_row mo_boot_m-4">
-									<span id="idp_metadata_url"
-										class=" mo_saml_highlight_background_url_note mo_saml_float_right">
-										<a class="mo_idp_metadata_link" href='<?php echo Uri::root() . 'plugins/system/joomlaidplogin/saml2idp/metadata/metadata.php'; ?>' id='metadata-linkss' target='_blank'><?php echo '<strong>' . Uri::root() . 'plugins/system/joomlaidplogin/saml2idp/metadata/metadata.php </strong>'; ?></a>
-
-									</span>
-									<div class="mo_boot_col-sm-1">
-										<em class="fa fa-pull-right  fa-lg fa-copy mo_copy mo_copytooltip mo_boot_p-3"
+								<div class="mo_boot_row mo_boot_m-4 mo_idp_metadata_url_row">
+									<div class="mo_boot_col-11">
+										<span id="idp_metadata_url" class="mo_saml_highlight_background_url_note">
+											<a class="mo_idp_metadata_link" href='<?php echo Uri::root() . 'plugins/system/joomlaidplogin/saml2idp/metadata/metadata.php'; ?>' id='metadata-linkss' target='_blank'><?php echo '<strong>' . Uri::root() . 'plugins/system/joomlaidplogin/saml2idp/metadata/metadata.php </strong>'; ?></a>
+										</span>
+									</div>
+									<div class="mo_boot_col-1">
+										<em class="fa fa-lg fa-copy mo_copy mo_copytooltip mo_boot_p-3"
 											onclick="copyToClipboard('#idp_metadata_url');"></em>
 									</div>
 								</div>
@@ -1039,18 +1178,21 @@ class JoomlaIdpViewAccountSetup extends HtmlView
 		<div id="mo_saml_pricing_page" class="mo_idp_pricing_page mo_boot_col-sm-12 my-2">
 			<div class="mo_boot_row mo_idp_pricing_snippet_grid justify-content-center">
 				<div class="mo_idp_pricing_card">
-
+					<div class="mo_idp_plan_head">
 						<h5 class="mo_idp_free_plan"><?php echo Text::_('COM_JOOMLAIDP_FREE_PLAN'); ?></h5>
-
-							   <h1 class="mo_boot_p-0 mo_boot_m-1">$0<span class="corner-star">*</span></h1>
-
-				   <div class="mo_idp_txt_center mo_boot_mt-4">
-					   <a href="#"
-						   class="upgrade_button mo_idp_license_btns"><?php echo Text::_('COM_JOOMLAIDP_ACTIVE_PLAN'); ?></a>
-				   </div>
-				   <div class="mo_boot_mb-0 mo_boot_text-center mo_idp_feature_header mo_boot_mt-5">
+						<div class="mo_idp_price_box">
+							<span class="mo_idp_price_main">$0<span class="mo_idp_price_period">/year</span></span>
+							<span class="mo_idp_price_meta"><?php echo Text::_('COM_JOOMLAIDP_FREE_FOREVER'); ?></span>
+						</div>
+						<p class="mo_idp_plan_note"><?php echo Text::_('COM_JOOMLAIDP_FREE_PLAN_NOTE'); ?></p>
+						<div class="mo_idp_txt_center">
+							<a href="#" class="upgrade_button mo_idp_license_btns mo_idp_active_plan"><?php echo Text::_('COM_JOOMLAIDP_ACTIVE_PLAN'); ?></a>
+						</div>
+					</div>
+					<div class="mo_idp_plan_features">
+				   <div class="mo_boot_mb-0 mo_boot_text-center mo_idp_feature_header">
 					   <a href="#" onclick="toggleIncludedFeatures('free_plan_features'); return false;">
-						   <i class="fa fa-check-circle"></i> <strong>Included Features</strong>
+						   <i class="fa fa-check-circle"></i> <strong><?php echo Text::_('COM_JOOMLAIDP_INCLUDED_FEATURES'); ?></strong>
 					   </a>
 					   <ul id="free_plan_features" class="mt-mo-4 grow mo_idp_license_point mo_idp_first_Plan mo_boot_mt-3 mo_idp_features_list" style="display: none;">
 					   <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_FREE_NOW_DESC_A'); ?></span></li>
@@ -1065,7 +1207,7 @@ class JoomlaIdpViewAccountSetup extends HtmlView
 				   </div>
 				   <div class="mo_boot_mb-0 mo_boot_text-center mo_idp_feature_header mo_boot_mt-3">
 					   <a href="#" onclick="toggleIncludedFeatures('free_plan_not_included_features'); return false;">
-						   <i class="fa fa-times-circle" style="color: #cc0000;"></i> <strong>Not-Included Features</strong>
+						   <i class="fa fa-times-circle" style="color: #cc0000;"></i> <strong><?php echo Text::_('COM_JOOMLAIDP_NOT_INCLUDED_FEATURES'); ?></strong>
 					   </a>
 					   <ul id="free_plan_not_included_features" class="mt-mo-4 grow mo_idp_license_point mo_idp_first_Plan mo_boot_mt-3 mo_idp_features_list" style="display: none;">
 					   <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_B'); ?></span></li>
@@ -1079,130 +1221,61 @@ class JoomlaIdpViewAccountSetup extends HtmlView
 					   <li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_J'); ?></span></li>
 					   </ul>
 				   </div>
+					</div>
 						</div>
-						<div class=" mo_idp_pricing_card">
-
+						<div class="mo_idp_pricing_card premium">
+						<div class="mo_idp_plan_head">
+						<span class="mo_idp_recommended"><?php echo Text::_('COM_JOOMLAIDP_RECOMMENDED'); ?></span>
 						<h5><?php echo Text::_('COM_JOOMLAIDP_PREMIUM_PLAN'); ?></h5>
-						<div>
-						<select name="user-slab" class="mo_boot_col-12 mo_idp_users_details slab_dropdown mo_boot_mt-4 mo_boot_mb-4 mo_boot_p-1 mo_form-control mo_idp_form_control">
-								<option value="100" selected><?php echo Text::_('COM_JOOMLAIDP_NO_USERS'); ?>: 100</option>
-								<option value="200"><?php echo Text::_('COM_JOOMLAIDP_NO_USERS'); ?>: 200</option>
-								<option value="300"><?php echo Text::_('COM_JOOMLAIDP_NO_USERS'); ?>: 300</option>
-								<option value="400"><?php echo Text::_('COM_JOOMLAIDP_NO_USERS'); ?>: 400</option>
-								<option value="500"><?php echo Text::_('COM_JOOMLAIDP_NO_USERS'); ?>: 500</option>
-								<option value="750"><?php echo Text::_('COM_JOOMLAIDP_NO_USERS'); ?>: 750</option>
-								<option value="1000"><?php echo Text::_('COM_JOOMLAIDP_NO_USERS'); ?>: 1000</option>
-								<option value="2000"><?php echo Text::_('COM_JOOMLAIDP_NO_USERS'); ?>: 2000</option>
-								<option value="3000"><?php echo Text::_('COM_JOOMLAIDP_NO_USERS'); ?>: 3000</option>
-								<option value="4000"><?php echo Text::_('COM_JOOMLAIDP_NO_USERS'); ?>: 4000</option>
-								<option value="5000"><?php echo Text::_('COM_JOOMLAIDP_NO_USERS'); ?>: 5000</option>
-								<option value="5000p"><?php echo Text::_('COM_JOOMLAIDP_NO_USERS'); ?>: 5000+</option>
-							</select>
+						<div class="mo_idp_price_box" id="mo_idp_price_total">
+							<span class="mo_idp_price_main">$<span id="mo_idp_price_amount">249</span><span class="mo_idp_price_period">/year<sup>*</sup></span></span>
+							<span class="mo_idp_price_meta"><?php echo Text::_('COM_JOOMLAIDP_PER_INSTANCE_PRICING'); ?></span>
 						</div>
+						<div class="mo_idp_price_box mo_idp_disp_no" id="mo_idp_price_contact">
+							<a target="_blank" class="mo_idp_price_contact_link"
+								href="https://www.miniorange.com/contact"><?php echo Text::_('COM_JOOMLAIDP_CONTACT_US'); ?></a>
+						</div>
+						<select name="user-slab" id="mo_idp_user_slab" class="mo_boot_col-12 mo_idp_users_details slab_dropdown mo_boot_mt-4 mo_boot_mb-2 mo_boot_p-1 mo_form-control mo_idp_form_control">
+							<?php
+							// phpcs:disable Joomla.ControlStructures.ControlStructuresBrackets
+							$userPrices = array(
+								'100' => 199, '200' => 299, '300' => 399, '400' => 449, '500' => 499,
+								'750' => 749, '1000' => 949, '2000' => 1549, '3000' => 2149,
+								'4000' => 2599, '5000' => 2999,
+							);
 
-							<div class=" mo_boot_row mo_boot_col-12 mo_boot_mt-0">
-								<div class="mo_boot_col-6">
-								<div class="mo_idp_price_slab_100 text-center" id="mo_idp_price_slab1_100">
-									<span class="price-value mo_idp_premium_value">
-										<h1 class="mo_boot_p-0 mo_boot_m-1">$199 /year<span class="corner-star">*</span></h1>
-									</span>
-								</div>
+							foreach ($userPrices as $users => $price)
+							{
+								echo '<option value="' . $users . '" data-price="' . (int) $price . '"' . ((int) $users === 100 ? ' selected' : '') . '>'
+									. Text::_('COM_JOOMLAIDP_NO_USERS') . ': ' . $users . ' ($' . (int) $price . ')</option>';
+							}
+							?>
+							<option value="5000p"><?php echo Text::_('COM_JOOMLAIDP_NO_USERS'); ?>: 5000+</option>
+						</select>
+						<select name="sp-slab" id="mo_idp_sp_slab" class="mo_boot_col-12 mo_idp_sp_details slab_dropdown mo_boot_mb-4 mo_boot_p-1 mo_form-control mo_idp_form_control">
+							<?php
+							for ($sps = 1; $sps <= 5; $sps++)
+							{
+								$spPrice = $sps * 50;
+								echo '<option value="' . $sps . '" data-price="' . $spPrice . '"' . ($sps === 1 ? ' selected' : '') . '>'
+									. Text::_('COM_JOOMLAIDP_NO_SPS') . ': ' . $sps . ' ($' . $spPrice . ')</option>';
+							}
 
-								<div class="mo_idp_price_slab_200 text-center mo_idp_disp_no m-1"
-									id="mo_idp_price_slab1_200">
-									<span class="price-value mo_idp_plan_value">
-										<span class="mo_idp_upfrade_font">$</span>299 /year *
-									</span>
-								</div>
-
-								<div class="mo_idp_price_slab_300 text-center mo_idp_disp_no m-1"
-									id="mo_idp_price_slab1_300">
-									<span class="price-value mo_idp_plan_value">
-										<span class="mo_idp_upfrade_font">$</span>399 /year *
-									</span>
-								</div>
-
-								<div class="mo_idp_price_slab_400 text-center mo_idp_disp_no m-1"
-									id="mo_idp_price_slab1_400">
-									<span class="price-value mo_idp_plan_value">
-										<span class="mo_idp_upfrade_font">$</span>499 /year *
-									</span>
-								</div>
-
-								<div class="mo_idp_price_slab_500 text-center mo_idp_disp_no m-1"
-									id="mo_idp_price_slab1_500">
-									<span class="price-value mo_idp_plan_value">
-										<span class="mo_idp_upfrade_font">$</span>599 /year *
-									</span>
-								</div>
-
-								<div class="mo_idp_price_slab_750 text-center mo_idp_disp_no m-1"
-									id="mo_idp_price_slab1_750">
-									<span class="price-value mo_idp_plan_value">
-										<span class="mo_idp_upfrade_font">$</span>749 /year *
-									</span>
-								</div>
-
-								<div class="mo_idp_price_slab_1000 text-center mo_idp_disp_no m-1"
-									id="mo_idp_price_slab1_1000">
-									<span class="price-value mo_idp_plan_value">
-										<span class="mo_idp_upfrade_font">$</span>949 /year *
-									</span>
-								</div>
-
-								<div class="mo_idp_price_slab_2000 text-center mo_idp_disp_no m-1"
-									id="mo_idp_price_slab1_2000">
-									<span class="price-value mo_idp_plan_value">
-										<span class="mo_idp_upfrade_font">$</span>1549 /year *
-									</span>
-								</div>
-
-								<div class="mo_idp_price_slab_3000 text-center mo_idp_disp_no m-1"
-									id="mo_idp_price_slab1_3000">
-									<span class="price-value mo_idp_plan_value">
-										<span class="mo_idp_upfrade_font">$</span>2149 /year *
-									</span>
-								</div>
-
-								<div class="mo_idp_price_slab_4000 text-center mo_idp_disp_no m-1"
-									id="mo_idp_price_slab1_4000">
-									<span class="price-value mo_idp_plan_value">
-										<span class="mo_idp_upfrade_font">$</span>2599 /year *
-									</span>
-								</div>
-
-								<div class="mo_idp_price_slab_5000 text-center mo_idp_disp_no m-1"
-									id="mo_idp_price_slab1_5000">
-									<span class="price-value mo_idp_plan_value">
-										<span class="mo_idp_upfrade_font">$</span>2999 /year *
-									</span>
-								</div>
-								</div>
-								<div class="col-6">
-								<div class="text-center mo_boot_mt-3">
-									<small class="mo_idp_upgrade_feature">Per instance pricing</small>
-								</div>
-								</div>
-							</div>
-								<div class="mo_idp_price_slab_5000p text-center mo_idp_disp_no m-1"
-									id="mo_idp_price_slab1_5000p">
-									<a target="_blank" class="upgrade_button mo_idp_plan_value"
-										href="https://www.miniorange.com/contact"><?php echo Text::_('COM_JOOMLAIDP_CONTACT_US'); ?></a>
-
-								</div>
-
-
-							<div class="mo_idp_txt_center mo_boot_mt-4">
+							// phpcs:enable Joomla.ControlStructures.ControlStructuresBrackets
+							?>
+						</select>
+							<div class="mo_idp_txt_center">
 								<a class="upgrade_button mo_idp_license_btns" target="<?php echo $newTab;?>"
 									href="<?php echo $upgradeURL;?>">
 									<?php echo Text::_('COM_JOOMLAIDP_UPGRADE_NOW'); ?>
 								</a>
 							</div>
+						</div>
 
-							<div class="pricing-content">
-								<div class="mo_boot_mb-0 mo_boot_text-center mo_idp_feature_header mo_boot_mt-5">
+							<div class="pricing-content mo_idp_plan_features">
+								<div class="mo_boot_mb-0 mo_boot_text-center mo_idp_feature_header">
 									<a href="#" onclick="toggleIncludedFeatures('premium_plan_features', event); return false;">
-										<i class="fa fa-check-circle"></i> <strong>Included Features</strong>
+										<i class="fa fa-check-circle"></i> <strong><?php echo Text::_('COM_JOOMLAIDP_INCLUDED_FEATURES'); ?></strong>
 									</a>
 									<ul id="premium_plan_features" class="mt-mo-4 grow mo_idp_license_point mo_boot_mt-3 mo_idp_features_list" style="display: none;">
 										<li class="mo_saml_feature_snippet"><span>•</span><span class="mo_idp_upgrade_feature"><?php echo Text::_('COM_MINIORANGE_IDP_UPGRADE_NOW_DESC_A'); ?></span></li>
@@ -1220,7 +1293,7 @@ class JoomlaIdpViewAccountSetup extends HtmlView
 								<!-- Hidden "Not-Included Features" section to match free card height -->
 								<div class="mo_boot_mb-0 mo_boot_text-center mo_idp_feature_header mo_boot_mt-3 mo_idp_hidden_not_included">
 									<a href="#" onclick="toggleIncludedFeatures('premium_plan_not_included_features', event); return false;">
-									 <strong>Not-Included Features</strong>
+									 <strong><?php echo Text::_('COM_JOOMLAIDP_NOT_INCLUDED_FEATURES'); ?></strong>
 									</a>
 
 								</div>
@@ -1333,239 +1406,32 @@ class JoomlaIdpViewAccountSetup extends HtmlView
 
 	public static function showServiceProviderList()
 	{
-		$db = MoSamlIdpDb::getDb();
-		$query = $db->getQuery(true);
-		$query->select('*')
-			->from($db->quoteName('#__miniorangesamlidp'))
-			->order($db->quoteName('id') . ' ASC');
-		$db->setQuery($query);
-		$spList = $db->loadObjectList() ?: array();
-
-		$siteUrl = Uri::root();
-		$spBaseUrl = $siteUrl;
 		$app = Factory::getApplication();
 		$input = method_exists($app, 'getInput') ? $app->getInput() : $app->input;
-		$idParam = $input->get('id', '');
-		$spId = $input->get('sp_id', 0);
-		$showForm = $idParam === 'new' || $spId > 0;
+		$spId = (int) $input->get('sp_id', 0);
 
-		if ($showForm)
+		if ($spId <= 0)
 		{
-			if ($idParam === 'new')
-			{
-				$spId = 0;
-				$attribute = array();
-			}
-			elseif ($spId > 0)
-			{
-				$attribute = IDP_Utilities::fetchDatabaseValues('#__miniorangesamlidp', 'loadAssoc', '*', 'id', $spId);
-			}
-			else
-			{
-				$attribute = array();
-			}
-
-			self::showServiceProviderConfigurations($attribute, $spId);
+			$db = MoSamlIdpDb::getDb();
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName('id'))
+				->from($db->quoteName('#__miniorangesamlidp'))
+				->order($db->quoteName('id') . ' ASC');
+			$db->setQuery($query, 0, 1);
+			$spId = (int) $db->loadResult();
 		}
-		else
-		{
-			$spConfigured = false;
-			$spEntityIdProperty = 'sp_entityid';
-			$acsUrlProperty = 'acs_url';
 
-			foreach ($spList as $spItem)
-			{
-				if (!empty($spItem->$spEntityIdProperty) && !empty($spItem->$acsUrlProperty))
-				{
-					$spConfigured = true;
-					break;
-				}
-			}
+		$attribute = $spId > 0
+			? IDP_Utilities::fetchDatabaseValues('#__miniorangesamlidp', 'loadAssoc', '*', 'id', $spId)
+			: array();
 
-			$licensingPageLink = Uri::base() . 'index.php?option=com_joomlaidp&view=accountsetup&tab-panel=license';
-
-			if ($spConfigured)
-			{
-				$addSpControlHtml = '<div class="mo_idp_premium_btn_wrap mo_tooltip">
-					<button class="mo_boot_btn btn_cstm mo_saml_block_cursor" disabled >
-						<i class="fa fa-lock"></i> ' . Text::_('COM_JOOMLAIDP_ADD_NEW_SP') . '
-						<sup>
-							<a href="' . $licensingPageLink . '" class="mo_idp_crown_link">
-								<img class="crown_img_small mo_idp_ml_px"
-									src="' . Uri::base() . '/components/com_joomlaidp/assets/images/crown.webp"
-									alt="">
-							</a>
-						</sup>
-					</button>
-					<span class="mo_tooltiptext mo_tooltiptext_wide small mo_boot_btn-fetch">'
-						. Text::sprintf('COM_JOOMLAIDP_FREE_SP_LIMIT_NOTE', $licensingPageLink) . '
-					</span>
-				</div>';
-			}
-			else
-			{
-				$addSpControlHtml = '<a href="' . Route::_('index.php?option=com_joomlaidp&view=accountsetup&tab-panel=sp&id=new')
-					. '" class="mo_boot_btn btn_cstm">
-					<i class="fa fa-plus"></i> ' . Text::_('COM_JOOMLAIDP_ADD_NEW_SP') . '
-				</a>';
-			}
-
-			$spTableBodyHtml = '';
-
-			if (!empty($spList))
-			{
-				$spNameProperty = 'sp_name';
-
-				foreach ($spList as $sp)
-				{
-					$rowSpName = $sp->$spNameProperty;
-					$rowSpEntityId = $sp->$spEntityIdProperty;
-					$rowAcsUrl = $sp->$acsUrlProperty;
-					$testDisabled = empty($rowSpEntityId) ? 'disabled' : 'enabled';
-					$displaySpName = !empty($rowSpName) ? htmlspecialchars($rowSpName) : 'SP ' . $sp->id;
-
-					$spTableBodyHtml .= '<tr class="sp-row" data-sp-name="' . htmlspecialchars($rowSpName) . '">
-						<td>
-							<div class="mo_saml_sp_name mo_boot_p-4 mo_boot_text-center">
-								<strong>' . $displaySpName . '</strong>
-							</div>
-						</td>
-						<td>
-							<div class="mo_saml_sp_entityid mo_boot_p-4 mo_boot_text-center">
-								<span title="' . htmlspecialchars($rowSpEntityId) . '">'
-									. htmlspecialchars($rowSpEntityId) . '
-								</span>
-							</div>
-						</td>
-						<td>
-							<div class="mo_saml_actions_container mo_boot_p-2">
-								<div class="mo_saml_actions_bar mo_saml_mini_section">
-									<a href="' . Route::_('index.php?option=com_joomlaidp&view=accountsetup&tab-panel=sp&sp_id=' . $sp->id) . '"
-										class="mo_saml_action_btn mo_saml_mini_section"
-										title="' . Text::_('COM_JOOMLAIDP_EDIT') . '">
-										<i class="fa fa-edit"></i>
-									</a>
-									<div class="mo_saml_action_separator"></div>
-									<form method="post"
-										action="' . Route::_('index.php?option=com_joomlaidp&view=accountsetup&task=accountsetup.deleteServiceProvider') . '"
-										class="mo_saml_display_inline">'
-										. HTMLHelper::_('form.token') . '
-										<input type="hidden" name="sp_id" value="' . $sp->id . '" />
-										<button type="submit"
-											class="mo_saml_action_btn mo_saml_mini_section"
-											title="' . Text::_('COM_JOOMLAIDP_DELETE') . '"
-											onclick="return confirm(\'' . Text::_('COM_JOOMLAIDP_DELETE_SP_CONFIRM') . '\')">
-											<i class="fa fa-trash-o"></i>
-										</button>
-									</form>
-									<div class="mo_saml_action_separator"></div>
-									<input type="button" ' . $testDisabled . ' title="' . Text::_('COM_JOOMLAIDP_TEST_TITLE')
-										. '" class="mo_saml_test_btn mo_saml_mini_section" onclick="jQuery(\'#sp_entityid\').val(\''
-										. htmlspecialchars($rowSpEntityId ?? '', ENT_QUOTES, 'UTF-8') . '\'); jQuery(\'#acs_url\').val(\''
-										. htmlspecialchars($rowAcsUrl ?? '', ENT_QUOTES, 'UTF-8')
-										. '\'); showTestWindow();" value="' . Text::_('COM_JOOMLAIDP_TEST_CONFIG') . '" />
-								</div>
-							</div>
-						</td>
-					</tr>';
-				}
-			}
-			else
-			{
-				$spTableBodyHtml = '<tr>
-					<td colspan="3" class="text-center mo_saml_no_data">
-						<div class="mo_saml_empty_state">
-							<i class="fa fa-cloud fa-3x"></i>
-							<p>' . Text::_('COM_JOOMLAIDP_NO_SP_CONFIGURED') . '</p>
-						</div>
-					</td>
-				</tr>';
-			}
-			?>
-			<div id="sp_list_table" class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0 mo_idp_main_content">
-				<div class="mo_boot_row mo_boot_p-2">
-					<div class="mo_boot_col-sm-12 mo_boot_px-2">
-						<div class="mo_boot_row mo_boot_mb-4">
-							<div class="mo_boot_col-sm-9">
-								<h3 class="mo_saml_form_heading">
-									<?php echo Text::_('COM_JOOMLAIDP_LIST_OF_SP'); ?>
-								</h3>
-							</div>
-							<div class="mo_boot_col-sm-3">
-								<?php echo $addSpControlHtml; ?>
-							</div>
-						</div>
-
-						<div class="mo_boot_row">
-							<div class="mo_boot_col-sm-12">
-								<div class="mo_idp_mini_section">
-									<table class="mo_boot_m-0 mo_boot_col-sm-12">
-										<thead>
-											<tr>
-												<th class="mo_boot_p-4 mo_boot_text-center">
-													<?php echo Text::_('COM_JOOMLAIDP_NAME_SP_'); ?>
-												</th>
-												<th class="mo_boot_p-4 mo_boot_text-center">
-													<?php echo Text::_('COM_JOOMLAIDP_SP_ISSUER'); ?>
-												</th>
-												<th class="mo_boot_p-4 mo_boot_col-sm-3 mo_boot_text-center">
-													<?php echo Text::_('COM_JOOMLAIDP_ACTION'); ?>
-												</th>
-											</tr>
-											<tr>
-												<td colspan="3">
-													<hr class="mo_boot_m-0">
-												</td>
-											</tr>
-										</thead>
-										<tbody id="sp-table-body">
-											<?php echo $spTableBodyHtml; ?>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-						<input type="hidden" id="sp_entityid" value="" />
-						<input type="hidden" id="acs_url" value="" />
-						<input type="hidden" id="idp-initiated-url" value="<?php echo Route::_('index.php?option=com_idpinitiatedlogin'); ?>" />
-
-						<div class="mo_boot_d-flex mo_boot_align-items-center mo_boot_justify-content-between mo_boot_mt-4">
-							<p class="mo_boot_mb-0 mo_boot_mx-sm-3">
-								<?php echo Text::_('COM_JOOMLAIDP_SWITCHING_ENVIRONMENTS'); ?>
-								<?php echo Text::_('COM_JOOMLAIDP_IMPORT_EXPORT_CONFIG_HERE'); ?>
-							</p>
-							<button class="mo_boot_btn btn_cstm" onclick="showImportExportConfig()">
-								<?php echo Text::_('COM_JOOMLAIDP_IMPORT_EXPORT'); ?>
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<script>
-			jQuery(document).ready(function($) {
-				$('#sp-search').on('keyup', function() {
-					var value = $(this).val().toLowerCase();
-					$('#sp-table-body tr').filter(function() {
-						$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-					});
-				});
-			});
-			</script>
-			<?php
-			// Render import/export configuration UI (hidden by default)
-			self::importExportConfiguration();
-			?>
-			<?php
-		}
+		self::showServiceProviderConfigurations($attribute, $spId);
+		self::importExportConfiguration($attribute);
 	}
 
 
-	public static function importExportConfiguration()
+	public static function importExportConfiguration($attribute = array())
 	{
-		$app = Factory::getApplication();
-		$input = method_exists($app, 'getInput') ? $app->getInput() : $app->input;
-		$spId = $input->get('sp_id', 1);
-		$attribute = IDP_Utilities::fetchDatabaseValues('#__miniorangesamlidp', 'loadAssoc', '*', 'id', $spId);
 		$spEntityId = isset($attribute['sp_entityid']) ? $attribute['sp_entityid'] : '';
 		$exportState = $spEntityId ? 'enabled' : 'disabled';
 		$licensingPageLink = Uri::base() . 'index.php?option=com_joomlaidp&view=accountsetup&tab-panel=license';
@@ -1696,7 +1562,7 @@ class JoomlaIdpViewAccountSetup extends HtmlView
 			}
 		}
 		?>
-		<div class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0 mo_idp_main_content">
+		<div id="sp_list_table" class="mo_boot_col-sm-12 mo_boot_m-0 mo_boot_p-0 mo_idp_main_content">
 			<div class="mo_boot_row mo_boot_m-0 mo_boot_p-0">
 				<div class="mo_boot_col-sm-12 mo_tab_border">
 					<div class="mo_boot_col-sm-12 mo_boot_p-2">
@@ -1709,9 +1575,9 @@ class JoomlaIdpViewAccountSetup extends HtmlView
 									<h3 class="mo_idp_sp_head"><?php echo Text::_('COM_JOOMLAIDP_CHOOSE_METHOD_TO_SETUP_IDP_CONFIG'); ?></h3>
 								</div>
 								<div class="mo_boot_col-sm-12 mo_boot_col-lg-3 mo_boot_text-center" >
-									<a href="<?php echo Route::_('index.php?option=com_joomlaidp&view=accountsetup&tab-panel=sp'); ?>" class="mo_boot_btn btn_cstm">
-										<?php echo Text::_('COM_JOOMLAIDP_BACK_BTN'); ?>
-									</a>
+									<button type="button" class="mo_boot_btn btn_cstm" onclick="showImportExportConfig()">
+										<?php echo Text::_('COM_JOOMLAIDP_IMPORT_EXPORT'); ?>
+									</button>
 								</div>
 								<div class="mo_boot_col-sm-12 mo_boot_mt-3 mo_saml_dark_bg">
 									<ul class="switch_tab_sp mo_boot_text-center mo_boot_p-0 mo_boot_mt-4">

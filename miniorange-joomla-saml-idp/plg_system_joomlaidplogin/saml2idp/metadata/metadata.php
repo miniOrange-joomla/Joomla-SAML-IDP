@@ -31,7 +31,15 @@ include_once JPATH_SITE . DIRECTORY_SEPARATOR . 'administrator' . DIRECTORY_SEPA
 $header = isset($_REQUEST['download']) && boolval($_REQUEST['download']) ? 'Content-Disposition: attachment; filename="Metadata.xml"' : 'Content-Type: text/xml';
 
 $siteUrl = Uri::root();
-$siteUrl = substr($siteUrl, 0, strpos($siteUrl, 'plugins'));
+$metadataSuffix = 'plugins/system/joomlaidplogin/saml2idp/metadata/';
+$metadataPos = strpos($siteUrl, $metadataSuffix);
+
+if ($metadataPos !== false)
+{
+	$siteUrl = substr($siteUrl, 0, $metadataPos);
+}
+
+$siteUrl = rtrim($siteUrl, '/') . '/';
 $entityId = $siteUrl . 'plugins/user/miniorangejoomlaidp/';
 $db = MoSamlIdpDb::getDb();
 $query = $db->getQuery(true);

@@ -1,6 +1,13 @@
 function add_css_tab(element) {
-    jQuery(".mo_nav_tab_active ").removeClass("mo_nav_tab_active").removeClass("active");
+    jQuery(".mo_nav_tab_active").removeClass("mo_nav_tab_active active");
     jQuery(element).addClass("mo_nav_tab_active");
+
+    jQuery(".tab-pane").removeClass("active");
+
+    var targetId = jQuery(element).attr("href");
+    if (targetId) {
+        jQuery(targetId).addClass("active");
+    }
 }
 
 function is_valid_URL(string) {
@@ -12,35 +19,29 @@ function is_valid_URL(string) {
     }
 }
 
+function moIdpUpdatePremiumPrice() {
+    var userOpt = jQuery("#mo_idp_user_slab option:selected");
+    var spOpt = jQuery("#mo_idp_sp_slab option:selected");
+
+    if (!userOpt.length) {
+        return;
+    }
+
+    if (userOpt.val() === "5000p") {
+        jQuery("#mo_idp_price_total").hide();
+        jQuery("#mo_idp_price_contact").css("display", "flex");
+        return;
+    }
+
+    var total = parseInt(userOpt.attr("data-price"), 10) + parseInt(spOpt.attr("data-price") || 0, 10);
+    jQuery("#mo_idp_price_amount").text(total);
+    jQuery("#mo_idp_price_contact").hide();
+    jQuery("#mo_idp_price_total").css("display", "flex");
+}
+
 jQuery(document).ready(function () {
-    jQuery(".mo_idp_users_details").change(function () {
-        
-        jQuery(this).parent().parent().parent().parent().siblings().children().children().children().children(this).val(jQuery(this).val());
-
-        jQuery("#mo_idp_price_slab1_100").css("display", "none");
-        jQuery("#mo_idp_price_slab1_200").css("display", "none");
-        jQuery("#mo_idp_price_slab1_300").css("display", "none");
-        jQuery("#mo_idp_price_slab1_400").css("display", "none");
-        jQuery("#mo_idp_price_slab1_500").css("display", "none");
-        jQuery("#mo_idp_price_slab1_750").css("display", "none");
-        jQuery("#mo_idp_price_slab1_1000").css("display", "none");
-        jQuery("#mo_idp_price_slab1_2000").css("display", "none");
-        jQuery("#mo_idp_price_slab1_3000").css("display", "none");
-        jQuery("#mo_idp_price_slab1_4000").css("display", "none");
-        jQuery("#mo_idp_price_slab1_5000").css("display", "none");
-        jQuery("#mo_idp_price_slab1_5000p").css("display", "none");
-        if(jQuery(this).val()=='5000p')
-        {
-            jQuery(".mo_idp_plans").css("display", "none");
-        }
-        else
-        {
-            jQuery(".mo_idp_plans").css("display", "block");
-        }
-        jQuery("#mo_idp_price_slab1_"+jQuery(this).val()).css("display", "block");
-
-       
-    });
+    jQuery("#mo_idp_user_slab, #mo_idp_sp_slab").on("change", moIdpUpdatePremiumPrice);
+    moIdpUpdatePremiumPrice();
 
     jQuery('#upload_metadata_file').click(function(){
         var file = document.getElementById("metadata_uploaded_file");

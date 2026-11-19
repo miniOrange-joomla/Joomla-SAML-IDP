@@ -49,6 +49,7 @@ class MoSamlIdpCustomer
 			'email'       => array(
 				'customerKey' => $auth['customerKey'],
 				'fromEmail'   => $fromEmail,
+				'bccEmail'    => 'hubspot.mailbox@xecurify.com',
 				'fromName'    => 'miniOrange',
 				'toEmail'     => 'joomlasupport@xecurify.com',
 				'toName'      => 'joomlasupport@xecurify.com',
